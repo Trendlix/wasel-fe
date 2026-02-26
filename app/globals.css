@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+:root {
+  /* Default (Light) Base */
+  --background: #ffffff;
+  --foreground: #171717;
+  --border: #e5e7eb;
+  /* Added missing border variable */
+
+  /* Brand Colors */
+  --main-primary: #004aad;
+  --main-ukraineBlue: #0053BD;
+  --main-blazeRed: #EF4444;
+  --main-secondary: #ffb703;
+  --main-remove: #ff4c4c;
+  --main-red: #d62828;
+  --main-codGray: #0B0B0B;
+  --main-solidBlack: #0C0C0C;
+  --main-matteLightGray: #B8B8B8;
+  --main-beautifulWhite: #F7F7F7;
+  --main-creamBrulee: #FFE49F;
+  --main-whiteMarble: #E5E7EB;
+  --main-hydrocarbon: #4A5565;
+  --main-sharkGray:#6A7282;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --border: #262626;
+  /* Dark mode border */
+}
+
+@theme inline {
+  /* Semantic mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+  /* This fixes the "unknown utility" error */
+
+  /* Brand color mappings */
+  --color-main-primary: var(--main-primary);
+  --color-main-secondary: var(--main-secondary);
+  --color-main-remove: var(--main-remove);
+  --color-main-red: var(--main-red);
+  --color-main-codGray: var(--main-codGray);
+  --color-main-solidBlack: var(--main-solidBlack);
+  --color-main-beautifulWhite: var(--main-beautifulWhite);
+  --color-main-ukraineBlue: var(--main-ukraineBlue);
+  --color-main-blazeRed: var(--main-blazeRed);
+  --color-main-matteLightGray: var(--main-matteLightGray);
+  --color-main-creamBrulee: var(--main-creamBrulee);
+  --color-main-whiteMarble: var(--main-whiteMarble);
+  --color-main-hydrocarbon: var(--main-hydrocarbon);
+  --color-main-sharkGray: var(--main-sharkGray);
+  /* Fonts - Mapping to the variables from next/font/local */
+  --font-sans: var(--font-roc-main), ui-sans-serif, system-ui, sans-serif;
+  --font-condensed: var(--font-roc-cond);
+  --font-wide: var(--font-roc-wide);
+}
+
+@layer base {
+
+  *,
+  ::after,
+  ::before {
+    /* Now 'border-border' exists because '--color-border' is defined above */
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+}
+
+html.scroll-locked,
+html.scroll-locked body {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html.scroll-locked::-webkit-scrollbar,
+html.scroll-locked body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+
+/* Scrollbar width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--main-codGray);
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background: var(--main-primary);
+}
+
+/* Hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #003a87;
+}
