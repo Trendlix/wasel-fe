@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 
 export interface IHeroSentence {
-    text: string;
+    textKey: "selectLocation" | "chooseTruck" | "selectPrice" | "selectDriver" | "confirmed";
     style: Pick<CSSProperties,
         | "left"
         | "right"
@@ -13,7 +13,7 @@ export interface IHeroSentence {
 
 export const heroSentences: IHeroSentence[] = [
     {
-        text: "Select Location",
+        textKey: "selectLocation",
         style: {
             left: "10vw",
             top: "50%",
@@ -21,7 +21,7 @@ export const heroSentences: IHeroSentence[] = [
         },
     },
     {
-        text: "Choose Truck",
+        textKey: "chooseTruck",
         style: {
             bottom: "-5vh",
             left: "50%",
@@ -29,14 +29,14 @@ export const heroSentences: IHeroSentence[] = [
         },
     },
     {
-        text: "Select Price",
+        textKey: "selectPrice",
         style: {
             right: "10vw",
             top: "70%",
         },
     },
     {
-        text: "Select Driver",
+        textKey: "selectDriver",
         style: {
             bottom: "-7vh",
             left: "50%",
@@ -44,7 +44,7 @@ export const heroSentences: IHeroSentence[] = [
         },
     },
     {
-        text: "Confirmed",
+        textKey: "confirmed",
         style: {
             left: "10vw",
             top: "50%",

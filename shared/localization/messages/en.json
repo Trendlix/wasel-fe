@@ -1,11 +1,312 @@
 {
+    "meta": {
+        "title": "Wasel",
+        "description": "The smart way to move your cargo."
+    },
+    "nav": {
+        "home": "Home",
+        "about": "About",
+        "services": "Services",
+        "contact": "Contact",
+        "blogs": "Blogs",
+        "orderTracking": "Order Tracking",
+        "companiesAdvertisers": "Companies / Advertisers",
+        "companies": "Companies",
+        "downloadApp": "Download App",
+        "download": "Download"
+    },
     "home": {
+        "section1": {
+            "heading": "One platform connecting businesses, drivers, and fleet owners.",
+            "card1": {
+                "title": "Your Cargo is Save with Wasel",
+                "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima earum sit neque harum id totam at minus iste laborum, excepturi eum debitis dolor consequatur, ullam aut impedit porro omnis numquam!"
+            },
+            "card2": {
+                "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima earum sit neque harum id totam at minus iste laborum, excepturi eum debitis dolor consequatur, ullam aut impedit porro omnis numquam!"
+            },
+            "card3": { "title": "lorem4" },
+            "card4": { "title": "lorem4" }
+        },
+        "section2": {
+            "card1": {
+                "title": "Promote your brand through fleet exposure",
+                "description": "Increase brand awareness with high-impact vehicle advertising. Wasel's fleet operates across strategic routes, giving your business maximum exposure and continuous audience engagement."
+            },
+            "card2": {
+                "title": "Transparent pricing and trip updates",
+                "description": "Clear pricing. No surprises. Real-time updates every step of the way."
+            },
+            "card3": {
+                "title": "Request heavy transportation in minutes",
+                "description": "No more long calls or manual coordination. With Wasel, you can request heavy transport in just a few taps and receive instant confirmation with real-time tracking."
+            }
+        },
+        "section3": {
+            "heading": "Maximizing Value for Every Partner",
+            "subtitle": "Wasel delivers efficiency, transparency, and growth opportunities for every partner in the network.",
+            "card1": {
+                "title": "Manage multiple drivers in one dashboard",
+                "description": "Control and monitor your entire fleet from one powerful dashboard. Track trips, assign requests, and oversee driver performance with real-time updates and complete transparency."
+            },
+            "card2": {
+                "title": "Instant trip notifications",
+                "description": "Get notified instantly when a new trip is available near you."
+            },
+            "card3": {
+                "title": "Manage multiple drivers in one dashboard",
+                "description": "Control and monitor your entire fleet from one powerful dashboard. Track trips, assign requests, and oversee driver performance with real-time updates and complete transparency."
+            }
+        },
+        "section4": {
+            "card1": { "title": "Download", "title2": "Users App" },
+            "card2": { "title": "Download", "title2": "Driver/Storage Owner App" }
+        },
         "section-1": {
             "titles": [
                 "Smarter Routes. Stronger Logistics.",
                 "From Request to Delivery \n All in One App",
                 "The Smart Way to Move Your Cargo"
             ]
+        },
+        "hero": {
+            "words": {
+                "selectLocation": "Select Location",
+                "chooseTruck": "Choose Truck",
+                "selectPrice": "Select Price",
+                "selectDriver": "Select Driver",
+                "confirmed": "Confirmed"
+            },
+            "phoneContent": {
+                "subtitle": "Smarter Routes. Stronger Logistics.",
+                "requestToDelivery": "From Request to Delivery",
+                "allInOneApp": "All in One App",
+                "smartWayTo": "The Smart Way to",
+                "moveYour": "Move Your",
+                "cargo": "Cargo",
+                "heroImageAlt": "Hero iPhone preview"
+            },
+            "cards": {
+                "truck": {
+                    "title": "Medium Truck",
+                    "capacity": "Capacity: 3-5 tons"
+                },
+                "price": {
+                    "title": "Wasel Suggested Price",
+                    "amount": "3200 EGP",
+                    "description": "Based on distance, truck type, and current demand"
+                },
+                "driver": {
+                    "avatarLetter": "A",
+                    "name": "Ahmed Wael",
+                    "rating": "4.9",
+                    "tripsCar": "342 trips • Mercedes",
+                    "priceLabel": "Price",
+                    "priceAmount": "200 EGP",
+                    "accept": "Accept",
+                    "reject": "Reject",
+                    "highlights": {
+                        "arrive15": "Can arrive in 15 mins",
+                        "gpsTracked": "GPS Tracked"
+                    }
+                }
+            }
+        }
+    },
+    "about": {
+        "hero": {
+            "line1a": "From Booking to",
+            "line1b": "Delivery, Everything You",
+            "line2": "Need Is Inside Wasel App"
+        }
+    },
+    "contact": {
+        "hero": {
+            "title": "Contact Us",
+            "subtitle": "Have a question or want to work together? We'd love to hear from you. Reach out using the form below or contact us directly."
+        },
+        "form": {
+            "contactInfoTitle": "Contact Information",
+            "sendMessageTitle": "Send us a Message",
+            "sendButton": "Send Message",
+            "fields": {
+                "name": { "label": "Name", "placeholder": "Your name" },
+                "email": { "label": "Email", "placeholder": "your.email@example.com" },
+                "phone": { "label": "Phone (Optional)", "placeholder": "+1 (234) 567-890" },
+                "message": { "label": "Message", "placeholder": "How can we help you?" }
+            }
+        },
+        "info": {
+            "mobile": { "label": "Mobile", "value": "+1 (234) 567-890" },
+            "landline": { "label": "Landline", "value": "+1 (234) 567-891" },
+            "email": { "label": "Email", "value": "contact@example.com" },
+            "address": {
+                "label": "Address",
+                "line1": "123 Business Street",
+                "line2": "Suite 100",
+                "line3": "New York, NY 10001"
+            },
+            "businessHours": {
+                "label": "Business hours",
+                "weekdays": "Monday - Friday: 9:00 AM - 6:00 PM",
+                "saturday": "Saturday: 10:00 AM - 4:00 PM",
+                "sunday": "Sunday: Closed"
+            }
+        }
+    },
+    "services": {
+        "hero": {
+            "line1": "Smart",
+            "line2": "Logistics.",
+            "line3": "Storage. Visibility.",
+            "subtitle": "Wasel is more than a heavy transport platform. We provide a complete ecosystem for transportation, secure storage, and mobile advertising — connecting businesses, warehouse owners, and advertisers in one powerful network."
+        },
+        "section2": {
+            "cards": {
+                "0": {
+                    "tag": "For Users",
+                    "title": "Heavy Transportation Services",
+                    "highlightsTitle": "Move anything. Anytime.",
+                    "points": {
+                        "0": "On-demand heavy truck booking",
+                        "1": "Flatbeds, lowbeds, and specialized vehicles",
+                        "2": "Industrial & construction equipment transport",
+                        "3": "Oversized cargo handling",
+                        "4": "Real-time trip tracking"
+                    },
+                    "description": "Fast booking. Transparent pricing. Verified drivers."
+                },
+                "1": {
+                    "tag": "For Business",
+                    "title": "Corporate &\n Enterprise Services",
+                    "highlightsTitle": "Custom logistics solutions for large businesses.",
+                    "points": {
+                        "0": "Dedicated fleet management",
+                        "1": "Bulk shipment handling",
+                        "2": "Storage contracts",
+                        "3": "Advertising campaign coordination",
+                        "4": "Priority support"
+                    },
+                    "description": ""
+                },
+                "2": {
+                    "tag": "For Business",
+                    "title": "Safety, Transparency &\nTechnology",
+                    "highlightsTitle": "Built on trust and innovation.",
+                    "points": {
+                        "0": "Verified drivers & warehouses",
+                        "1": "Transparent pricing",
+                        "2": "Real-time tracking",
+                        "3": "Secure payments",
+                        "4": "Dedicated support team"
+                    },
+                    "description": ""
+                }
+            }
+        },
+        "section3": {
+            "headingWord": "Warehouse",
+            "headingSuffix": "Solutions",
+            "subtitle": "Wasel connects warehouse owners with businesses and individuals who need secure storage space.",
+            "cards": {
+                "0": {
+                    "tag": "secure storage, on demand",
+                    "title": "For Warehouse Owners",
+                    "highlightsTitle": "Built on trust and innovation.",
+                    "points": {
+                        "0": "List your warehouse space",
+                        "1": "Manage availability easily",
+                        "2": "Receive storage requests instantly",
+                        "3": "Maximize unused space revenue",
+                        "4": "Secure and transparent payments"
+                    }
+                },
+                "1": {
+                    "tag": "secure storage, on demand",
+                    "title": "For Customers",
+                    "highlightsTitle": "Built on trust and innovation.",
+                    "points": {
+                        "0": "Short-term & long-term storage",
+                        "1": "Secure monitored facilities",
+                        "2": "Flexible space options",
+                        "3": "Easy booking through the platform",
+                        "4": "Affordable pricing plans",
+                        "5": "Store machinery, inventory, materials, or bulk goods safely and efficiently."
+                    }
+                }
+            }
+        },
+        "section4": {
+            "headingWord1": "Truck",
+            "headingWord2": "Advertising",
+            "headingSuffix": "Solutions",
+            "subtitle": "Turn your fleet into a mobile billboard. Advertisers get city-wide reach; truck owners earn extra income.",
+            "cards": {
+                "0": {
+                    "tag": "Turn Trucks Into Moving Billboards",
+                    "title": "For Advertisers",
+                    "points": {
+                        "0": "High-visibility mobile advertising",
+                        "1": "City-wide brand exposure",
+                        "2": "Targeted geographic routes",
+                        "3": "Cost-effective marketing channel",
+                        "4": "Performance tracking reports"
+                    }
+                },
+                "1": {
+                    "tag": "turn trucks into moving billboards",
+                    "title": "For Truck Owners",
+                    "points": {
+                        "0": "Earn additional income",
+                        "1": "Approved brand partnerships",
+                        "2": "Professional ad installation",
+                        "3": "Flexible participation options"
+                    }
+                }
+            }
+        }
+    },
+    "brandBanner": {
+        "heading": "Manage Your Fleet or Brand with Full Control.",
+        "description": "Companies and advertisers can log in to manage fleets, monitor campaigns, and track performance in real time.",
+        "companiesPortal": "Companies / Advertisers Portal",
+        "driverPortal": "Driver / Storage Owner Portal"
+    },
+    "footer": {
+        "waselFleet": "wasel fleet",
+        "company": "company",
+        "waselFor": "wasel for",
+        "support": "support",
+        "shipYourCargo": "Ship your cargo Now!",
+        "copyright": "© {year} Wasel. All rights reserved.",
+        "terms": "Terms & Conditions",
+        "privacy": "Privacy Policy",
+        "companiesDashboard": "Companies Dashboard",
+        "advertisersDashboard": "Advertisers Dashboard",
+        "iosUserApp": "IOS User app",
+        "androidUserApp": "Android User app",
+        "iosDriverApp": "IOS Driver app",
+        "androidDriverApp": "Android Driver app",
+        "about": "About",
+        "services": "Services",
+        "blogs": "Blogs",
+        "contact": "Contact",
+        "companies": "Companies",
+        "advertisers": "Advertisers",
+        "helpCenter": "Help center",
+        "talkToSupport": "Talk to support"
+    },
+    "faq": {
+        "heading": "Frequently Asked Questions (FAQ)",
+        "description": "Have questions about Wasel? We've got you covered. Here you'll find answers to the most common inquiries",
+        "items": {
+            "0": { "q": "Do you do web design or web development?", "a": "We offer both web design and web development services to suit your project needs." },
+            "1": { "q": "I'm an agency, do you develop Figma designs?", "a": "Yes, we develop pixel-perfect implementations from Figma designs." },
+            "2": { "q": "Why do I develop solely using Webflow?", "a": "Webflow provides a powerful visual development environment with flexible design control." },
+            "3": { "q": "How much does it cost?", "a": "Pricing depends on project scope, timeline, and complexity. Contact us for a custom quote." },
+            "4": { "q": "Is there any extra cost involved?", "a": "We provide transparent pricing with no hidden fees. Any additional work is discussed beforehand." },
+            "5": { "q": "How long does it take?", "a": "Project timelines vary based on scope. We'll provide a clear delivery estimate after reviewing your requirements." },
+            "6": { "q": "Do I need a developer to make future updates on my website?", "a": "Not necessarily. We can set up a CMS or provide training so you can manage updates yourself." }
         }
     }
 }

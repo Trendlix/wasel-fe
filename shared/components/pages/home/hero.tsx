@@ -1,17 +1,34 @@
 "use client";
 
 import NextImage from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 import DynamicIsland from "./components/hero/dynamic-island";
+import SentencesCards from "./components/hero/SentencesCards";
+import clsx from "clsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HeroTest = () => {
+const backOut = (t: number, amplitude = 1.7): number => {
+    const c1 = amplitude;
+    const c3 = c1 + 1;
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+};
+
+type HeroProps = {
+    onLayoutReady?: (ready: boolean) => void;
+    onMountStart?: () => void;
+};
+
+const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
+    const tWords = useTranslations("home.hero.words");
+    const tPhone = useTranslations("home.hero.phoneContent");
     const containerRef = useRef<HTMLDivElement>(null);
     const iphoneRef = useRef<HTMLDivElement>(null);
+    const blurRef = useRef<HTMLDivElement>(null);
     const dynamicIslandRef = useRef<HTMLDivElement>(null);
     const subtitleBlockRef = useRef<HTMLDivElement>(null);
     const headingRef = useRef<HTMLDivElement>(null);
@@ -19,10 +36,27 @@ const HeroTest = () => {
     const sentencesRef = useRef<HTMLDivElement[]>([]);
     const currentImageRef = useRef<string>("/brand/pages/home/iphone.png");
     const [imageSrc, setImageSrc] = useState("/brand/pages/home/iphone.png");
+    const [firstImageLoaded, setFirstImageLoaded] = useState(false);
 
-    // ── Mount animation for iPhone ──
+    useEffect(() => {
+        const firstSrc = "/brand/pages/home/iphone.png";
+        const img = new window.Image();
+        img.src = firstSrc;
+        const onLoad = () => {
+            setFirstImageLoaded(true);
+            onMountStart?.();
+        };
+        if (img.complete) {
+            queueMicrotask(onLoad);
+        } else {
+            img.onload = onLoad;
+        }
+    }, [onMountStart]);
+
+    // ── Mount animation for iPhone (waits for first image) ──
     useGSAP(() => {
-        if (!iphoneRef.current || !dynamicIslandRef.current) return;
+        if (!firstImageLoaded) return;
+        if (!iphoneRef.current || !dynamicIslandRef.current || !blurRef.current) return;
 
         const iphoneMountTl = gsap.timeline();
         iphoneMountTl.fromTo(
@@ -30,14 +64,20 @@ const HeroTest = () => {
             { bottom: "-130%", scale: 1.9 },
             { bottom: "-90%", scale: 1.9, duration: 2, ease: "back.out(1.7)" },
         );
+        iphoneMountTl.fromTo(
+            blurRef.current,
+            { top: "50%", rotate: 0 },
+            { top: "0%", rotate: 20, duration: 2, ease: "back.out(1.7)", opacity: 1, width: "80%", height: "120%" },
+            "<",
+        );
 
         const islandCamera = dynamicIslandRef.current.querySelector("#dynamic-island-camera") as HTMLDivElement | null;
         const islandContent = dynamicIslandRef.current.querySelector("#dynamic-island-content") as HTMLDivElement | null;
         const islandRoot = dynamicIslandRef.current.querySelector("#dynamic-island-root") as HTMLDivElement | null;
 
-        const openPadX = window.innerWidth * 0.01; // px-[1vw]
-        const openCameraPx = 40; // px-10
-        const openCameraPt = window.innerWidth * 0.007; // pt-[0.7vw]
+        const openPadX = window.innerWidth * 0.01;
+        const openCameraPx = 40;
+        const openCameraPt = window.innerWidth * 0.007;
         const heroImageSources = [
             "/brand/pages/home/iphone.png",
             "/brand/pages/home/iphone-location.png",
@@ -238,7 +278,14 @@ const HeroTest = () => {
 
         const words = sentencesRef.current;
         gsap.set(words, { opacity: 0, y: 80 });
+        const CARD_FADE_IN_END = 0.35;
         const CARD_HOLD_END = 0.70;
+        const cardOpacity = (rawP: number) =>
+            rawP <= CARD_FADE_IN_END
+                ? rawP / CARD_FADE_IN_END
+                : rawP <= CARD_HOLD_END
+                    ? 1
+                    : Math.max(1 - (rawP - CARD_HOLD_END) / (1 - CARD_HOLD_END), 0);
         const cardFadeOutP = (rawP: number) =>
             rawP <= CARD_HOLD_END ? 0 : (rawP - CARD_HOLD_END) / (1 - CARD_HOLD_END);
         const MID_STUCK_START = 0.45;
@@ -255,12 +302,14 @@ const HeroTest = () => {
             gsap.utils.clamp(0, 1, midStuckProgress(rawP) * 2);
 
         const vh = window.innerHeight;
-        const IPHONE_SCALE_END = 300;
+        /** Higher values = more scroll needed to get through the hero (slower feel). */
+        const SCROLL_PACE = 3;
+        const IPHONE_SCALE_END = 300 * SCROLL_PACE;
         const LOCATION_THRESHOLD = IPHONE_SCALE_END * 0.6;
-        const SENTENCE_START = 300;
-        const SENTENCE_SPACING = vh * 0.5;
-        const SENTENCE_DURATION = 200;
-        const TOTAL_SCROLL = IPHONE_SCALE_END + words.length * SENTENCE_SPACING + 500;
+        const SENTENCE_START = 300 * SCROLL_PACE;
+        const SENTENCE_SPACING = vh * 0.5 * SCROLL_PACE;
+        const SENTENCE_DURATION = 200 * SCROLL_PACE;
+        const TOTAL_SCROLL = IPHONE_SCALE_END + words.length * SENTENCE_SPACING + 500 * SCROLL_PACE;
         const s0FadeStart = SENTENCE_START + SENTENCE_SPACING;
         const sentence2End = SENTENCE_START + SENTENCE_SPACING + SENTENCE_DURATION;
         const s1FadeStart = SENTENCE_START + SENTENCE_SPACING * 2;
@@ -268,6 +317,18 @@ const HeroTest = () => {
         const s2FadeStart = SENTENCE_START + SENTENCE_SPACING * 3;
         const sentence4End = SENTENCE_START + SENTENCE_SPACING * 3 + SENTENCE_DURATION;
         const confirmedWordStart = SENTENCE_START + SENTENCE_SPACING * 4;
+        const word0End = SENTENCE_START + SENTENCE_DURATION;
+        const word1End = SENTENCE_START + SENTENCE_SPACING + SENTENCE_DURATION;
+        const word2End = SENTENCE_START + SENTENCE_SPACING * 2 + SENTENCE_DURATION;
+        const word3End = SENTENCE_START + SENTENCE_SPACING * 3 + SENTENCE_DURATION;
+        const word4End = SENTENCE_START + SENTENCE_SPACING * 4 + SENTENCE_DURATION;
+        const cardDuration = sentence2End - s0FadeStart;
+        const priceCardDuration = sentence3End - s1FadeStart;
+        const driverCardDuration = sentence4End - s2FadeStart;
+        const cardTravelVh = 4.5;
+        const truckCard = containerRef.current?.querySelector<HTMLElement>("#truck-card");
+        const selectPriceCard = containerRef.current?.querySelector<HTMLElement>("#select-price-card");
+        const selectDriverCard = containerRef.current?.querySelector<HTMLElement>("#select-driver-card");
 
         const mainTrigger = ScrollTrigger.create({
             trigger: containerRef.current,
@@ -279,6 +340,53 @@ const HeroTest = () => {
                 const scroll = self.progress * TOTAL_SCROLL;
                 const phoneRawP = scroll <= IPHONE_SCALE_END ? scroll / IPHONE_SCALE_END : 1;
                 applyProgress(phoneRawP);
+                if (blurRef.current) {
+                    const blurStates = [
+                        { xPercent: 0, opacity: 0.3 }, // center (initial)
+                        { xPercent: 0, opacity: 0.4 }, // center
+                        { xPercent: 18, opacity: 0.3 }, // right
+                        { xPercent: 0, opacity: 0.4 }, // center
+                        { xPercent: 0, opacity: 0.3 }, // center (last)
+                    ];
+                    const lerp = (from: number, to: number, p: number) => gsap.utils.interpolate(from, to, p);
+                    let xPercent = blurStates[0].xPercent;
+                    let opacity = blurStates[0].opacity;
+
+                    if (scroll <= word0End) {
+                        xPercent = blurStates[0].xPercent;
+                        opacity = blurStates[0].opacity;
+                    } else if (scroll <= word1End) {
+                        const p = gsap.utils.clamp(0, 1, (scroll - word0End) / (word1End - word0End));
+                        xPercent = lerp(blurStates[0].xPercent, blurStates[1].xPercent, p);
+                        opacity = lerp(blurStates[0].opacity, blurStates[1].opacity, p);
+                    } else if (scroll <= word2End) {
+                        const p = gsap.utils.clamp(0, 1, (scroll - word1End) / (word2End - word1End));
+                        xPercent = lerp(blurStates[1].xPercent, blurStates[2].xPercent, p);
+                        opacity = lerp(blurStates[1].opacity, blurStates[2].opacity, p);
+                    } else if (scroll <= word3End) {
+                        const p = gsap.utils.clamp(0, 1, (scroll - word2End) / (word3End - word2End));
+                        xPercent = lerp(blurStates[2].xPercent, blurStates[3].xPercent, p);
+                        opacity = lerp(blurStates[2].opacity, blurStates[3].opacity, p);
+                    } else if (scroll <= word4End) {
+                        const p = gsap.utils.clamp(0, 1, (scroll - word3End) / (word4End - word3End));
+                        xPercent = lerp(blurStates[3].xPercent, blurStates[4].xPercent, p);
+                        opacity = lerp(blurStates[3].opacity, blurStates[4].opacity, p);
+                    } else {
+                        xPercent = blurStates[4].xPercent;
+                        opacity = blurStates[4].opacity;
+                    }
+                    // Monotonic rotation: increases on forward scroll, decreases on backward scroll.
+                    const rotationP = gsap.utils.clamp(0, 1, (scroll - word0End) / (word4End - word0End));
+                    const rotate = gsap.utils.interpolate(0, 120, rotationP);
+
+                    gsap.set(blurRef.current, {
+                        width: "70%",
+                        height: "100%",
+                        xPercent,
+                        rotate,
+                        opacity,
+                    });
+                }
 
                 if (scroll < s0FadeStart) {
                     if (scroll < LOCATION_THRESHOLD) {
@@ -300,6 +408,68 @@ const HeroTest = () => {
                     swapImage("/brand/pages/home/iphone-confirmed.png");
                 } else {
                     swapImage("/brand/pages/home/iphone-select-driver.png");
+                }
+
+                if (truckCard) {
+                    if (scroll < s0FadeStart) {
+                        truckCard.style.opacity = "0";
+                        truckCard.style.transform = `translateY(${cardTravelVh}vh)`;
+                    } else if (scroll <= sentence2End) {
+                        const rawP = Math.min((scroll - s0FadeStart) / cardDuration, 1);
+                        const stuckP = midStuckProgress(rawP);
+                        const eased = backOut(stuckP, 1.7);
+                        const op = cardOpacity(stuckP);
+                        const foP = cardFadeOutP(stuckP);
+                        const y = cardTravelVh * (1 - eased) - foP * cardTravelVh;
+
+                        truckCard.style.opacity = `${op}`;
+                        truckCard.style.transform = `translateY(${y}vh)`;
+                    } else {
+                        truckCard.style.opacity = "0";
+                        truckCard.style.transform = `translateY(-${cardTravelVh}vh)`;
+                    }
+                }
+
+                if (selectPriceCard) {
+                    if (scroll < s1FadeStart) {
+                        selectPriceCard.style.opacity = "0";
+                        selectPriceCard.style.transform = `translateY(${cardTravelVh}vh)`;
+                    } else if (scroll <= sentence3End) {
+                        const rawP = Math.min((scroll - s1FadeStart) / priceCardDuration, 1);
+                        const stuckP = midStuckProgress(rawP);
+                        const eased = backOut(stuckP, 1.7);
+                        const op = cardOpacity(stuckP);
+                        const foP = cardFadeOutP(stuckP);
+                        const y = Math.max(cardTravelVh * (1 - eased), 0);
+                        const scaleOut = gsap.utils.interpolate(1, 0.88, foP);
+
+                        selectPriceCard.style.opacity = `${op}`;
+                        selectPriceCard.style.transform = `translateY(${y}vh) scale(${scaleOut})`;
+                    } else {
+                        selectPriceCard.style.opacity = "0";
+                        selectPriceCard.style.transform = "translateY(0vh) scale(0.88)";
+                    }
+                }
+
+                if (selectDriverCard) {
+                    if (scroll < s2FadeStart) {
+                        selectDriverCard.style.opacity = "0";
+                        selectDriverCard.style.transform = "translateY(0vh) scale(0.88)";
+                    } else if (scroll <= sentence4End) {
+                        const rawP = Math.min((scroll - s2FadeStart) / driverCardDuration, 1);
+                        const stuckP = midStuckProgress(rawP);
+                        const op = cardOpacity(stuckP);
+                        const foP = cardFadeOutP(stuckP);
+                        const scaleIn = gsap.utils.interpolate(0.88, 1, Math.min(stuckP / CARD_FADE_IN_END, 1));
+                        const scaleOut = gsap.utils.interpolate(1, 0.88, foP);
+                        const scale = stuckP <= CARD_FADE_IN_END ? scaleIn : scaleOut;
+
+                        selectDriverCard.style.opacity = `${op}`;
+                        selectDriverCard.style.transform = `translateY(0vh) scale(${scale})`;
+                    } else {
+                        selectDriverCard.style.opacity = "0";
+                        selectDriverCard.style.transform = "translateY(0vh) scale(0.88)";
+                    }
                 }
 
                 words.forEach((el, i) => {
@@ -337,33 +507,40 @@ const HeroTest = () => {
         });
 
         applyProgress(0);
-        requestAnimationFrame(() => applyProgress(mainTrigger.progress));
-    }, { scope: containerRef });
+        requestAnimationFrame(() => {
+            applyProgress(mainTrigger.progress);
+            requestAnimationFrame(() => {
+                ScrollTrigger.refresh();
+                onLayoutReady?.(true);
+            });
+        });
+    }, { scope: containerRef, dependencies: [firstImageLoaded] });
 
     const setRef = (el: HTMLDivElement | null, index: number) => {
         if (el) sentencesRef.current[index] = el;
     };
 
     return (
-        <div ref={containerRef} className="h-screen w-screen flex flex-col bg-black text-white">
+        <section ref={containerRef} className="h-screen w-screen flex flex-col bg-black text-white relative">
             <div className="basis-[10%]" />
-
+            <BluredBackground blurRef={blurRef} />
             <div className="basis-[80%] grid grid-cols-3 items-center">
-                <div className="flex items-start justify-center h-full pt-[10%]">
+                <div className="flex items-start justify-center h-full pt-[25%]">
                     <div className="relative">
-                        <div ref={(el) => setRef(el, 0)} className="text-4xl font-bold text-left">Select Location</div>
-                        <div ref={(el) => setRef(el, 4)} className="text-4xl font-bold text-left absolute inset-0">Confirmed</div>
+                        <div ref={(el) => setRef(el, 0)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left opacity-0 translate-y-[80px]">{tWords("selectLocation")}</div>
+                        <div ref={(el) => setRef(el, 4)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left absolute inset-0 opacity-0 translate-y-[80px]">{tWords("confirmed")}</div>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center border h-full relative">
-                    <div ref={iphoneRef} className="absolute h-full w-full">
+                <div className="flex items-center justify-center h-full relative">
+                    <div ref={iphoneRef} className="absolute h-full w-full" style={{ bottom: "-130%", transform: "scale(1.9)" }}>
                         {/* iPhone frame */}
                         <div className="w-full h-full flex items-center justify-center">
                             <div className="relative h-full aspect-[285/580]">
+                                <SentencesCards />
                                 <NextImage
                                     src={imageSrc}
-                                    alt="hero-image"
+                                    alt={tPhone("heroImageAlt")}
                                     fill
                                     className="object-contain"
                                 />
@@ -386,17 +563,17 @@ const HeroTest = () => {
                 </div>
 
                 <div className="flex items-center justify-center h-full">
-                    <div ref={(el) => setRef(el, 2)} className="text-4xl font-bold text-right translate-y-[10%]">Select Price</div>
+                    <div ref={(el) => setRef(el, 2)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-right opacity-0 translate-y-[80px]">{tWords("selectPrice")}</div>
                 </div>
             </div>
 
             <div className="basis-[10%] flex items-center justify-center">
                 <div className="relative">
-                    <div ref={(el) => setRef(el, 1)} className="text-3xl font-semibold text-center">Choose Truck</div>
-                    <div ref={(el) => setRef(el, 3)} className="text-3xl font-semibold text-center absolute inset-0">Select Driver</div>
+                    <div ref={(el) => setRef(el, 1)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("chooseTruck")}</div>
+                    <div ref={(el) => setRef(el, 3)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center absolute inset-0 opacity-0 translate-y-[80px]">{tWords("selectDriver")}</div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 
@@ -408,25 +585,46 @@ type IPhoneContentProps = {
 };
 
 const IPhoneContent = ({ subtitleBlockRef, headingRef }: IPhoneContentProps) => {
+    const t = useTranslations("home.hero.phoneContent");
+
     return (<div className="flex flex-col gap-y-[0.7vw] items-center justify-center">
         {/* upper part */}
         <div ref={subtitleBlockRef} className="flex flex-col items-center justify-center gap-y-[0.1vw]">
-            <p className="text-[0.5vw] font-light leading-2.5">Smarter Routes. Stronger Logistics.</p>
+            <p className="text-[0.5vw] font-light leading-2.5">{t("subtitle")}</p>
             <p className="flex flex-col items-center font-medium text-[1vw] leading-[1.4vw]">
-                <span>From Request to Delivery</span>
-                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">All in One App</span>
+                <span>{t("requestToDelivery")}</span>
+                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("allInOneApp")}</span>
             </p>
         </div>
 
         {/* lower part */}
         <div ref={headingRef} className="flex flex-col items-center justify-center font-medium text-[1.8vw] leading-[2vw]">
-            <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">The Smart Way to</p>
+            <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("smartWayTo")}</p>
             <p>
-                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">Move Your</span>
+                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("moveYour")}</span>
                 {" "}
-                <span>Cargo</span>
+                <span>{t("cargo")}</span>
             </p>
         </div>
     </div>)
 }
-export default HeroTest;
+
+type BluredBackgroundProps = {
+    blurRef: React.RefObject<HTMLDivElement | null>;
+};
+
+const BluredBackground = ({ blurRef }: BluredBackgroundProps) => {
+    return (
+        <div className={clsx("flex items-center justify-center", "absolute inset-0", "h-full", "w-full")}>
+            <div
+                ref={blurRef}
+                className={clsx(
+                    "bg-main-ukraineBlue h-full w-[70%] blur-[120px] opacity-30 relative top-[50%]",
+                    "rounded-full pointer-events-none z-0",
+                )}
+            />
+        </div>
+    );
+}
+
+export default Hero;

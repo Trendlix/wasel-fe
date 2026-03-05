@@ -1,25 +1,31 @@
 import clsx from "clsx";
 import { Clock, LucideIcon, MapPin, User } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 interface IOfferHighlightsInterface {
     icon: LucideIcon;
-    description: string;
+    descriptionKey: string;
 }
 
 export const OfferHighlights: IOfferHighlightsInterface[] = [
     {
-        description: "Can arrive in 15 mins",
+        descriptionKey: "arrive15",
         icon: Clock
     },
     {
-        description: "GPS Tracked",
+        descriptionKey: "gpsTracked",
         icon: MapPin
     }
 ]
 
 const DynamicIslandContent = () => {
+    const locale = useLocale();
+    const t = useTranslations("home.hero.cards.driver");
+    const dir = locale === "ar" ? "rtl" : "ltr";
+
     return (
         <div
+            dir={dir}
             className={clsx(
                 "w-full h-fit flex flex-col pointer-events-none opacity-0",
                 // padding scales up with screen size
@@ -51,7 +57,7 @@ const DynamicIslandContent = () => {
                         "3xl:w-18 3xl:h-18 3xl:text-3xl",
                         "4xl:w-20 4xl:h-20 4xl:text-3xl",
                     )}>
-                        {"A"}
+                        {t("avatarLetter")}
                     </div>
 
                     {/* Info block */}
@@ -66,15 +72,15 @@ const DynamicIslandContent = () => {
                                 "text-nowrap font-medium leading-tight",
                                 "text-xs lg:text-sm xl:text-base 2xl:text-lg 3xl:text-xl 4xl:text-2xl"
                             )}>
-                                <span className="font-semibold">Ahmed Wael</span>
+                                <span className="font-semibold">{t("name")}</span>
                                 {" "}
-                                <span>{"⭐"}{" "}{"4.9"}</span>
+                                <span>{"⭐"}{" "}{t("rating")}</span>
                             </div>
                             <div className={clsx(
                                 "text-main-primary uppercase font-semibold text-nowrap leading-tight",
                                 "text-xs lg:text-sm xl:text-base 2xl:text-xl 3xl:text-2xl 4xl:text-2xl"
                             )}>
-                                {"200"}{" "}{"EGP"}
+                                {t("priceAmount")}
                             </div>
                         </div>
 
@@ -83,7 +89,7 @@ const DynamicIslandContent = () => {
                             "text-white/80",
                             "text-xs lg:text-xs xl:text-sm 2xl:text-base 3xl:text-lg 4xl:text-lg"
                         )}>
-                            342 trips • Mercedes
+                            {t("tripsCar")}
                         </p>
 
                         {/* Highlights */}
@@ -114,7 +120,7 @@ const DynamicIslandContent = () => {
                                         "3xl:text-lg",
                                         "4xl:text-lg",
                                     )}>
-                                        {item.description}
+                                        {t(`highlights.${item.descriptionKey}`)}
                                     </span>
                                 </div>
                             ))}
@@ -149,7 +155,7 @@ const DynamicIslandContent = () => {
                     "3xl:h-16 3xl:text-xl",
                     "4xl:h-[71px] 4xl:text-2xl",
                 )}>
-                    Accept
+                    {t("accept")}
                 </div>
 
                 {/* Reject */}
@@ -162,7 +168,7 @@ const DynamicIslandContent = () => {
                     "3xl:h-16 3xl:text-xl",
                     "4xl:h-[71px] 4xl:text-2xl",
                 )}>
-                    Reject
+                    {t("reject")}
                 </div>
 
                 {/* Profile */}
