@@ -311,7 +311,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
         const SENTENCE_START = 300 * SCROLL_PACE;
         const SENTENCE_SPACING = vh * 0.5 * SCROLL_PACE;
         const SENTENCE_DURATION = 200 * SCROLL_PACE;
-        const TOTAL_SCROLL = IPHONE_SCALE_END + words.length * SENTENCE_SPACING + 500 * SCROLL_PACE;
+        const TOTAL_SCROLL = IPHONE_SCALE_END + words.length * SENTENCE_SPACING + SENTENCE_DURATION + 80 * SCROLL_PACE;
         const s0FadeStart = SENTENCE_START + SENTENCE_SPACING;
         const sentence2End = SENTENCE_START + SENTENCE_SPACING + SENTENCE_DURATION;
         const s1FadeStart = SENTENCE_START + SENTENCE_SPACING * 2;
@@ -555,7 +555,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                                     >
                                         <DynamicIsland />
                                     </div>
-                                    <div ref={phoneContentWrapperRef} className="mt-[1vw]">
+                                    <div ref={phoneContentWrapperRef} className="mt-[0.5vw]">
                                         <IPhoneContent subtitleBlockRef={subtitleBlockRef} headingRef={headingRef} />
                                     </div>
                                 </div>
@@ -592,15 +592,15 @@ const IPhoneContent = ({ subtitleBlockRef, headingRef }: IPhoneContentProps) => 
     return (<div className="flex flex-col gap-y-[0.7vw] items-center justify-center">
         {/* upper part */}
         <div ref={subtitleBlockRef} className="flex flex-col items-center justify-center gap-y-[0.1vw]">
-            <p className="text-[0.5vw] font-light leading-2.5">{t("subtitle")}</p>
-            <p className="flex flex-col items-center font-medium text-[1vw] leading-[1.4vw]">
+            <p className="text-[0.3vw] font-light leading-2.5">{t("subtitle")}</p>
+            <p className="flex flex-col items-center font-medium text-[0.7vw] leading-[0.8vw]">
                 <span>{t("requestToDelivery")}</span>
                 <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("allInOneApp")}</span>
             </p>
         </div>
 
         {/* lower part */}
-        <div ref={headingRef} className="flex flex-col items-center justify-center font-medium text-[1.8vw] leading-[2vw]">
+        <div ref={headingRef} className="flex flex-col items-center justify-center font-medium text-[1.5vw] leading-[1.5vw] mt-[0.5vw]">
             <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("smartWayTo")}</p>
             <p>
                 <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("moveYour")}</span>

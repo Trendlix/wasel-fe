@@ -20,6 +20,12 @@ const Section4 = () => {
 
         gsap.set(cards, { autoAlpha: 0.2, y: 60 });
 
+        // set all bars to width 0 on mount
+        cards.forEach((el) => {
+            const bar = el.querySelector<HTMLElement>("[data-bar]");
+            if (bar) gsap.set(bar, { width: 0 });
+        });
+
         cards.forEach((el) => {
             gsap.timeline({
                 scrollTrigger: {
@@ -32,6 +38,8 @@ const Section4 = () => {
 
         const section = sectionRef.current;
         if (!section) return;
+
+        let lastActiveIndex = -1;
 
         ScrollTrigger.create({
             trigger: section,
@@ -56,8 +64,24 @@ const Section4 = () => {
                 });
 
                 cards.forEach((el, i) => {
-                    gsap.to(el, { autoAlpha: i === activeIndex ? 1 : 0.2, duration: 0.3, ease: "power2.out", overwrite: "auto" });
+                    const isActive = i === activeIndex;
+                    gsap.to(el, { autoAlpha: isActive ? 1 : 0.2, duration: 0.3, ease: "power2.out", overwrite: "auto" });
+
+                    if (lastActiveIndex !== activeIndex) {
+                        const bar = el.querySelector<HTMLElement>("[data-bar]");
+                        if (bar) {
+                            const targetWidth = bar.dataset.barWidth ?? "100%";
+                            gsap.to(bar, {
+                                width: isActive ? targetWidth : 0,
+                                duration: 0.8,
+                                ease: "power2.out",
+                                overwrite: "auto",
+                            });
+                        }
+                    }
                 });
+
+                lastActiveIndex = activeIndex;
             },
         });
     }, { scope: sectionRef, dependencies: [] });
@@ -96,7 +120,7 @@ const Card = ({ item }: { item: IAboutTruck }) => {
                             <br />
                             <span className={clsx("relative", "w-fit")}>
                                 <span className="relative z-10 pr-1 pl-20">{title[1]}</span>
-                                <span className={barClass} />
+                                <span className={barClass} data-bar data-bar-width="100%" />
                             </span>
                             {" "}
                             <span>{title[2]}</span>
@@ -106,7 +130,7 @@ const Card = ({ item }: { item: IAboutTruck }) => {
                         </p>
                     </div>
                     <div className="pr-20 max-w-[598px]">
-                        <Image src={image} alt={title.join(" ")} width={1000} height={1000} className="w-full h-full object-cover" />
+                        <Image src={image} alt={title.join(" ")} width={1000} height={1000} className="w-full h-full object-cover drop-shadow-[500px] drop-shadow-main-black" />
                     </div>
                 </div>
             </div>
@@ -119,13 +143,13 @@ const Card = ({ item }: { item: IAboutTruck }) => {
             <div className="bg-linear-to-b from-main-paleBlack/45 to-main-classicMatteGrey rounded-[30px] p-px overflow-hidden min-h-[500px] flex flex-col">
                 <div className="rounded-[30px] bg-main-codGray text-white overflow-hidden py-7 flex items-center justify-between gap-10 flex-1 min-h-0">
                     <div className="pl-20 max-w-[598px] relative z-10">
-                        <Image src={image} alt={title.join(" ")} width={1000} height={1000} className="w-full h-full object-cover" />
+                        <Image src={image} alt={title.join(" ")} width={1000} height={1000} className="w-full h-full object-cover drop-shadow-[500px] drop-shadow-main-black" />
                     </div>
                     <div className="flex-1 space-y-6">
                         <h3 className="2xl:text-5xl xl:text-4xl md:text-3xl text-2xl font-bold">
                             <span className={clsx("relative", "w-fit")}>
                                 <span className="relative z-10 pr-1 pl-20">{title[0]}</span>
-                                <span className={barClassWide} />
+                                <span className={barClassWide} data-bar data-bar-width="182%" />
                             </span>
                             {" "}
                             <span>{title[1]}</span>
@@ -147,7 +171,7 @@ const Card = ({ item }: { item: IAboutTruck }) => {
                     <h3 className="2xl:text-5xl xl:text-4xl md:text-3xl text-2xl font-bold">
                         <span className={clsx("relative", "w-fit")}>
                             <span className="relative z-10 pr-1 pl-20">{title[0]}</span>
-                            <span className={barClassWide} />
+                            <span className={barClassWide} data-bar data-bar-width="182%" />
                         </span>
                         <br />
                         <span className="pl-20">{title[1]}</span>
@@ -157,7 +181,7 @@ const Card = ({ item }: { item: IAboutTruck }) => {
                     </p>
                 </div>
                 <div className="pr-20 max-w-[598px]">
-                    <Image src={image} alt={title.join(" ")} width={1000} height={1000} className="w-full h-full object-cover" />
+                    <Image src={image} alt={title.join(" ")} width={1000} height={1000} className="w-full h-full object-cover drop-shadow-[500px] drop-shadow-main-black" />
                 </div>
             </div>
         </div>

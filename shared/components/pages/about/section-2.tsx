@@ -60,14 +60,14 @@ const Section2 = () => {
                 scrub: 1,
             },
         });
-        // Cards move into place: back.out for overshoot/settle, opacity tied to scroll progress
+        // Cards move into place
         cardTl.to(card1Ref.current, { y: 0, opacity: 1, duration: 0.33, ease: "back.out(1.2)" }, 0);
         cardTl.to(card2Ref.current, { y: 0, opacity: 1, duration: 0.33, ease: "back.out(1.2)" }, 0.33);
         cardTl.to(card3Ref.current, { y: 0, opacity: 1, duration: 0.34, ease: "back.out(1.2)" }, 0.66);
-        // When each card is fully in place, bar grows to full width (hero-style)
-        cardTl.to(bar1Ref.current, { width: "125%", duration: 0.08, ease: "back.out(1)" }, 0.33);
-        cardTl.to(bar2Ref.current, { width: "125%", duration: 0.08, ease: "back.out(1)" }, 0.66);
-        cardTl.to(bar3Ref.current, { width: "125%", duration: 0.08, ease: "back.out(1)" }, 0.92);
+        // Bars scrub in sync with their card
+        cardTl.to(bar1Ref.current, { width: "125%", duration: 0.33, ease: "none" }, 0);
+        cardTl.to(bar2Ref.current, { width: "125%", duration: 0.33, ease: "none" }, 0.33);
+        cardTl.to(bar3Ref.current, { width: "125%", duration: 0.34, ease: "none" }, 0.66);
     }, { scope: sectionRef })
 
 
