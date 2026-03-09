@@ -23,10 +23,11 @@
                 "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima earum sit neque harum id totam at minus iste laborum, excepturi eum debitis dolor consequatur, ullam aut impedit porro omnis numquam!"
             },
             "card2": {
+                "title": "Show Driver Reviews",
                 "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima earum sit neque harum id totam at minus iste laborum, excepturi eum debitis dolor consequatur, ullam aut impedit porro omnis numquam!"
             },
-            "card3": { "title": "lorem4" },
-            "card4": { "title": "lorem4" }
+            "card3": { "title": "Wasel Payment Faster than any other App." },
+            "card4": { "title": "Wasel Payment Faster than any other App." }
         },
         "section2": {
             "card1": {

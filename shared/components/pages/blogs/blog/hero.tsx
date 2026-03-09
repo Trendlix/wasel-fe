@@ -1,0 +1,87 @@
+"use client";
+
+import { IBlogCardItem } from "@/shared/constants/blogs";
+import { useGSAP } from "@gsap/react";
+import clsx from "clsx";
+import gsap from "gsap";
+import { ArrowLeftIcon, Calendar, Clock } from "lucide-react";
+import Link from "next/link";
+import { useRef } from "react";
+
+const tagsColors = [
+    { text: "text-white", bg: "bg-main-red" },
+    { text: "text-black", bg: "bg-main-secondary" },
+    { text: "text-white", bg: "bg-main-ukraineBlue" },
+];
+
+const Hero = ({ blog, onLayoutReady }: { blog: IBlogCardItem; onLayoutReady?: () => void }) => {
+    const color = tagsColors[(blog.id - 1) % tagsColors.length];
+
+    const scopeRef = useRef<HTMLElement>(null);
+    const backRef = useRef<HTMLAnchorElement>(null);
+    const tagRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useGSAP(() => {
+        const tl = gsap.timeline({
+            defaults: { ease: "power3.out", duration: 0.8 },
+            onComplete: onLayoutReady,
+        });
+
+        tl.from(scopeRef.current, { autoAlpha: 0, duration: 0.5 })
+            .from(backRef.current, { y: 20, autoAlpha: 0 }, "-=0.2")
+            .from(tagRef.current, { y: 20, autoAlpha: 0 }, "-=0.5")
+            .from(contentRef.current?.children ?? [], { y: 40, autoAlpha: 0, stagger: 0.12 }, "-=0.4");
+    }, { scope: scopeRef });
+
+    return (
+        <section
+            ref={scopeRef}
+            className={clsx("relative")}
+            style={{
+                backgroundImage: `url(${blog.coverImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+            }}
+        >
+            <div className="bg-linear-to-t from-main-codGray via-black/50 to-black/70 w-full h-full absolute inset-0 z-0" />
+
+            <div className={clsx("max-2xl:container relative z-10 h-full min-h-[600px] 2xl:max-w-3xl mx-auto", "flex items-end justify-start", "py-14")}>
+                <div className="h-full space-y-8">
+                    <Link ref={backRef} href="/blogs" className="text-white/70 text-sm leading-[24px] tracking-0 flex items-center gap-2">
+                        <span><ArrowLeftIcon size={20} /></span>
+                        <span>Back to Blogs</span>
+                    </Link>
+
+                    <div ref={tagRef} className={clsx("rounded-full px-4 py-1.5 w-fit", "uppercase text-xs font-medium tracking-[3px]", color.bg, color.text)}>
+                        {blog.type}
+                    </div>
+
+                    <div ref={contentRef} className="space-y-4">
+                        <h2 className="text-white font-bold xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-2xl xl:leading-14">
+                            {blog.title}
+                        </h2>
+
+                        <p className="text-white/70 text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] max-w-3xl">
+                            {blog.description}
+                        </p>
+
+                        <div className="flex items-center gap-6 text-white/70 text-base *:flex *:items-center *:gap-2">
+                            <p>
+                                <Calendar size={15} />
+                                <span>{blog.timestamp.date}</span>
+                            </p>
+                            <p>
+                                <Clock size={15} />
+                                <span>{blog.readTime}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+export default Hero;

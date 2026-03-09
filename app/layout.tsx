@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/shared/components/common/theme-provider";
 import { ScrollSpeedController } from "@/shared/components/common/scroll-speed";
-import { rocGrotesk, rocGroteskCond, rocGroteskWide } from "./fonts";
+import { plusJakartaSans, rocGrotesk, rocGroteskCond, rocGroteskWide } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Wasel",
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${rocGrotesk.variable} ${rocGroteskCond.variable} ${rocGroteskWide.variable}`}
+      className={`${rocGrotesk.variable} ${rocGroteskCond.variable} ${rocGroteskWide.variable} ${plusJakartaSans.variable}`}
     >
       <body>
         <ThemeProvider

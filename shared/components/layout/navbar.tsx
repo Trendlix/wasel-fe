@@ -15,8 +15,8 @@ const navLinks = [
     { href: "/about", labelKey: "about" },
     { href: "/services", labelKey: "services" },
     { href: "/contact", labelKey: "contact" },
-    // { href: "/blogs", labelKey: "blogs" },
-    // { href: "/order-tracking", labelKey: "orderTracking" },
+    { href: "/blogs", labelKey: "blogs" },
+    { href: "/order-tracking", labelKey: "orderTracking" },
 ] as const;
 
 const Navbar = () => {

@@ -204,14 +204,15 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
 
             gsap.set(dynamicIslandRef.current, {
                 width: "90%",
-                maxWidth: `${gsap.utils.interpolate(50, 90, islandP)}%`,
+                maxWidth: `${gsap.utils.interpolate(36, 65, islandP)}%`,
                 opacity: gsap.utils.interpolate(1, 0, hideP),
             });
 
             gsap.set(islandRoot, {
-                height: islandP >= 0.99 ? "auto" : gsap.utils.interpolate(closedHeight, openHeight, islandP),
-                minHeight: islandP >= 0.99 ? openHeight : closedHeight,
-                borderRadius: gsap.utils.interpolate(200, 55, islandP),
+                height: islandP >= 0.99 ? "auto" : gsap.utils.interpolate(closedHeight, Math.min(openHeight, 366), islandP),
+                minHeight: islandP >= 0.99 ? Math.min(openHeight, 366) : closedHeight,
+                maxHeight: "366px",
+                borderRadius: gsap.utils.interpolate(200, 30, islandP),
                 paddingLeft: `${gsap.utils.interpolate(fromPadding, openPadX, islandP)}px`,
                 paddingRight: `${gsap.utils.interpolate(fromPadding, openPadX, islandP)}px`,
                 paddingTop: `${gsap.utils.interpolate(0, paddingTop, islandP)}px`,
@@ -269,6 +270,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
         }
         gsap.set(islandRoot, {
             height: getClosedIslandHeight(),
+            maxHeight: "366px",
             borderRadius: 200,
             paddingLeft: "0px",
             paddingRight: "0px",

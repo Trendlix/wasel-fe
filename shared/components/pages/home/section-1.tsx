@@ -2,10 +2,11 @@
 
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
-import { useRef } from "react";
+import { forwardRef, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
 type Section1Props = {
@@ -15,32 +16,36 @@ type Section1Props = {
 const Section1 = ({ heroLayoutReady = false }: Section1Props) => {
     const t = useTranslations("home.section1");
     const headingRef = useRef<HTMLHeadingElement>(null);
-    const cardsContainerRef = useRef<HTMLDivElement>(null);
+    const card1Ref = useRef<HTMLDivElement>(null);
+    const card2Ref = useRef<HTMLDivElement>(null);
+    const card3Ref = useRef<HTMLDivElement>(null);
+    const card4Ref = useRef<HTMLDivElement>(null);
     const scopeRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
-        if (!heroLayoutReady || !headingRef.current || !cardsContainerRef.current || !scopeRef.current) return;
+        if (!heroLayoutReady || !scopeRef.current) return;
+        const cards = [card1Ref.current, card2Ref.current, card3Ref.current, card4Ref.current];
+        if (!headingRef.current || cards.some(c => !c)) return;
 
+        // initial states — each card enters from a direction matching its grid position
         gsap.set(headingRef.current, { autoAlpha: 0, y: 250 });
-        gsap.set(cardsContainerRef.current, { autoAlpha: 0, y: 150 });
+        gsap.set(card1Ref.current, { autoAlpha: 0, x: -300, y: 100 });
+        gsap.set(card2Ref.current, { autoAlpha: 0, x: 300 });
+        gsap.set(card3Ref.current, { autoAlpha: 0, x: -200, y: 200 });
+        gsap.set(card4Ref.current, { autoAlpha: 0, y: 200 });
 
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: scopeRef.current,
-                start: "top 50%"
+                start: "top 50%",
             },
         });
 
-        tl.set(cardsContainerRef.current, { autoAlpha: 1 }, 0).fromTo(
-            headingRef.current,
-            { autoAlpha: 0, y: 250 },
-            { autoAlpha: 1, y: 0, duration: 1.4, ease: "back.out(1)" },
-        ).fromTo(
-            cardsContainerRef.current,
-            { y: 150 },
-            { y: 0, duration: 1.4, ease: "back.out(1.4)" },
-            "<",
-        );
+        tl.to(headingRef.current, { autoAlpha: 1, y: 0, duration: 1.2, ease: "back.out(1)" })
+            .to(card1Ref.current, { autoAlpha: 1, x: 0, y: 0, duration: 1.1, ease: "back.out(1)" }, "<+=0.15")
+            .to(card2Ref.current, { autoAlpha: 1, x: 0, duration: 1.1, ease: "back.out(1)" }, "<+=0.15")
+            .to(card3Ref.current, { autoAlpha: 1, x: 0, y: 0, duration: 1.1, ease: "back.out(1)" }, "<+=0.15")
+            .to(card4Ref.current, { autoAlpha: 1, y: 0, duration: 1.1, ease: "back.out(1)" }, "<+=0.15");
 
     }, { scope: scopeRef, dependencies: [heroLayoutReady] });
 
@@ -48,15 +53,15 @@ const Section1 = ({ heroLayoutReady = false }: Section1Props) => {
         <section className={clsx("min-h-screen pb-10 bg-black flex flex-col")}>
             <div ref={scopeRef} className={clsx("container gap-y-12 flex-1 flex flex-col")}>
 
-                <h1 ref={headingRef} className={clsx("text-white font-bold text-center", "xl:text-7xl lg:text-6xl md:text-5xl sm:text-4xl text-2xl")} >
+                <h1 ref={headingRef} className={clsx("text-white font-bold text-center", "xl:text-7xl lg:text-6xl md:text-5xl sm:text-4xl text-2xl")}>
                     {t("heading")}
                 </h1>
 
-                <div ref={cardsContainerRef} className={clsx("grid grid-cols-3 grid-rows-2 gap-9 flex-1", "min-h-[800px]", "*:rounded-[37px] *:overflow-hidden", "relative z-50")}>
-                    <Card1 />
-                    <Card2 />
-                    <Card3 />
-                    <Card4 />
+                <div className={clsx("grid grid-cols-3 grid-rows-[430px_300px] gap-7", "*:rounded-[37px] *:overflow-hidden", "relative z-50")}>
+                    <Card1 ref={card1Ref} />
+                    <Card2 ref={card2Ref} />
+                    <Card3 ref={card3Ref} />
+                    <Card4 ref={card4Ref} />
                 </div>
 
             </div>
@@ -64,42 +69,84 @@ const Section1 = ({ heroLayoutReady = false }: Section1Props) => {
     );
 };
 
-const Card1 = () => {
+const Card1 = forwardRef<HTMLDivElement>((_, ref) => {
     const t = useTranslations("home.section1.card1");
     return (
-        <div className={clsx("col-span-2 row-span-1 bg-main-flatBlack border border-white/19 py-[clamp(1.5rem,2vw,3rem)] px-[clamp(1.5rem,1.5vw,3rem)]")}>
-            <div className={clsx("font-medium text-2xl leading-9 text-main-darkHeatherGray", "capitalize")}>{t("title")}</div>
-            <div></div>
+        <div ref={ref} className={clsx("col-span-2 bg-main-flatBlack border border-white/19 pt-[clamp(1.5rem,2vw,3rem)] px-[clamp(1.5rem,1.5vw,3rem)]", "flex flex-col")}>
+            <p
+                className="font-medium text-start text-white"
+                style={{ fontSize: "25.82px", lineHeight: "38.8px", letterSpacing: "0" }}
+            >
+                {t("title")}
+            </p>
+            <div className="mt-auto">
+                <Image src="/brand/pages/home/to-be-gif/cargo.png" alt="card1" width={1000} height={1000} className="w-full h-full object-cover" />
+            </div>
         </div>
     );
-};
+});
+Card1.displayName = "Card1";
 
-const Card2 = () => {
+const Card2 = forwardRef<HTMLDivElement>((_, ref) => {
     const t = useTranslations("home.section1.card2");
     return (
-        <div className={clsx("col-span-1 row-span-2", "bg-main-matteBlack", "flex flex-col", "py-[clamp(1.5rem,2vw,3rem)] px-[clamp(1.5rem,2.3vw,3rem)]", "*:border")}>
-            <div></div>
-            <div className={clsx("mt-auto")}>{t("description")}</div>
+        <div ref={ref} className={clsx("col-span-1 row-span-2", "bg-main-matteBlack", "flex flex-col", "relative")}>
+            <Image src="/brand/pages/home/to-be-gif/driver.png" alt="card1" width={1000} height={1000} className="w-full h-full object-cover absolute top-0 left-0 z-0" />
+            <div className="absolute bottom-0 left-0 right-0 z-10">
+                <div className="flex flex-col items-center text-center gap-5 px-12 py-10">
+                    <p
+                        className="font-medium text-white"
+                        style={{ fontSize: "25.82px", lineHeight: "38.8px", letterSpacing: "-0.01em" }}
+                    >
+                        {t("title")}
+                    </p>
+                    <p
+                        className="font-normal text-white/70"
+                        style={{ fontFamily: "var(--font-jakarta)", fontSize: "16.95px", lineHeight: "26.94px", letterSpacing: "0" }}
+                    >
+                        {t("description")}
+                    </p>
+                </div>
+            </div>
         </div>
     );
-};
+});
+Card2.displayName = "Card2";
 
-const Card3 = () => {
+const Card3 = forwardRef<HTMLDivElement>((_, ref) => {
     const t = useTranslations("home.section1.card3");
     return (
-        <div className={clsx("col-span-1 row-span-1 bg-main-ukraineBlue", "py-[clamp(1.5rem,2vw,3rem)]")}>
-            <p className="text-center">{t("title")}</p>
+        <div ref={ref} className={clsx("col-span-1 row-span-1 bg-main-ukraineBlue", "pt-[clamp(1.5rem,2vw,3rem)]", "flex flex-col")}>
+            <p
+                className="text-center font-medium text-white px-4"
+                style={{ fontSize: "25.82px", lineHeight: "38.8px", letterSpacing: "0" }}
+            >
+                {t("title")}
+            </p>
+            <div className="mt-auto">
+                <Image src="/brand/pages/home/to-be-gif/faster.png" alt="card1" width={1000} height={1000} className="w-full h-full object-cover" />
+            </div>
         </div>
     );
-};
+});
+Card3.displayName = "Card3";
 
-const Card4 = () => {
+const Card4 = forwardRef<HTMLDivElement>((_, ref) => {
     const t = useTranslations("home.section1.card4");
     return (
-        <div className={clsx("col-span-1 row-span-1 bg-white", "py-[clamp(1.5rem,2vw,3rem)]")}>
-            <p className="text-center">{t("title")}</p>
+        <div ref={ref} className={clsx("col-span-1 row-span-1 bg-white", "pt-[clamp(1.5rem,2vw,3rem)]", "flex flex-col")}>
+            <p
+                className="text-center font-medium text-black px-4"
+                style={{ fontSize: "25.82px", lineHeight: "38.8px", letterSpacing: "0" }}
+            >
+                {t("title")}
+            </p>
+            <div className="mt-auto">
+                <Image src="/brand/pages/home/to-be-gif/payment.png" alt="card1" width={1000} height={1000} className="w-full h-full object-cover" />
+            </div>
         </div>
     );
-};
+});
+Card4.displayName = "Card4";
 
 export default Section1;
