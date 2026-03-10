@@ -41,6 +41,8 @@
   --main-carbonFiber: #262626;
   --main-eerieBlack: #1A1A1A;
   --main-coldBlack: #101215;
+  --main-lightGray: #D4D4D4;
+  --main-techWhite: #F5F5F5;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -148,6 +150,8 @@
   --color-main-carbonFiber: var(--main-carbonFiber);
   --color-main-eerieBlack: var(--main-eerieBlack);
   --color-main-coldBlack: var(--main-coldBlack);
+  --color-main-lightGray: var(--main-lightGray);
+  --color-main-techWhite: var(--main-techWhite);
   /* Fonts - Mapping to the variables from next/font/local */
   --font-sans: var(--font-roc-main), ui-sans-serif, system-ui, sans-serif;
   --font-condensed: var(--font-roc-cond);

@@ -55,17 +55,17 @@ const FAQ = ({ heroLayoutReady = false, className }: FAQProps) => {
     }, { scope: scopeRef, dependencies: [heroLayoutReady] });
 
     return (
-        <section ref={scopeRef} className={clsx("text-white bg-black", className)} dir={dir}>
+        <section ref={scopeRef} className={clsx("text-black dark:text-white", className)} dir={dir}>
             <div className="container flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-12 xl:gap-16">
                 <div ref={(el) => { elementsRefs.current[0] = el; }} className="w-full lg:max-w-md xl:max-w-lg shrink-0">
-                    <h3 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[54px] leading-tight xl:leading-[56px]">
+                    <h3 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[54px] leading-tight xl:leading-[56px] text-black dark:text-white">
                         {t("heading")}
                     </h3>
-                    <p className="mt-3 font-normal text-[15px] sm:text-base md:text-[17px] leading-6 text-main-matteLightGray">
+                    <p className="mt-3 font-normal text-[15px] sm:text-base md:text-[17px] leading-6 dark:text-main-matteLightGray text-main-black">
                         {t("description")}
                     </p>
                 </div>
-                <div ref={(el) => { elementsRefs.current[1] = el; }} className="w-full flex-1 min-w-0">
+                <div ref={(el) => { elementsRefs.current[1] = el; }} className="w-full flex-1 min-w-0 [&_[data-slot=accordion-trigger]]:text-black [&_[data-slot=accordion-trigger]]:dark:text-white [&_[data-slot=accordion-content]]:text-black [&_[data-slot=accordion-content]]:dark:text-white [&_.text-muted-foreground]:text-black [&_.text-muted-foreground]:dark:text-white">
                     <Accordion type="single" collapsible>
                         {Array.from({ length: count }, (_, i) => (
                             <AccordionItem className="border-b last:border-b-0 border-main-grayHint" key={i} value={`item-${i}`}>

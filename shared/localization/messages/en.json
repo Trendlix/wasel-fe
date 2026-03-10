@@ -119,6 +119,113 @@
             "line1a": "From Booking to",
             "line1b": "Delivery, Everything You",
             "line2": "Need Is Inside Wasel App"
+        },
+        "section1": {
+            "foundedIn": "Founded in",
+            "year": "2024",
+            "wasel": "Wasel",
+            "technologyDriven": "is a technology-driven",
+            "logistics": "logistics",
+            "platform": "platform.",
+            "para1": "Specialized in heavy and large-weight transportation. ",
+            "para2": "We connect users, drivers, fleet owners, and advertisers through smart digital solutions designed to improve efficiency,",
+            "para3": "transparency, and operational control. Our mission is to modernize heavy transport by delivering reliable, scalable, and innovative tools that power growth across the entire ecosystem."
+        },
+        "section2": {
+            "whatWe": "What We",
+            "stand": "Stand",
+            "for": "For",
+            "arrowAlt": "decorative arrow"
+        },
+        "section3": {
+            "card1": {
+                "title": "Reliability",
+                "description": "We understand that heavy transportation demands precision and dependability. That's why we build systems that ensure secure operations, verified partners."
+            },
+            "card2": {
+                "title": "Transparency",
+                "description": "Clear pricing, real-time tracking, and open communication are at the core of our platform. We believe trust is built through visibility and honest operations."
+            },
+            "card3": {
+                "title": "Partnership",
+                "description": "Wasel is more than a platform — it's a network. We value strong relationships with drivers, companies, users, and advertisers, growing together through collaboration."
+            }
+        },
+        "section4": {
+            "card0": {
+                "title0": "What Makes",
+                "title1": "Wasel",
+                "title2": "Different",
+                "description": "Wasel is not just a transportation app — it is a complete logistics ecosystem designed to create measurable value for everyone involved."
+            },
+            "card1": {
+                "title0": "Wasel",
+                "title1": "Mission",
+                "description": "To simplify heavy transportation by delivering smart, reliable, and scalable digital solutions that empower every partner in the logistics chain."
+            },
+            "card2": {
+                "title0": "Wasel",
+                "title1": "Commitment",
+                "description": "We are committed to building a trusted transportation network where reliability, transparency, and performance drive long-term success."
+            },
+            "card3": {
+                "title0": "Wasel",
+                "title1": "Vision",
+                "description": "To become the leading heavy transportation platform in the region, setting new standards for operational efficiency, transparency, and technological innovation."
+            }
+        }
+    },
+    "orderTracking": {
+        "hero": {
+            "title": "Track Your Shipment",
+            "subtitle": "Enter your tracking number below to get real-time updates on your shipment status and location."
+        },
+        "track": {
+            "placeholder": "Enter your tracking number (e.g. WSL1234567890)",
+            "trackButton": "Track",
+            "sampleNumbers": "Try these sample tracking numbers:",
+            "noOrderFound": "No order found",
+            "noOrderFoundHint": "Double-check your tracking number and try again."
+        },
+        "status": {
+            "order_placed": { "label": "Order Placed", "description": "Shipment booking confirmed" },
+            "order_picked_up": { "label": "Picked Up", "description": "Package picked up from origin" },
+            "order_in_transit": { "label": "In Transit", "description": "En route to destination" },
+            "order_out_for_delivery": { "label": "Out for Delivery", "description": "Package out for final delivery" },
+            "order_delivered": { "label": "Delivered", "description": "Package delivered successfully" },
+            "order_cancelled": { "label": "Cancelled", "description": "Order has been cancelled" }
+        },
+        "result": {
+            "currentStatus": "Current Status",
+            "trackingNumber": "Tracking Number:",
+            "estimatedDelivery": "Estimated Delivery",
+            "shipmentTimeline": "Shipment Timeline",
+            "shipmentDetails": "Shipment Details",
+            "from": "From",
+            "to": "To",
+            "weight": "Weight",
+            "vehicleType": "Vehicle Type",
+            "driver": "Driver",
+            "needHelp": "Need Help?",
+            "needHelpDescription": "Our support team is here to assist you with any questions about your shipment.",
+            "callSupport": "Call Support",
+            "emailUs": "Email Us"
+        },
+        "cards": {
+            "heading": "Why Track with Wasel?",
+            "subtitle": "Get complete visibility into your shipments",
+            "realTimeLocation": {
+                "title": "Real-Time Location",
+                "description": "Track your shipment's exact location with GPS updates every 30 seconds."
+            },
+            "accurateEtas": {
+                "title": "Accurate ETAs",
+                "description": "AI-powered delivery estimates based on real traffic and weather conditions"
+            },
+            "instantNotifications": {
+                "title": "Instant Notifications",
+                "description": "Get SMS and email alerts for every major milestone in your delivery"
+            }
         }
     },
     "contact": {
@@ -266,6 +373,37 @@
                 }
             }
         }
+    },
+    "blogs": {
+        "hero": {
+            "title": "Wasel Blogs",
+            "subtitle": "Stay updated with the latest trends, insights, and innovations in logistics, transportation, and supply chain management."
+        },
+        "banner": {
+            "tabs": {
+                "technology": "Technology",
+                "featured": "Featured",
+                "industry": "Industry",
+                "transportation": "Transportation",
+                "storage": "Storage",
+                "business": "Business"
+            },
+            "slider": {
+                "1": { "title": "How AI Is Reshaping Software Development in 2026", "description": "Artificial intelligence is rapidly changing how developers write, test, and deploy code. From AI copilots to automated testing pipelines, discover how development teams are becoming faster and more efficient.", "readTime": "6 min read", "date": "January 28, 2026" },
+                "2": { "title": "Building Scalable SaaS Platforms: Lessons from Modern Startups", "description": "Startups today must design systems that scale from hundreds to millions of users. This article explores architecture patterns, microservices, and cloud-native strategies used by fast-growing SaaS companies.", "readTime": "8 min read", "date": "February 10, 2026" },
+                "3": { "title": "The Rise of AI Voice Agents in Customer Support", "description": "Voice AI is becoming a powerful tool for businesses. Learn how AI voice agents are reducing support costs, improving response times, and creating more natural customer experiences.", "readTime": "5 min read", "date": "February 22, 2026" }
+            }
+        },
+        "cards": {
+            "how-heavy-transportation-is-construction": { "title": "How Heavy Transportation is Construction", "description": "From flatbeds to specialized vehicles, learn how on-demand heavy truck booking is changing the construction industry.", "readTime": "7 min read", "date": "February 12, 2026" },
+            "building-scalable-saas-platforms-lessons-from-modern-startups": { "title": "Building Scalable SaaS Platforms: Lessons from Modern Startups", "description": "Startups today must design systems that scale from hundreds to millions of users. This article explores architecture patterns, microservices, and cloud-native strategies used by fast-growing SaaS companies.", "readTime": "8 min read", "date": "February 10, 2026" },
+            "the-rise-of-ai-voice-agents-in-customer-support": { "title": "The Rise of AI Voice Agents in Customer Support", "description": "Voice AI is becoming a powerful tool for businesses. Learn how AI voice agents are reducing support costs, improving response times, and creating more natural customer experiences.", "readTime": "5 min read", "date": "February 22, 2026" },
+            "warehouse-storage-solutions-a-complete-guide": { "title": "Warehouse Storage Solutions: A Complete Guide", "description": "Everything you need to know about choosing the right warehouse storage solution for your business needs.", "readTime": "6 min read", "date": "February 10, 2026" },
+            "optimizing-your-supply-chain-with-digital-solutions": { "title": "Optimizing Your Supply Chain with Digital Solutions", "description": "Learn how digital transformation is streamlining supply chain operations and reducing costs for businesses.", "readTime": "8 min read", "date": "February 5, 2026" },
+            "the-rise-of-container-shipping-in-modern-trade": { "title": "The Rise of Container Shipping in Modern Trade", "description": "Explore how container shipping has become the backbone of global trade and what the future holds.", "readTime": "6 min read", "date": "February 2, 2026" }
+        },
+        "backToBlogs": "Back to Blogs",
+        "relatedBlogs": "Related Blogs"
     },
     "brandBanner": {
         "heading": "Manage Your Fleet or Brand with Full Control.",

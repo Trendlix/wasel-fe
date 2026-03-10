@@ -1,12 +1,15 @@
 "use client";
 
 import { blogsSliderItems, IBlogsSliderItem } from "@/shared/constants/blogs";
+import { useLocale, useTranslations } from "next-intl";
 import clsx from "clsx";
 import { Calendar, Clock } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-const BannerSlider = () => {
+const BannerSlider = ({ isAr }: { isAr?: boolean }) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const [activeTab, setActiveTab] = useState<IBlogsSliderItem["type"]>("technology");
 
     const activeItem = blogsSliderItems.find((i) => i.type === activeTab) ?? null;
@@ -30,9 +33,9 @@ const BannerSlider = () => {
     }, [activeTab]);
 
     return (
-        <div className={clsx("space-y-10", "xl:p-[70px] lg:p-[50px] md:p-[40px] p-[30px]")}>
+        <div className={clsx("space-y-10", "xl:p-[70px] lg:p-[50px] md:p-[40px] p-[30px]")} dir={dir}>
             <SliderTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-            <SliderContent ref={contentRef} activeItem={activeItem} />
+            <SliderContent ref={contentRef} activeItem={activeItem} isAr={isAr} />
         </div>
     );
 };
@@ -44,6 +47,7 @@ const SliderTabs = ({
     activeTab: IBlogsSliderItem["type"];
     setActiveTab: (tab: IBlogsSliderItem["type"]) => void;
 }) => {
+    const t = useTranslations("blogs.banner.tabs");
     const tabsRef = useRef<HTMLDivElement>(null);
 
     const baseClass = "font-medium text-sm leading-7 tracking-[1%] rounded-full uppercase";
@@ -76,7 +80,7 @@ const SliderTabs = ({
                     className={clsx(baseClass, activeTab === tab ? activeClass : inactiveClass)}
                     onClick={() => setActiveTab(tab)}
                 >
-                    {tab}
+                    {t(tab)}
                 </button>
             ))}
         </div>
@@ -84,33 +88,38 @@ const SliderTabs = ({
 };
 
 const SliderContent = ({
+    isAr,
     activeItem,
     ref,
 }: {
+    isAr?: boolean;
     activeItem: IBlogsSliderItem | null;
     ref: React.Ref<HTMLDivElement>;
 }) => {
+    const t = useTranslations("blogs.banner.slider");
     if (!activeItem) return null;
+
+    const itemKey = String(activeItem.id);
 
     return (
         <div ref={ref} className={clsx("space-y-4")}>
-            <h2 className="text-white font-bold xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-2xl xl:leading-14 max-w-5xl">
-                {activeItem.title}
+            <h2 className={clsx("text-white font-bold xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-2xl max-w-5xl", isAr ? "leading-tight" : "xl:leading-14")}>
+                {t(`${itemKey}.title`)}
             </h2>
 
             <p className="text-white/70 text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] max-w-3xl">
-                {activeItem.description}
+                {t(`${itemKey}.description`)}
             </p>
 
             <div className="flex items-center gap-6 text-white/70 text-base *:flex *:items-center *:gap-2">
                 <p>
                     <Calendar size={15} />
-                    <span>{activeItem.timestamp.date}</span>
+                    <span>{t(`${itemKey}.date`)}</span>
                 </p>
 
                 <p>
                     <Clock size={15} />
-                    <span>{activeItem.readTime}</span>
+                    <span>{t(`${itemKey}.readTime`)}</span>
                 </p>
             </div>
         </div>

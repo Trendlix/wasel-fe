@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -12,6 +12,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { footerLinks } from "@/shared/constants/footer-links";
 import { AppStoreButton, GooglePlayButton } from "../common";
 import { FacebookIcon, Globe, Linkedin } from "lucide-react";
+import { useTheme } from "next-themes";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -76,9 +77,19 @@ const Footer = ({ heroLayoutReady = false, className }: FooterProps) => {
 };
 
 const Logo = () => {
+    const { resolvedTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        const id = requestAnimationFrame(() => setMounted(true));
+        return () => cancelAnimationFrame(id);
+    }, []);
+
+    const logoSrc = !mounted ? "/brand/logo-light.png" : resolvedTheme === "dark" ? "/brand/logo.png" : "/brand/logo-light.png";
+
     return (
         <div>
-            <Image src="/brand/logo.png" alt="logo" width={100} height={100} />
+            <Image src={logoSrc} alt="logo" width={100} height={100} />
         </div>
     );
 };
@@ -89,7 +100,7 @@ const Links = ({ dir }: { dir: string }) => {
         <div className="flex items-start justify-between flex-wrap gap-x-12 gap-y-8 capitalize" dir={dir}>
             {footerLinks.map((section) => (
                 <div key={section.titleKey} className="space-y-3.5">
-                    <p className={clsx("font-medium text-xs leading-5 text-main-secondary")}>{t(section.titleKey)}</p>
+                    <p className={clsx("font-medium text-xs leading-5 dark:text-main-secondary text-main-ukraineBlue")}>{t(section.titleKey)}</p>
                     <ul className={clsx("space-y-1.5 text-main-carbonBlue")}>
                         {section.items.map((item) => {
                             const Icon = item.icon;
@@ -106,7 +117,7 @@ const Links = ({ dir }: { dir: string }) => {
 
             {/* ship card */}
             <div className="space-y-3.5">
-                <p className={clsx("font-medium text-xs leading-5 text-main-secondary")}>{t("shipYourCargo")}</p>
+                <p className={clsx("font-medium text-xs leading-5 dark:text-main-secondary text-main-ukraineBlue")}>{t("shipYourCargo")}</p>
                 <div className="flex items-center justify-between gap-x-3">
                     <AppStoreButton />
                     <GooglePlayButton />

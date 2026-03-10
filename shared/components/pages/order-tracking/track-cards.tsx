@@ -1,6 +1,7 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
+import { useLocale, useTranslations } from "next-intl";
 import clsx from "clsx";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,31 +11,31 @@ import { ReactNode, useRef } from "react";
 gsap.registerPlugin(ScrollTrigger);
 
 interface ICard {
-    title: string;
-    description: string;
+    titleKey: string;
+    descriptionKey: string;
     icon: { bg: string; icon: ReactNode };
 }
 
-const cards: ICard[] = [
+const cardsConfig: ICard[] = [
     {
-        title: "Real-Time Location",
-        description: "Track your shipment's exact location with GPS updates every 30 seconds.",
+        titleKey: "realTimeLocation.title",
+        descriptionKey: "realTimeLocation.description",
         icon: {
             bg: "bg-main-ukraineBlue/30",
             icon: <MapPin className="text-main-ukraineBlue" size={28} />,
         },
     },
     {
-        title: "Accurate ETAs",
-        description: "AI-powered delivery estimates based on real traffic and weather conditions",
+        titleKey: "accurateEtas.title",
+        descriptionKey: "accurateEtas.description",
         icon: {
             bg: "bg-main-secondary/30",
             icon: <Bell className="text-main-secondary" size={28} />,
         },
     },
     {
-        title: "Instant Notifications",
-        description: "Get SMS and email alerts for every major milestone in your delivery",
+        titleKey: "instantNotifications.title",
+        descriptionKey: "instantNotifications.description",
         icon: {
             bg: "bg-main-red/30",
             icon: <ShieldCheck className="text-main-red" size={28} />,
@@ -43,6 +44,9 @@ const cards: ICard[] = [
 ];
 
 const TrackCards = () => {
+    const t = useTranslations("orderTracking.cards");
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const headingRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
 
@@ -76,34 +80,34 @@ const TrackCards = () => {
     });
 
     return (
-        <div className="container space-y-8 pb-20 pt-28 flex flex-col items-center justify-center">
+        <div className="container space-y-8 pb-20 pt-28 flex flex-col items-center justify-center" dir={dir}>
             <div ref={headingRef} className="space-y-1 text-center">
-                <h2 className="text-white font-bold xl:text-4xl lg:text-3xl md:text-2xl text-xl">
-                    Why Track with Wasel?
+                <h2 className="dark:text-white text-black font-bold xl:text-4xl lg:text-3xl md:text-2xl text-xl">
+                    {t("heading")}
                 </h2>
-                <p className="text-white/70 text-sm max-w-2xl mx-auto">
-                    Get complete visibility into your shipments
+                <p className="dark:text-white/70 text-black/70 text-sm max-w-2xl mx-auto">
+                    {t("subtitle")}
                 </p>
             </div>
 
             <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {cards.map((card) => (
-                    <Card key={card.title} card={card} />
+                {cardsConfig.map((card) => (
+                    <Card key={card.titleKey} card={card} t={t} />
                 ))}
             </div>
         </div>
     );
 };
 
-const Card = ({ card }: { card: ICard }) => {
+const Card = ({ card, t }: { card: ICard; t: (key: string) => string }) => {
     return (
-        <div className={clsx("rounded-[20px] bg-main-eerieBlack", "flex items-center gap-5", "p-6")}>
+        <div className={clsx("rounded-[20px] dark:bg-main-eerieBlack bg-main-techWhite", "flex items-center gap-5", "p-6")}>
             <div className={clsx("rounded-full p-4 shrink-0", card.icon.bg)}>
                 {card.icon.icon}
             </div>
             <div className="space-y-1">
-                <h3 className="text-white font-bold text-lg leading-tight">{card.title}</h3>
-                <p className="text-white/50 text-sm leading-[1.6]">{card.description}</p>
+                <h3 className="dark:text-white text-black font-bold text-lg leading-tight">{t(card.titleKey)}</h3>
+                <p className="dark:text-white/50 text-black/50 text-sm leading-[1.6]">{t(card.descriptionKey)}</p>
             </div>
         </div>
     );

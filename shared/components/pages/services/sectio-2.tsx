@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import { useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -12,6 +12,8 @@ import { serviceSection2Cards, type IServiceSection2Card } from "@/shared/consta
 gsap.registerPlugin(ScrollTrigger);
 
 const Section2 = () => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const t = useTranslations("services.section2");
     const sectionRef = useRef<HTMLElement>(null);
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -72,7 +74,7 @@ const Section2 = () => {
     }, { scope: sectionRef, dependencies: [] });
 
     return (
-        <section ref={sectionRef} className="pb-28 pt-10">
+        <section ref={sectionRef} dir={dir} className="pb-28 pt-10">
             <div className="container space-y-8">
                 {serviceSection2Cards.map((card, index) => {
                     const points = card.highlights.points.map((_, j) => t(`cards.${index}.points.${j}`));

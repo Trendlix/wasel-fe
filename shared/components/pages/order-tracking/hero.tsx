@@ -1,11 +1,15 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
+import { useLocale, useTranslations } from "next-intl";
 import clsx from "clsx";
 import gsap from "gsap";
 import { useRef } from "react";
 
 const Hero = ({ onLayoutReady }: { onLayoutReady?: () => void }) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
+    const t = useTranslations("orderTracking.hero");
     const scopeRef = useRef<HTMLElement>(null);
     const headingRef = useRef<HTMLHeadingElement>(null);
     const subtitleRef = useRef<HTMLParagraphElement>(null);
@@ -22,20 +26,20 @@ const Hero = ({ onLayoutReady }: { onLayoutReady?: () => void }) => {
     }, { scope: scopeRef });
 
     return (
-        <section ref={scopeRef} className="mt-36">
+        <section ref={scopeRef} className="mt-36" dir={dir}>
             <div className="container">
                 <div className="text-center flex items-center flex-col gap-3">
                     <h1
                         ref={headingRef}
-                        className={clsx("text-white font-bold lg:text-6xl text-4xl leading-[60px] tracking-0")}
+                        className={clsx("dark:text-white text-black font-bold lg:text-6xl text-4xl leading-[60px] tracking-0")}
                     >
-                        Track Your Shipment
+                        {t("title")}
                     </h1>
                     <p
                         ref={subtitleRef}
-                        className={clsx("text-white/70 leading-[26px] tracking-0", "max-w-xl")}
+                        className={clsx("dark:text-white/70 text-black/70 leading-[26px] tracking-0", "max-w-xl")}
                     >
-                        Enter your tracking number below to get real-time updates on your shipment status and location.
+                        {t("subtitle")}
                     </p>
                 </div>
             </div>

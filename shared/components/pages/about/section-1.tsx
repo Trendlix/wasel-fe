@@ -3,10 +3,12 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 gsap.registerPlugin(ScrollTrigger);
 
 
 const Section1 = () => {
+    const t = useTranslations("about.section1");
     const scopeRef = useRef<HTMLDivElement>(null);
     const headingRef = useRef<HTMLHeadingElement>(null);
     const headingXWidthRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -74,29 +76,29 @@ const Section1 = () => {
             <div className="container *: space-y-10">
                 <div className="text-black dark:text-white *:text-center">
                     <h2 ref={headingRef} className={clsx("font-bold xl:text-5xl lg:text-4xl md:text-3xl sm:text-2xl text-xl xl:leading-14 opacity-0")}>
-                        <span className="">Founded in</span>
+                        <span className="">{t("foundedIn")}</span>
                         {" "}
                         <span className={clsx("w-fit", "relative")}>
-                            <span className="relative z-10 text-white dark:text-black">2024</span>
+                            <span className="relative z-10 text-white dark:text-black">{t("year")}</span>
                             <span ref={(el) => { headingXWidthRefs.current[0] = el; }} className={clsx("absolute", "inset-0 w-0 h-full bg-main-secondary z-0")}></span>
                         </span>
                         {" "}
                         <br />
                         <span className={clsx("w-fit", "relative")}>
-                            <span className="relative z-10 text-white dark:text-black">Wasel</span>
+                            <span className="relative z-10 text-white dark:text-black">{t("wasel")}</span>
                             <span ref={(el) => { headingXWidthRefs.current[1] = el; }} className={clsx("absolute", "inset-0 w-0 h-full bg-main-red z-0")}></span>
                         </span>
                         {" "}
-                        <span className="font-medium">is a technology-driven</span>
+                        <span className="font-medium">{t("technologyDriven")}</span>
                         {" "}
-                        <span>logistics<br className="max-md:hidden" /> platform.</span>
+                        <span>{t("logistics")}<br className="max-md:hidden" /> {t("platform")}</span>
                     </h2>
                 </div>
                 <div className="text-black dark:text-white *:text-center md:max-w-[80%] mx-auto font-medium 2xl:text-3xl lg:text-2xl md:text-xl sm:text-sm text-xs">
                     <p ref={paragraphRef} className="opacity-0">
-                        <span ref={(el) => { spanRefs.current[0] = el; }}>Specialized in heavy and large-weight transportation. </span>
-                        <span ref={(el) => { spanRefs.current[1] = el; }}>We connect users, drivers, fleet owners, and advertisers through smart digital solutions designed to improve efficiency,</span>
-                        <span ref={(el) => { spanRefs.current[2] = el; }}>transparency, and operational control. Our mission is to modernize heavy transport by delivering reliable, scalable, and innovative tools that power growth across the entire ecosystem.</span>
+                        <span ref={(el) => { spanRefs.current[0] = el; }}>{t("para1")}</span>
+                        <span ref={(el) => { spanRefs.current[1] = el; }}>{t("para2")}</span>
+                        <span ref={(el) => { spanRefs.current[2] = el; }}>{t("para3")}</span>
                     </p>
                 </div>
             </div>

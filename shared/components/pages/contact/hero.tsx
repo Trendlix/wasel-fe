@@ -2,7 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRef } from "react";
 import gsap from "gsap";
 
@@ -16,6 +16,8 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     const headingRef = useRef<HTMLHeadingElement>(null);
     const paragraphRef = useRef<HTMLParagraphElement>(null);
     const formRef = useRef<HTMLDivElement>(null);
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
 
     useGSAP(() => {
         if (!headingRef.current || !paragraphRef.current || !formRef.current) return;
@@ -33,13 +35,13 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     }, { scope: scopeRef });
 
     return (
-        <section ref={scopeRef} className="pb-28">
+        <section ref={scopeRef} dir={dir} className="pb-28">
             <div className="container mt-36 space-y-8">
                 <div className={clsx("flex flex-col gap-1")}>
-                    <h1 ref={headingRef} className={clsx("font-medium 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl opacity-0")}>
+                    <h1 ref={headingRef} className={clsx("font-medium 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl opacity-0 dark:text-white text-black")}>
                         {t("title")}
                     </h1>
-                    <p ref={paragraphRef} className={clsx("text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] tracking-0 max-w-2xl opacity-0")}>
+                    <p ref={paragraphRef} className={clsx("text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] tracking-0 max-w-2xl opacity-0 dark:text-white text-black")}>
                         {t("subtitle")}
                     </p>
                 </div>

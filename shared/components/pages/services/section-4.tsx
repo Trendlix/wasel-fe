@@ -13,8 +13,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Section4 = () => {
     const locale = useLocale();
-    const t = useTranslations("services.section4");
     const dir = locale === "ar" ? "rtl" : "ltr";
+    const t = useTranslations("services.section4");
     const scopeRef = useRef<HTMLElement>(null);
     const headingRef = useRef<HTMLDivElement>(null);
     const headingXWidthRef = useRef<HTMLSpanElement | null>(null);
@@ -104,6 +104,7 @@ const Section4 = () => {
                                 key={card.id}
                                 ref={(el) => { cardRefs.current[index] = el; }}
                                 className="min-h-[320px] sm:min-h-[380px] md:min-h-[400px] lg:min-h-[420px] max-h-[90vh]"
+                                dir={dir}
                             >
                                 <Card card={card} content={content} reverse={card.id % 2 === 0} />
                             </div>
@@ -120,18 +121,19 @@ const Heading = forwardRef<HTMLDivElement, { t: (key: string) => string; dir: st
         <div
             ref={ref}
             className="flex flex-col items-center justify-center gap-y-2 sm:gap-y-3 text-center"
+            dir={dir}
         >
-            <h2 className="capitalize text-white font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight">
+            <h2 className="capitalize font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight">
                 <p>
-                    <span>{t("headingWord1")}</span>
+                    <span className="dark:text-white text-black">{t("headingWord1")}</span>
                     {" "}
-                    <span className={clsx("w-fit relative text-nowrap", "text-black")}>
+                    <span className={clsx("w-fit relative text-nowrap", "text-white p-1")}>
                         <span className="relative z-10">{t("headingWord2")}</span>
                         <span ref={setHeadingXWidthRef} className={clsx("absolute inset-0 w-full h-full bg-main-secondary z-0", dir === "rtl" && "origin-right right-0 left-auto")} />
                     </span>
                     {" "}
                 </p>
-                <span>{t("headingSuffix")}</span>
+                <span className="dark:text-white text-black">{t("headingSuffix")}</span>
             </h2>
             <p className="text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] tracking-0 max-w-2xl mx-auto px-2">
                 {t("subtitle")}

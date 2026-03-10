@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useLocale, useTranslations } from "next-intl";
 import BannerSlider from "./banner";
 import { RefObject, useRef } from "react";
 import { useGSAP } from "@gsap/react";
@@ -8,6 +9,9 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const Hero = ({ onLayoutReady }: { onLayoutReady?: () => void }) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
+    const isAr = locale === "ar";
     const scopeRef = useRef<HTMLDivElement>(null);
     const headingRef = useRef<HTMLDivElement>(null);
     const bannerRef = useRef<HTMLDivElement>(null);
@@ -39,33 +43,35 @@ const Hero = ({ onLayoutReady }: { onLayoutReady?: () => void }) => {
     }, { scope: scopeRef });
 
     return (
-        <section ref={scopeRef}>
+        <section ref={scopeRef} dir={dir}>
             <div className="container space-y-10 mt-36">
                 <Heading headingRef={headingRef} />
-                <Banner bannerRef={bannerRef} />
+                <Banner bannerRef={bannerRef} dir={dir} isAr={isAr} />
             </div>
         </section>
     );
 };
 
 const Heading = ({ headingRef }: { headingRef: RefObject<HTMLDivElement | null> }) => {
+    const t = useTranslations("blogs.hero");
     return (
         <div className="space-y-1" ref={headingRef}>
-            <h1 className="text-white font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl">
-                Wasel Blogs
+            <h1 className="dark:text-white text-black font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl">
+                {t("title")}
             </h1>
 
             <p className="text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] max-w-3xl">
-                Stay updated with the latest trends, insights, and innovations in logistics, transportation, and supply chain management.
+                {t("subtitle")}
             </p>
         </div>
     );
 };
 
-const Banner = ({ bannerRef }: { bannerRef: RefObject<HTMLDivElement | null> }) => {
+const Banner = ({ bannerRef, dir, isAr }: { bannerRef: RefObject<HTMLDivElement | null>; dir?: "ltr" | "rtl"; isAr?: boolean }) => {
     return (
         <div
             ref={bannerRef}
+            dir={dir}
             className={clsx(
                 "max-h-[80vh] min-h-[600px]",
                 "rounded-[30px] overflow-hidden",
@@ -83,8 +89,8 @@ const Banner = ({ bannerRef }: { bannerRef: RefObject<HTMLDivElement | null> }) 
         >
             <div className="bg-linear-to-t from-main-ukraineBlue to-main-primary absolute inset-0 z-0 opacity-80 w-full h-full"></div>
 
-            <div className="relative h-full w-full flex items-end justify-start">
-                <BannerSlider />
+            <div className={clsx("relative h-full w-full flex items-end", isAr ? "justify-start" : "justify-end")}>
+                <BannerSlider isAr={isAr} />
             </div>
         </div>
     );

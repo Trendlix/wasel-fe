@@ -13,13 +13,13 @@ const ContactClient = () => {
     const [heroLayoutReady, setHeroLayoutReady] = useState(false);
 
     return (
-        <div className={clsx("bg-main-codGray", "overflow-hidden", "relative")}>
+        <div className={clsx("dark:bg-main-codGray bg-white", "overflow-hidden", "relative")}>
             <Navbar />
             <Hero onLayoutReady={() => setHeroLayoutReady(true)} />
-            <BrandBanner heroLayoutReady={heroLayoutReady} className="bg-main-codGray" />
-            <HomeSection4 heroLayoutReady={heroLayoutReady} className="bg-main-codGray" />
-            <FAQ heroLayoutReady={heroLayoutReady} className="py-10 bg-main-codGray" />
-            <Footer heroLayoutReady={heroLayoutReady} className="bg-main-codGray" />
+            <BrandBanner heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
+            <HomeSection4 heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
+            <FAQ heroLayoutReady={heroLayoutReady} className="py-10 dark:bg-main-codGray bg-white" />
+            <Footer heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
         </div>
     );
 };

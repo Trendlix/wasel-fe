@@ -4,10 +4,12 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 import Section3 from "./section-3";
 gsap.registerPlugin(ScrollTrigger);
 
 const Section2 = () => {
+    const t = useTranslations("about.section2");
     const sectionRef = useRef<HTMLElement>(null);
     const scopeRef = useRef<HTMLDivElement>(null);
     const headingXWidthRef = useRef<HTMLSpanElement>(null);
@@ -76,19 +78,18 @@ const Section2 = () => {
             <div ref={scopeRef} className="relative z-0 py-28 flex flex-col items-center justify-center min-h-screen" id="about-section2">
                 <div className="container space-y-4">
                     <h3 className={clsx("text-black dark:text-white font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl text-center")}>
-                        <span>What We</span>
+                        <span>{t("whatWe")}</span>
                         {" "}
                         <span className={clsx("w-fit", "relative")}>
-                            <span className="relative z-10 text-white dark:text-black">Stand</span>
+                            <span className="relative z-10 text-white dark:text-black">{t("stand")}</span>
                             <span ref={headingXWidthRef} className={clsx("absolute", "inset-0 w-full h-full bg-main-ukraineBlue z-0")}></span>
                         </span>
-                        {" "}
-                        <span>For</span>
+                        {t("for") ? <>{" "}<span>{t("for")}</span></> : null}
                     </h3>
                     {/* arrows */}
                     <div className="flex flex-col items-center justify-center">
-                        <Image src="/brand/pages/about/section2/link.png" alt="arrow left" width={73} height={73} />
-                        <Image src="/brand/pages/about/section2/link.png" alt="arrow left" width={73} height={73} ref={arrow2Ref} />
+                        <Image src="/brand/pages/about/section2/link.png" alt={t("arrowAlt")} width={73} height={73} />
+                        <Image src="/brand/pages/about/section2/link.png" alt={t("arrowAlt")} width={73} height={73} ref={arrow2Ref} />
                     </div>
                 </div>
             </div>

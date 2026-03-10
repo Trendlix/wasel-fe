@@ -13,13 +13,13 @@ const OrderTrackingClient = () => {
     const [heroLayoutReady, setHeroLayoutReady] = useState(false);
 
     return (
-        <div className={clsx("bg-main-codGray", "overflow-hidden", "relative")}>
+        <div className={clsx("dark:bg-main-codGray bg-white", "overflow-hidden", "relative")}>
             <Navbar />
             <Hero onLayoutReady={() => setHeroLayoutReady(true)} />
             <Track />
-            <BrandBanner heroLayoutReady={heroLayoutReady} className="bg-main-codGray" />
-            <FAQ heroLayoutReady={heroLayoutReady} className="bg-main-codGray" />
-            <Footer heroLayoutReady={heroLayoutReady} className="bg-main-codGray" />
+            <BrandBanner heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
+            <FAQ heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
+            <Footer heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
         </div>
     );
 };

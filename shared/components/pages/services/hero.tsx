@@ -39,17 +39,17 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
 }
 
 const Heading = ({ t, dir, headingRef, setHeadingXWidthRef, setParagraphRef }: { t: (key: string) => string; dir: string; headingRef: RefObject<HTMLHeadingElement | null>; setHeadingXWidthRef: (el: HTMLSpanElement | null) => void; setParagraphRef: (el: HTMLParagraphElement | null) => void }) => {
-    return (<div className="flex flex-col items-center justify-center gap-y-4">
+    return (<div className="flex flex-col items-center justify-center gap-y-4" dir={dir}>
         <h1 className={clsx("text-white font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl", "flex flex-col items-center justify-center", "opacity-0", "text-start", dir === "rtl" && "text-end")} ref={headingRef}>
             <p>
-                <span>{t("line1")}</span>
+                <span className="dark:text-white text-black">{t("line1")}</span>
                 {" "}
                 <span className={clsx("w-fit", "relative")}>
-                    <span className="relative z-10 text-black dark:text-white">{t("line2")}</span>
+                    <span className="relative z-10 text-white p-1">{t("line2")}</span>
                     <span ref={setHeadingXWidthRef} className={clsx("absolute", "inset-0 w-full h-full bg-main-ukraineBlue z-0")}></span>
                 </span>
             </p>
-            <p className="mt-1">{t("line3")}</p>
+            <p className="mt-1 dark:text-white text-black">{t("line3")}</p>
         </h1>
         <p ref={setParagraphRef} className={clsx("lg:text-lg text-sm leading-[27px] text-center 2xl:max-w-[50%] opacity-0")}>
             {t("subtitle")}

@@ -12,6 +12,7 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     const t = useTranslations("about.hero");
     const locale = useLocale();
     const dir = locale === "ar" ? "rtl" : "ltr";
+    const isAr = locale === "ar";
     const scopeRef = useRef<HTMLDivElement>(null);
     const headingRef = useRef<HTMLHeadingElement>(null);
     const headingXWidthRef = useRef<HTMLSpanElement>(null);
@@ -42,7 +43,7 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
             }}
         >
             <div className={clsx("container h-full", "flex flex-col items-start justify-end", "py-20", dir === "rtl" && "items-end")}>
-                <h1 className={clsx("text-white font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl opacity-0", "text-start", dir === "rtl" && "text-end")} ref={headingRef}>
+                <h1 className={clsx("text-white font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl opacity-0", isAr && "leading-tight", "text-start", dir === "rtl" && "text-end")} ref={headingRef}>
                     <p>
                         {t("line1a")}
                         <br className="max-md:hidden" />
