@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { forwardRef, useRef } from "react";
 import gsap from "gsap";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 
 
@@ -13,6 +13,8 @@ type Section2Props = {
 };
 
 const Section2 = ({ heroLayoutReady = false }: Section2Props) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const scopeRef = useRef<HTMLDivElement>(null);
     const cardsRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -90,11 +92,11 @@ const Section2 = ({ heroLayoutReady = false }: Section2Props) => {
             <div ref={scopeRef} className="md:sm-container container">
                 <div className="flex gap-4 max-md:flex-col">
                     <div className="lg:w-[60%] md:w-[50%] space-y-4 mt-20 flex flex-col items-end">
-                        <Card1 ref={(el) => { cardsRefs.current[0] = el; }} />
-                        <Card3 ref={(el) => { cardsRefs.current[2] = el; }} />
+                        <Card1 ref={(el) => { cardsRefs.current[0] = el; }} dir={dir} />
+                        <Card3 ref={(el) => { cardsRefs.current[2] = el; }} dir={dir} />
                     </div>
                     <div className="lg:w-[40%] md:w-[50%]">
-                        <Card2 ref={(el) => { cardsRefs.current[1] = el; }} />
+                        <Card2 ref={(el) => { cardsRefs.current[1] = el; }} dir={dir} />
                     </div>
                 </div>
             </div>
@@ -104,12 +106,12 @@ const Section2 = ({ heroLayoutReady = false }: Section2Props) => {
 
 
 
-const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {dir: string}>(({dir, ...props}, ref) => {
     const t = useTranslations("home.section2.card1");
     return (
         <div ref={ref} {...props} className="relative h-fit">
             <div className="max-h-[500px] bg-main-red overflow-hidden text-white rounded-4xl xl:space-y-[clamp(1.5rem,2vw,3rem)] opacity-0" id="card-content">
-                <div className="space-y-3 xl:px-12 lg:px-6 md:px-4 px-4 xl:py-10 lg:py-6 md:py-4 py-4">
+                <div className="space-y-3 xl:px-12 lg:px-6 md:px-4 px-4 xl:py-10 lg:py-6 md:py-4 py-4" dir={dir}>
                     <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
                     <p className="xl:text-base text-sm">{t("description")}</p>
                 </div>
@@ -123,12 +125,12 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((
 });
 Card1.displayName = "Card1";
 
-const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {dir: string}>(({dir, ...props}, ref) => {
     const t = useTranslations("home.section2.card2");
     return (
         <div ref={ref} {...props} className="relative h-fit">
             <div className="bg-main-secondary rounded-4xl xl:px-14 lg:px-6 md:px-4 px-4 xl:py-10 lg:py-6 md:py-4 py-4 opacity-0" id="card-content">
-                <div className="xl:space-y-3 lg:space-y-2 md:space-y-1">
+                <div className="xl:space-y-3 lg:space-y-2 md:space-y-1" dir={dir}>
                     <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
                     <p className="xl:text-base text-sm">{t("description")}</p>
                 </div>
@@ -142,12 +144,12 @@ const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((
 });
 Card2.displayName = "Card2";
 
-const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {dir: string}>(({dir, ...props}, ref) => {
     const t = useTranslations("home.section2.card3");
     return (
-        <div ref={ref} {...props} className="relative h-fit flex justify-end">
+        <div ref={ref} {...props} className="relative h-fit flex justify-end" >
             <div className=" text-white md:max-w-[80%] bg-main-ukraineBlue overflow-hidden rounded-4xl opacity-0" id="card-content">
-                <div className="xl:px-12 lg:px-6 md:px-4 px-4 xl:pt-10 lg:pt-6 md:pt-4 pt-4">
+                <div className="xl:px-12 lg:px-6 md:px-4 px-4 xl:pt-10 lg:pt-6 md:pt-4 pt-4" dir={dir}>
                     <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
                     <p className="xl:text-base text-sm">{t("description")}</p>
                 </div>

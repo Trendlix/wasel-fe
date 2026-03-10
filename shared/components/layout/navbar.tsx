@@ -9,6 +9,7 @@ import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { useHeroMountReady } from "@/shared/components/pages/home/home-client";
 import { Button } from "../ui/button";
 import clsx from "clsx";
+import ThemeSwitcher from "../common/layout/theme-switcher";
 
 const navLinks = [
     { href: "/", labelKey: "home" },
@@ -24,6 +25,7 @@ const Navbar = () => {
     const pathname = usePathname();
     const heroMountReady = useHeroMountReady();
     const isAboutPage = pathname === "/about" || pathname?.endsWith("/about");
+    const isHomePage = pathname === "/" || pathname?.endsWith("/");
     const inactiveTextClass = isAboutPage ? "text-white/54 hover:text-white" : "text-main-zenGray hover:text-white";
     const navRef = useRef<HTMLDivElement>(null);
     const locale = useLocale();
@@ -82,6 +84,7 @@ const Navbar = () => {
                             <span className="sm:hidden">{t("download")}</span>
                         </Button>
                     </div>
+                    {!isHomePage && <ThemeSwitcher />}
                     <LanguageSwitcher inactiveClass={inactiveTextClass} />
                 </div>
             </nav>

@@ -54,7 +54,7 @@ const HomeClient = () => {
                 <Section3 heroLayoutReady={heroLayoutReady} />
                 <Section4 heroLayoutReady={heroLayoutReady} />
                 <BrandBanner heroLayoutReady={heroLayoutReady} />
-                <FAQ heroLayoutReady={heroLayoutReady} className="py-16 md:py-24 xl:py-32" />
+                <FAQ heroLayoutReady={heroLayoutReady} className="py-16 md:py-24 xl:py-28" />
                 <Footer heroLayoutReady={heroLayoutReady} />
             </div>
         </HeroLayoutContext.Provider>

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { forwardRef, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +16,8 @@ type Section4Props = {
 };
 
 const Section4 = ({ heroLayoutReady = false, className }: Section4Props) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const cardsRefs = useRef<Array<HTMLDivElement | null>>([]);
     const scopeRef = useRef<HTMLElement>(null);
 
@@ -78,16 +80,16 @@ const Section4 = ({ heroLayoutReady = false, className }: Section4Props) => {
     return (
         <section ref={scopeRef} className={clsx("bg-black", className)}>
             <div className="container py-10 md:py-16 flex items-stretch gap-6 xl:gap-11 *:flex-1 max-lg:flex-col">
-                <Card1 ref={(el) => { cardsRefs.current[0] = el; }} />
-                <Card2 ref={(el) => { cardsRefs.current[1] = el; }} />
+                <Card1 ref={(el) => { cardsRefs.current[0] = el; }} dir={dir} />
+                <Card2 ref={(el) => { cardsRefs.current[1] = el; }} dir={dir} />
             </div>
         </section>
     );
 };
 
-const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section4.card1");
-    return (<div ref={ref} {...props} className="h-full min-h-[380px] md:min-h-[460px] xl:min-h-[520px] text-white pt-6 md:pt-8 px-5 sm:px-8 lg:px-10 xl:px-12 bg-main-ukraineBlue rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden">
+    return (<div ref={ref} dir={dir} {...props} className="h-full min-h-[380px] md:min-h-[460px] xl:min-h-[520px] text-white pt-6 md:pt-8 px-5 sm:px-8 lg:px-10 xl:px-12 bg-main-ukraineBlue rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden">
         <div className="xl:space-y-12 lg:space-y-10 md:space-y-8 space-y-6 flex-1 flex items-start flex-col justify-center">
             <p className={clsx("font-bold xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-tight")}>
                 {t("title")}
@@ -110,9 +112,9 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((
 });
 Card1.displayName = "Card1";
 
-const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section4.card2");
-    return (<div ref={ref} {...props} className="h-full min-h-[380px] md:min-h-[460px] xl:min-h-[520px] text-black pt-6 md:pt-8 px-5 sm:px-8 lg:px-10 xl:px-12 bg-main-secondary rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden">
+    return (<div ref={ref} dir={dir} {...props} className="h-full min-h-[380px] md:min-h-[460px] xl:min-h-[520px] text-black pt-6 md:pt-8 px-5 sm:px-8 lg:px-10 xl:px-12 bg-main-secondary rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden">
         <div className="xl:space-y-12 lg:space-y-10 md:space-y-8 space-y-6 flex-1 flex items-start flex-col justify-center">
             <p className={clsx("font-bold xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-tight")}>
                 {t("title")} <br className="max-lg:hidden" /> {t("title2")}

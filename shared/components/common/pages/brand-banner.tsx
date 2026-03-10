@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "../../ui/button";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
@@ -14,6 +14,8 @@ gsap.registerPlugin(ScrollTrigger);
 type BrandBannerProps = { heroLayoutReady?: boolean, className?: string };
 
 const BrandBanner = ({ heroLayoutReady = false, className }: BrandBannerProps) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const t = useTranslations("brandBanner");
     const scopeRef = useRef<HTMLDivElement>(null);
     const elementsRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -52,7 +54,7 @@ const BrandBanner = ({ heroLayoutReady = false, className }: BrandBannerProps) =
                 <div ref={(el) => { elementsRefs.current[0] = el; }} className="self-end flex items-start justify-end">
                     <Image src="/common/Link (1).png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%]" />
                 </div>
-                <div ref={(el) => { elementsRefs.current[1] = el; }} className="space-y-3 self-center text-white">
+                <div ref={(el) => { elementsRefs.current[1] = el; }} className="space-y-3 self-center text-white" dir={dir}>
                     <h3 className="font-bold xl:text-4xl text-2xl">
                         {t("heading")}
                     </h3>

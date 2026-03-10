@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -18,6 +18,8 @@ gsap.registerPlugin(ScrollTrigger);
 type FooterProps = { heroLayoutReady?: boolean, className?: string };
 
 const Footer = ({ heroLayoutReady = false, className }: FooterProps) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const scopeRef = useRef<HTMLDivElement>(null);
     const elementsRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -62,11 +64,11 @@ const Footer = ({ heroLayoutReady = false, className }: FooterProps) => {
                 </div>
                 {/* links */}
                 <div ref={(el) => { elementsRefs.current[1] = el; }}>
-                    <Links />
+                    <Links dir={dir} />
                 </div>
                 {/* copyright */}
                 <div ref={(el) => { elementsRefs.current[2] = el; }}>
-                    <Copyright />
+                    <Copyright dir={dir} />
                 </div>
             </div>
         </footer>
@@ -81,10 +83,10 @@ const Logo = () => {
     );
 };
 
-const Links = () => {
+const Links = ({ dir }: { dir: string }) => {
     const t = useTranslations("footer");
     return (
-        <div className="flex items-start justify-between flex-wrap gap-x-12 gap-y-8 capitalize">
+        <div className="flex items-start justify-between flex-wrap gap-x-12 gap-y-8 capitalize" dir={dir}>
             {footerLinks.map((section) => (
                 <div key={section.titleKey} className="space-y-3.5">
                     <p className={clsx("font-medium text-xs leading-5 text-main-secondary")}>{t(section.titleKey)}</p>
@@ -120,10 +122,10 @@ const socialLinks = [
     { href: "#", icon: Linkedin, label: "LinkedIn" },
 ] as const;
 
-const Copyright = () => {
+const Copyright = ({ dir }: { dir: string }) => {
     const t = useTranslations("footer");
     return (
-        <div className="border-t border-main-darkGrey pt-4 text-[11px] text-main-darkGrey">
+        <div className="border-t border-main-darkGrey pt-4 text-[11px] text-main-darkGrey" dir={dir}>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm  font-medium ">
                     {t("copyright", { year: new Date().getFullYear() })}

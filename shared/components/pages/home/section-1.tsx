@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { forwardRef, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +15,8 @@ type Section1Props = {
 
 const Section1 = ({ heroLayoutReady = false }: Section1Props) => {
     const t = useTranslations("home.section1");
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const headingRef = useRef<HTMLHeadingElement>(null);
     const card1Ref = useRef<HTMLDivElement>(null);
     const card2Ref = useRef<HTMLDivElement>(null);
@@ -53,15 +55,15 @@ const Section1 = ({ heroLayoutReady = false }: Section1Props) => {
         <section className={clsx("min-h-screen pb-10 bg-black flex flex-col")}>
             <div ref={scopeRef} className={clsx("container gap-y-12 flex-1 flex flex-col")}>
 
-                <h1 ref={headingRef} className={clsx("text-white font-bold text-center", "xl:text-7xl lg:text-6xl md:text-5xl sm:text-4xl text-2xl")}>
+                <h1 ref={headingRef} className={clsx("text-white font-bold text-center", "xl:text-7xl lg:text-6xl md:text-5xl sm:text-4xl text-2xl", "leading-tight")}>
                     {t("heading")}
                 </h1>
 
                 <div className={clsx("grid grid-cols-3 grid-rows-[430px_300px] gap-7", "*:rounded-[37px] *:overflow-hidden", "relative z-50")}>
-                    <Card1 ref={card1Ref} />
-                    <Card2 ref={card2Ref} />
-                    <Card3 ref={card3Ref} />
-                    <Card4 ref={card4Ref} />
+                    <Card1 ref={card1Ref} dir={dir} />
+                    <Card2 ref={card2Ref} dir={dir} />
+                    <Card3 ref={card3Ref} dir={dir} />
+                    <Card4 ref={card4Ref} dir={dir} />
                 </div>
 
             </div>
@@ -69,10 +71,10 @@ const Section1 = ({ heroLayoutReady = false }: Section1Props) => {
     );
 };
 
-const Card1 = forwardRef<HTMLDivElement>((_, ref) => {
+const Card1 = forwardRef<HTMLDivElement, { dir: string }>(({ dir }, ref) => {
     const t = useTranslations("home.section1.card1");
     return (
-        <div ref={ref} className={clsx("col-span-2 bg-main-flatBlack border border-white/19 pt-[clamp(1.5rem,2vw,3rem)] px-[clamp(1.5rem,1.5vw,3rem)]", "flex flex-col")}>
+        <div ref={ref} className={clsx("col-span-2 bg-main-flatBlack border border-white/19 pt-[clamp(1.5rem,2vw,3rem)] px-[clamp(1.5rem,1.5vw,3rem)]", "flex flex-col")} dir={dir}>
             <p
                 className="font-medium text-start text-white"
                 style={{ fontSize: "25.82px", lineHeight: "38.8px", letterSpacing: "0" }}
@@ -87,10 +89,10 @@ const Card1 = forwardRef<HTMLDivElement>((_, ref) => {
 });
 Card1.displayName = "Card1";
 
-const Card2 = forwardRef<HTMLDivElement>((_, ref) => {
+const Card2 = forwardRef<HTMLDivElement, { dir: string }>(({ dir }, ref) => {
     const t = useTranslations("home.section1.card2");
     return (
-        <div ref={ref} className={clsx("col-span-1 row-span-2", "bg-main-matteBlack", "flex flex-col", "relative")}>
+        <div ref={ref} className={clsx("col-span-1 row-span-2", "bg-main-matteBlack", "flex flex-col", "relative")} dir={dir}>
             <Image src="/brand/pages/home/to-be-gif/driver.png" alt="card1" width={1000} height={1000} className="w-full h-full object-cover absolute top-0 left-0 z-0" />
             <div className="absolute bottom-0 left-0 right-0 z-10">
                 <div className="flex flex-col items-center text-center gap-5 px-12 py-10">
@@ -113,10 +115,10 @@ const Card2 = forwardRef<HTMLDivElement>((_, ref) => {
 });
 Card2.displayName = "Card2";
 
-const Card3 = forwardRef<HTMLDivElement>((_, ref) => {
+const Card3 = forwardRef<HTMLDivElement, { dir: string }>(({ dir }, ref) => {
     const t = useTranslations("home.section1.card3");
     return (
-        <div ref={ref} className={clsx("col-span-1 row-span-1 bg-main-ukraineBlue", "pt-[clamp(1.5rem,2vw,3rem)]", "flex flex-col")}>
+        <div ref={ref} className={clsx("col-span-1 row-span-1 bg-main-ukraineBlue", "pt-[clamp(1.5rem,2vw,3rem)]", "flex flex-col")} dir={dir}>
             <p
                 className="text-center font-medium text-white px-4"
                 style={{ fontSize: "25.82px", lineHeight: "38.8px", letterSpacing: "0" }}
@@ -131,10 +133,10 @@ const Card3 = forwardRef<HTMLDivElement>((_, ref) => {
 });
 Card3.displayName = "Card3";
 
-const Card4 = forwardRef<HTMLDivElement>((_, ref) => {
+const Card4 = forwardRef<HTMLDivElement, { dir: string }>(({ dir }, ref) => {
     const t = useTranslations("home.section1.card4");
     return (
-        <div ref={ref} className={clsx("col-span-1 row-span-1 bg-white", "pt-[clamp(1.5rem,2vw,3rem)]", "flex flex-col")}>
+        <div ref={ref} className={clsx("col-span-1 row-span-1 bg-white", "pt-[clamp(1.5rem,2vw,3rem)]", "flex flex-col")} dir={dir}>
             <p
                 className="text-center font-medium text-black px-4"
                 style={{ fontSize: "25.82px", lineHeight: "38.8px", letterSpacing: "0" }}

@@ -6,7 +6,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -18,6 +18,8 @@ gsap.registerPlugin(ScrollTrigger);
 type FAQProps = { heroLayoutReady?: boolean, className?: string };
 
 const FAQ = ({ heroLayoutReady = false, className }: FAQProps) => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const t = useTranslations("faq");
     const tItems = useTranslations("faq.items");
     const count = 7;
@@ -53,7 +55,7 @@ const FAQ = ({ heroLayoutReady = false, className }: FAQProps) => {
     }, { scope: scopeRef, dependencies: [heroLayoutReady] });
 
     return (
-        <section ref={scopeRef} className={clsx("text-white bg-black", className)}>
+        <section ref={scopeRef} className={clsx("text-white bg-black", className)} dir={dir}>
             <div className="container flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-12 xl:gap-16">
                 <div ref={(el) => { elementsRefs.current[0] = el; }} className="w-full lg:max-w-md xl:max-w-lg shrink-0">
                     <h3 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[54px] leading-tight xl:leading-[56px]">

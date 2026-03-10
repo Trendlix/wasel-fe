@@ -6,7 +6,7 @@ import Image from "next/image";
 import { forwardRef, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 gsap.registerPlugin(ScrollTrigger);
 
 type Section3Props = {
@@ -15,6 +15,8 @@ type Section3Props = {
 
 const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
     const t = useTranslations("home.section3");
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const scopeRef = useRef<HTMLDivElement>(null);
     const cardsRefs = useRef<Array<HTMLDivElement | null>>([]);
     const headingBlockRef = useRef<HTMLDivElement>(null);
@@ -144,11 +146,11 @@ const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
                 </div>
                 <div className="flex gap-4 max-md:flex-col">
                     <div className="lg:w-[60%] md:w-[50%] w-full space-y-4 flex flex-col items-end *:h-fit">
-                        <Card1 ref={(el) => { cardsRefs.current[0] = el; }} />
-                        <Card3 ref={(el) => { cardsRefs.current[2] = el; }} />
+                        <Card1 ref={(el) => { cardsRefs.current[0] = el; }} dir={dir} />
+                        <Card3 ref={(el) => { cardsRefs.current[2] = el; }} dir={dir} />
                     </div>
                     <div className="lg:w-[40%] md:w-[50%] w-full 2xl:mt-62 xl:mt-48 lg:mt-36 md:mt-24 *:h-fit">
-                        <Card2 ref={(el) => { cardsRefs.current[1] = el; }} />
+                        <Card2 ref={(el) => { cardsRefs.current[1] = el; }} dir={dir} />
                     </div>
                 </div>
             </div>
@@ -156,12 +158,12 @@ const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
     );
 };
 
-const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section3.card1");
     return (
         <div ref={ref} {...props} className="relative h-fit text-white">
             <div className={clsx("xl:pl-12 pl-6", "bg-main-ukraineBlue", "rounded-4xl", "overflow-hidden")}>
-                <div className="xl:pr-12 lg:pr-8 md:pr-6 pr-4 xl:py-10 md:py-10 py-4 space-y-3">
+                <div className="xl:pr-12 lg:pr-8 md:pr-6 pr-4 xl:py-10 md:py-10 py-4 space-y-3" dir={dir}>
                     <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
                     <p className="xl:text-base text-sm">{t("description")}</p>
                 </div>
@@ -175,12 +177,12 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((
 });
 Card1.displayName = "Card1";
 
-const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section3.card2");
     return (
         <div ref={ref} {...props} className="relative h-fit text-black">
             <div className={clsx("xl:pr-12 pr-6", "bg-main-secondary", "rounded-4xl", "overflow-hidden")}>
-                <div className="xl:pl-12 pl-6 xl:py-10 py-4 space-y-3">
+                <div className="xl:pl-12 pl-6 xl:py-10 py-4 space-y-3" dir={dir}>
                     <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
                     <p className="xl:text-base text-sm">{t("description")}</p>
                 </div>
@@ -194,12 +196,12 @@ const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((
 });
 Card2.displayName = "Card2";
 
-const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
+const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section3.card3");
     return (
         <div ref={ref} {...props} className="relative h-fit text-white  2xl:max-w-[70%] xl:w-[80%] lg:w-[90%] w-full">
             <div className={clsx("xl:pl-12 pl-6", "bg-main-red", "rounded-4xl", "overflow-hidden")}>
-                <div className="xl:pr-12 pr-6 xl:py-10 py-4 space-y-3">
+                <div className="xl:pr-12 pr-6 xl:py-10 py-4 space-y-3" dir={dir}>
                     <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
                     <p className="xl:text-base text-sm">{t("description")}</p>
                 </div>
