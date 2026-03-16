@@ -1,11 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { useTheme } from "next-themes";
+import { createContext, useContext, useState } from "react";
 import { useLockScroll } from "@/shared/hooks/common/useScrollLock";
 import useLenis from "@/shared/hooks/animation/layout/useLenis";
 import useScrollToTopBeforeRefresh from "@/shared/hooks/animation/layout/useScrollToTopBeforeRefresh";
-import useNavbarStore from "@/shared/hooks/store/layout/useNavbr";
 import Hero from "./hero";
 import Section1 from "./section-1";
 import Section2 from "./section-2";
@@ -43,15 +41,8 @@ const HomeClient = () => {
     useLockScroll({ duration: 2000 });
     useLenis();
     useScrollToTopBeforeRefresh();
-    const { resolvedTheme } = useTheme();
     const [heroLayoutReady, setHeroLayoutReady] = useState(false);
     const [heroMountReady, setHeroMountReady] = useState(false);
-    const { setTheme } = useTheme();
-
-    useEffect(() => {
-        if (!resolvedTheme) return;
-        setTheme("dark");
-    }, [resolvedTheme, setTheme]);
 
     return (
         <HeroLayoutContext.Provider value={{ heroLayoutReady, setHeroLayoutReady, heroMountReady }}>
@@ -63,7 +54,7 @@ const HomeClient = () => {
                 <Section3 heroLayoutReady={heroLayoutReady} />
                 <Section4 heroLayoutReady={heroLayoutReady} />
                 <BrandBanner heroLayoutReady={heroLayoutReady} />
-                <FAQ heroLayoutReady={heroLayoutReady} className="py-16 md:py-24 xl:py-28" />
+                <FAQ heroLayoutReady={heroLayoutReady} className="bg-black" />
                 <Footer heroLayoutReady={heroLayoutReady} />
             </div>
         </HeroLayoutContext.Provider>

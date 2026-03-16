@@ -23,8 +23,14 @@ const ServicesClient = () => {
             <Section2 />
             <Section3 />
             <Section4 />
-            <BrandBanner heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
-            <HomeSection4 heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
+            <div className="flex flex-col w-full relative">
+                <div className="order-2 md:order-1 w-full">
+                    <BrandBanner heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
+                </div>
+                <div className="order-1 md:order-2 w-full">
+                    <HomeSection4 heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
+                </div>
+            </div>
             <FAQ heroLayoutReady={heroLayoutReady} className="py-10 bg-white dark:bg-main-codGray" />
             <Footer heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
         </div>

@@ -68,7 +68,7 @@ const BlogCard = ({ item, colorIndex }: BlogCardProps) => {
             </div>
 
             <div className="flex flex-col gap-3 p-4 mt-auto">
-                <h3 className="dark:text-white text-black font-bold text-2xl leading-[30px] tracking-0">
+                <h3 className="dark:text-white text-black font-bold md:text-2xl text-xl leading-[30px] tracking-0">
                     {tCards(`${baseKey}.title`)}
                 </h3>
 

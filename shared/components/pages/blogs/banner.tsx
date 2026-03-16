@@ -111,7 +111,7 @@ const SliderContent = ({
                 {t(`${itemKey}.description`)}
             </p>
 
-            <div className="flex items-center gap-6 text-white/70 text-base *:flex *:items-center *:gap-2">
+            <div className="flex items-center gap-6 text-white/70 md:text-base text-xs *:flex *:items-center *:gap-2">
                 <p>
                     <Calendar size={15} />
                     <span>{t(`${itemKey}.date`)}</span>

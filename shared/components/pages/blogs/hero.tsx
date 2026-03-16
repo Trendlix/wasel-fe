@@ -55,12 +55,12 @@ const Hero = ({ onLayoutReady }: { onLayoutReady?: () => void }) => {
 const Heading = ({ headingRef }: { headingRef: RefObject<HTMLDivElement | null> }) => {
     const t = useTranslations("blogs.hero");
     return (
-        <div className="space-y-1" ref={headingRef}>
-            <h1 className="dark:text-white text-black font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl">
+        <div className="space-y-4" ref={headingRef}>
+            <h1 className="dark:text-white text-black font-bold 2xl:text-5xl xl:text-4xl text-3xl">
                 {t("title")}
             </h1>
 
-            <p className="text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] max-w-3xl">
+            <p className="lg:text-lg text-base leading-[21px] md:leading-[27px] max-w-3xl dark:text-white text-black">
                 {t("subtitle")}
             </p>
         </div>
@@ -73,7 +73,7 @@ const Banner = ({ bannerRef, dir, isAr }: { bannerRef: RefObject<HTMLDivElement 
             ref={bannerRef}
             dir={dir}
             className={clsx(
-                "max-h-[80vh] min-h-[600px]",
+                "max-h-[80vh] md:min-h-[600px]",
                 "rounded-[30px] overflow-hidden",
                 "relative",
                 "flex items-end justify-start",

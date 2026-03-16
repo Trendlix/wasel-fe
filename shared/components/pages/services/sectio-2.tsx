@@ -105,24 +105,24 @@ const Card = ({ card, content }: { card: IServiceSection2Card; content: { tag: s
     const textClass = colors.text ?? "text-white";
 
     return (
-        <div className={clsx("rounded-[30px] overflow-hidden relative min-h-[400px]", colors.bg)}>
+        <div className={clsx("rounded-[30px] overflow-hidden relative min-h-[400px] max-md:flex max-md:flex-col-reverse", "overflow-hidden", colors.bg)}>
             {/* bg - image pinned to right bottom */}
-            <div className={clsx("absolute right-0 w-full h-full flex items-end justify-end pointer-events-none", id == 1 && "-bottom-10")}>
+            <div className={clsx("md:absolute right-0 w-full h-full flex items-end justify-end pointer-events-none", id == 1 && "-bottom-10")}>
                 <Image
                     src={image}
                     alt={content.title}
                     width={1000}
                     height={1000}
-                    className={clsx("object-bottom-right object-contain mix-blend-multiply", id == 1 ? "max-w-[57%]" : " max-w-[50%]")}
+                    className={clsx("object-bottom-right object-contain mix-blend-multiply", id == 1 ? "md:max-w-[57%]" : "md:max-w-[50%] max-md:h-[331px]")}
                 />
             </div>
             {/* content */}
-            <div className={clsx("relative z-10 space-y-7 py-20 px-16")}>
+            <div className={clsx("relative z-10 space-y-7 md:py-20 md:px-16 px-[30px] py-[29px]")}>
                 <div>
                     <span className={clsx("uppercase font-medium text-sm tracking-[5px]", colors.tag)}>
                         {content.tag}
                     </span>
-                    <h2 className={clsx("font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl mt-1 whitespace-pre-line", textClass)}>
+                    <h2 className={clsx("font-bold 2xl:text-5xl xl:text-4xl text-3xl mt-1 whitespace-pre-line", textClass)}>
                         {content.title}
                     </h2>
                 </div>

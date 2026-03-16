@@ -33,13 +33,20 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
     const subtitleBlockRef = useRef<HTMLDivElement>(null);
     const headingRef = useRef<HTMLDivElement>(null);
     const phoneContentWrapperRef = useRef<HTMLDivElement>(null);
-    const sentencesRef = useRef<HTMLDivElement[]>([]);
-    const currentImageRef = useRef<string>("/brand/pages/home/iphone.png");
+    const desktopSentencesRef = useRef<HTMLDivElement[]>([]);
+    const mobileSentencesRef = useRef<HTMLDivElement[]>([]);
+    const getBaseIphoneSrc = () =>
+        (typeof window !== "undefined" && window.innerWidth < 768)
+            ? "/brand/pages/home/iphone-small.png"
+            : "/brand/pages/home/iphone.png";
     const [imageSrc, setImageSrc] = useState("/brand/pages/home/iphone.png");
+    const currentImageRef = useRef<string>("/brand/pages/home/iphone.png");
     const [firstImageLoaded, setFirstImageLoaded] = useState(false);
 
     useEffect(() => {
-        const firstSrc = "/brand/pages/home/iphone.png";
+        const firstSrc = getBaseIphoneSrc();
+        currentImageRef.current = firstSrc;
+        queueMicrotask(() => setImageSrc(firstSrc));
         const img = new window.Image();
         img.src = firstSrc;
         const onLoad = () => {
@@ -58,11 +65,14 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
         if (!firstImageLoaded) return;
         if (!iphoneRef.current || !dynamicIslandRef.current || !blurRef.current) return;
 
+        const isMdOrUp = window.innerWidth >= 768;
+        const bottomTo = isMdOrUp ? "-90%" : "-30%";
+
         const iphoneMountTl = gsap.timeline();
         iphoneMountTl.fromTo(
             iphoneRef.current,
             { bottom: "-130%", scale: 1.9 },
-            { bottom: "-90%", scale: 1.9, duration: 2, ease: "back.out(1.7)" },
+            { bottom: bottomTo, scale: 1.9, duration: 2, ease: "back.out(1.7)" },
         );
         iphoneMountTl.fromTo(
             blurRef.current,
@@ -78,8 +88,10 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
         const openPadX = window.innerWidth * 0.01;
         const openCameraPx = 40;
         const openCameraPt = window.innerWidth * 0.007;
+        const baseIphoneSrc = isMdOrUp ? "/brand/pages/home/iphone.png" : "/brand/pages/home/iphone-small.png";
         const heroImageSources = [
             "/brand/pages/home/iphone.png",
+            "/brand/pages/home/iphone-small.png",
             "/brand/pages/home/iphone-location.png",
             "/brand/pages/home/iphone-truck.png",
             "/brand/pages/home/iphone-select-price.png",
@@ -197,8 +209,10 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
             const fromPadding = 0;
             const isOpen = islandP > 0.02;
 
+            // On mobile, mount ends at -30%; on md+ it ends at -90%. Scroll starts from that end state.
+            const bottomFrom = isMdOrUp ? -90 : -30;
             gsap.set(iphoneRef.current, {
-                bottom: `${gsap.utils.interpolate(-90, 0, phoneP)}%`,
+                bottom: `${gsap.utils.interpolate(bottomFrom, 0, phoneP)}%`,
                 scale: gsap.utils.interpolate(1.9, 1, phoneP),
             });
 
@@ -278,7 +292,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
         });
         if (islandContent) gsap.set(islandContent, { display: "none", opacity: 0, scale: 0.92 });
 
-        const words = sentencesRef.current;
+        const words = isMdOrUp ? desktopSentencesRef.current : mobileSentencesRef.current;
         gsap.set(words, { opacity: 0, y: 80 });
         const CARD_FADE_IN_END = 0.35;
         const CARD_HOLD_END = 0.70;
@@ -305,7 +319,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
 
         const vh = window.innerHeight;
         /** Higher values = more scroll needed to get through the hero (slower feel). */
-        const SCROLL_PACE = 3;
+        const SCROLL_PACE = isMdOrUp ? 3 : 2;
         const IPHONE_SCALE_END = 300 * SCROLL_PACE;
         const LOCATION_THRESHOLD = IPHONE_SCALE_END * 0.6;
         const SENTENCE_START = 300 * SCROLL_PACE;
@@ -392,7 +406,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
 
                 if (scroll < s0FadeStart) {
                     if (scroll < LOCATION_THRESHOLD) {
-                        swapImage("/brand/pages/home/iphone.png");
+                        swapImage(baseIphoneSrc);
                     } else {
                         swapImage("/brand/pages/home/iphone-location.png");
                     }
@@ -518,8 +532,12 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
         });
     }, { scope: containerRef, dependencies: [firstImageLoaded] });
 
-    const setRef = (el: HTMLDivElement | null, index: number) => {
-        if (el) sentencesRef.current[index] = el;
+    const setDesktopRef = (el: HTMLDivElement | null, index: number) => {
+        if (el) desktopSentencesRef.current[index] = el;
+    };
+
+    const setMobileRef = (el: HTMLDivElement | null, index: number) => {
+        if (el) mobileSentencesRef.current[index] = el;
     };
 
     return (
@@ -529,8 +547,8 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
             <div className="basis-[80%] grid grid-cols-3 items-center">
                 <div className="flex items-start justify-center h-full pt-[25%]">
                     <div className="relative">
-                        <div ref={(el) => setRef(el, 0)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left opacity-0 translate-y-[80px]">{tWords("selectLocation")}</div>
-                        <div ref={(el) => setRef(el, 4)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left absolute inset-0 opacity-0 translate-y-[80px]">{tWords("confirmed")}</div>
+                        <div ref={(el) => setDesktopRef(el, 0)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left opacity-0 translate-y-[80px] invisible md:visible">{tWords("selectLocation")}</div>
+                        <div ref={(el) => setDesktopRef(el, 4)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left absolute inset-0 opacity-0 translate-y-[80px] invisible md:visible">{tWords("confirmed")}</div>
                     </div>
                 </div>
 
@@ -538,7 +556,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                     <div ref={iphoneRef} className="absolute h-full w-full" style={{ bottom: "-130%", transform: "scale(1.9)" }}>
                         {/* iPhone frame */}
                         <div className="w-full h-full flex items-center justify-center">
-                            <div className="relative h-full aspect-[285/580]">
+                            <div className="relative h-full aspect-[150/480] md:aspect-[285/580]">
                                 <SentencesCards />
                                 <NextImage
                                     src={imageSrc}
@@ -547,11 +565,11 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                                     className="object-contain"
                                 />
 
-                                {/* Dynamic Island responsive content */}
-                                <div className="absolute top-5 w-full flex items-center justify-center flex-col">
+                                {/* Dynamic Island + iPhone content: hidden on < md */}
+                                <div className="absolute top-[38%] md:top-5 w-full  flex items-center justify-center flex-col">
                                     <div
                                         ref={dynamicIslandRef}
-                                        className="w-[90%] max-w-[50%] flex items-center justify-center"
+                                        className="w-[90%] max-w-[50%] hidden md:flex items-center justify-center"
                                     >
                                         <DynamicIsland />
                                     </div>
@@ -565,14 +583,24 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                 </div>
 
                 <div className="flex items-center justify-center h-full">
-                    <div ref={(el) => setRef(el, 2)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-right opacity-0 translate-y-[80px]">{tWords("selectPrice")}</div>
+                    <div ref={(el) => setDesktopRef(el, 2)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-right opacity-0 translate-y-[80px] invisible md:visible">{tWords("selectPrice")}</div>
                 </div>
             </div>
 
-            <div className="basis-[10%] flex items-center justify-center">
+            <div className="absolute left-1/2 bottom-[15vh] -translate-x-1/2 z-20 pointer-events-none md:hidden w-full">
+                <div className="relative w-full flex items-center justify-center">
+                    <div ref={(el) => setMobileRef(el, 0)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{tWords("selectLocation")}</div>
+                    <div ref={(el) => setMobileRef(el, 1)} className="absolute left-1/2 -translate-x-1/2 xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("chooseTruck")}</div>
+                    <div ref={(el) => setMobileRef(el, 2)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{tWords("selectPrice")}</div>
+                    <div ref={(el) => setMobileRef(el, 3)} className="absolute left-1/2 -translate-x-1/2 xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("selectDriver")}</div>
+                    <div ref={(el) => setMobileRef(el, 4)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{tWords("confirmed")}</div>
+                </div>
+            </div>
+
+            <div className="basis-[10%] hidden md:flex items-center justify-center">
                 <div className="relative">
-                    <div ref={(el) => setRef(el, 1)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("chooseTruck")}</div>
-                    <div ref={(el) => setRef(el, 3)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center absolute inset-0 opacity-0 translate-y-[80px]">{tWords("selectDriver")}</div>
+                    <div ref={(el) => setDesktopRef(el, 1)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("chooseTruck")}</div>
+                    <div ref={(el) => setDesktopRef(el, 3)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center absolute inset-0 opacity-0 translate-y-[80px]">{tWords("selectDriver")}</div>
                 </div>
             </div>
         </section>
@@ -589,20 +617,20 @@ type IPhoneContentProps = {
 const IPhoneContent = ({ subtitleBlockRef, headingRef }: IPhoneContentProps) => {
     const t = useTranslations("home.hero.phoneContent");
 
-    return (<div className="flex flex-col gap-y-[0.7vw] items-center justify-center">
+    return (<div className="flex flex-col md:gap-y-[0.7vw] gap-y-[20px] items-center justify-center">
         {/* upper part */}
         <div ref={subtitleBlockRef} className="flex flex-col items-center justify-center gap-y-[0.1vw]">
-            <p className="text-[0.3vw] font-light leading-2.5">{t("subtitle")}</p>
-            <p className="flex flex-col items-center font-medium text-[0.7vw] leading-[0.8vw]">
+            <p className="md:text-[0.3vw] text-[5px] font-light leading-2.5">{t("subtitle")}</p>
+            <p className="flex flex-col items-center font-medium md:text-[0.7vw] text-[10px] md:leading-[0.8vw] leading-[2.8vw]">
                 <span>{t("requestToDelivery")}</span>
                 <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("allInOneApp")}</span>
             </p>
         </div>
 
         {/* lower part */}
-        <div ref={headingRef} className="flex flex-col items-center justify-center font-medium text-[1.5vw] leading-[1.5vw] mt-[0.5vw]">
+        <div ref={headingRef} className="flex flex-col items-center justify-center font-medium md:text-[1.5vw] text-[16px] md:leading-[1.5vw] leading-[4vw]">
             <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("smartWayTo")}</p>
-            <p>
+            <p className="max-md:flex max-md:flex-col max-md:items-center max-md:justify-center">
                 <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("moveYour")}</span>
                 {" "}
                 <span>{t("cargo")}</span>

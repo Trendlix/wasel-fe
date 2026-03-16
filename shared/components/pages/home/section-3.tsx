@@ -13,6 +13,10 @@ type Section3Props = {
     heroLayoutReady?: boolean;
 };
 
+const CARD_TITLE_CLASS = "font-medium md:text-[25.82px] md:leading-[38.8px] text-[19.03px] sm:text-[25px] leading-[26.94px]";
+const CARD_PARAGRAPH_CLASS = "xl:text-base text-sm";
+const CARD_CONTENT_GAP_CLASS = "flex flex-col gap-4 md:gap-6 xl:gap-8";
+
 const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
     const t = useTranslations("home.section3");
     const locale = useLocale();
@@ -23,6 +27,7 @@ const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
 
     useGSAP(() => {
         if (!heroLayoutReady || !scopeRef.current || !cardsRefs.current[0] || !cardsRefs.current[1] || !cardsRefs.current[2] || !headingBlockRef.current) return;
+        const isMdOrUp = window.innerWidth >= 768;
 
         // initial setup
         gsap.set(headingBlockRef.current, {
@@ -55,37 +60,41 @@ const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
         // card 2 animations
         gsap.set(cardsRefs.current[1], {
             y: 120,
-            autoAlpha: 0.2,
+            autoAlpha: isMdOrUp ? 0.2 : 1,
         });
         gsap.set(cardsRefs.current[2], {
             y: 180,
         });
-        // Keep opacity tied to scroll progress.
-        const c2OpacityTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: cardsRefs.current[1],
-                start: "top bottom",
-                end: "top 60%",
-                scrub: true,
-            }
-        });
-        c2OpacityTl.to(cardsRefs.current[1], {
-            autoAlpha: 1,
-            ease: "none",
-        });
-        // On leave, fade card 1 and card 2 back from 1 to 0.2.
-        const c2LeaveTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: scopeRef.current,
-                start: "30% top",
-                end: "70% top",
-                scrub: true,
-            }
-        });
-        c2LeaveTl.to([cardsRefs.current[0], cardsRefs.current[1]], {
-            autoAlpha: 0.2,
-            ease: "none",
-        });
+        if (isMdOrUp) {
+            // Keep opacity tied to scroll progress.
+            const c2OpacityTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: cardsRefs.current[1],
+                    start: "top bottom",
+                    end: "top 60%",
+                    scrub: true,
+                }
+            });
+            c2OpacityTl.to(cardsRefs.current[1], {
+                autoAlpha: 1,
+                ease: "none",
+            });
+            // On leave, fade card 1 and card 2 back from 1 to 0.2.
+            const c2LeaveTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: scopeRef.current,
+                    start: "30% top",
+                    end: "70% top",
+                    scrub: true,
+                }
+            });
+            c2LeaveTl.to([cardsRefs.current[0], cardsRefs.current[1]], {
+                autoAlpha: 0.2,
+                ease: "none",
+            });
+        } else {
+            gsap.set([cardsRefs.current[0], cardsRefs.current[1]], { autoAlpha: 1 });
+        }
         // Move up as a regular tween when card 2 is hit (not scrubbed).
         ScrollTrigger.create({
             trigger: cardsRefs.current[1],
@@ -162,14 +171,14 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
     const t = useTranslations("home.section3.card1");
     return (
         <div ref={ref} {...props} className="relative h-fit text-white">
-            <div className={clsx("xl:pl-12 pl-6", "bg-main-ukraineBlue", "rounded-4xl", "overflow-hidden")}>
+            <div className={clsx("xl:pl-12 pl-6", "bg-main-ukraineBlue", "rounded-4xl", "overflow-hidden", CARD_CONTENT_GAP_CLASS)}>
                 <div className="xl:pr-12 lg:pr-8 md:pr-6 pr-4 xl:py-10 md:py-10 py-4 space-y-3" dir={dir}>
-                    <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
-                    <p className="xl:text-base text-sm">{t("description")}</p>
+                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
                 </div>
                 <Image src="/brand/pages/home/section3/manage.png" alt="truck" width={3072} height={1260} className="w-full h-auto mt-auto" />
             </div>
-            <div className="absolute -top-[22%] -left-[12%] h-fit max-sm:hidden">
+            <div className="absolute -top-[22%] -left-[12%] h-fit max-md:hidden">
                 <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] rotate-90" />
             </div>
         </div>
@@ -181,14 +190,14 @@ const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
     const t = useTranslations("home.section3.card2");
     return (
         <div ref={ref} {...props} className="relative h-fit text-black">
-            <div className={clsx("xl:pr-12 pr-6", "bg-main-secondary", "rounded-4xl", "overflow-hidden")}>
+            <div className={clsx("xl:pr-12 pr-6", "bg-main-secondary", "rounded-4xl", "overflow-hidden", CARD_CONTENT_GAP_CLASS)}>
                 <div className="xl:pl-12 pl-6 xl:py-10 py-4 space-y-3" dir={dir}>
-                    <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
-                    <p className="xl:text-base text-sm">{t("description")}</p>
+                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
                 </div>
                 <Image src="/brand/pages/home/section3/instant.png" alt="truck" width={3072} height={1260} className="w-full h-auto mt-auto" />
             </div>
-            <div className="absolute -top-[15%] -right-[13%] h-fit max-sm:hidden flex justify-end">
+            <div className="absolute -top-[15%] -right-[13%] h-fit max-md:hidden flex justify-end">
                 <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] rotate-180" />
             </div>
         </div>
@@ -200,16 +209,16 @@ const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
     const t = useTranslations("home.section3.card3");
     return (
         <div ref={ref} {...props} className="relative h-fit text-white  2xl:max-w-[70%] xl:w-[80%] lg:w-[90%] w-full">
-            <div className={clsx("xl:pl-12 pl-6", "bg-main-red", "rounded-4xl", "overflow-hidden")}>
+            <div className={clsx("xl:pl-12 pl-6", "bg-main-red", "rounded-4xl", "overflow-hidden", CARD_CONTENT_GAP_CLASS)}>
                 <div className="xl:pr-12 pr-6 xl:py-10 py-4 space-y-3" dir={dir}>
-                    <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
-                    <p className="xl:text-base text-sm">{t("description")}</p>
+                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
                 </div>
                 <div className="w-full flex items-end justify-end">
                     <Image src="/brand/pages/home/section3/easy.png" alt="truck" width={3072} height={1260} className="w-[80%] max-w-[380px] max-h-[306px] mt-auto" />
                 </div>
             </div>
-            <div className="absolute -bottom-[18%] -left-[15%] h-fit max-sm:hidden">
+            <div className="absolute -bottom-[18%] -left-[15%] h-fit max-md:hidden">
                 <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[18%] max-h-[18%] " />
             </div>
         </div>

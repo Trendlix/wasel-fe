@@ -5,12 +5,17 @@ import Image from "next/image";
 import { forwardRef, useRef } from "react";
 import gsap from "gsap";
 import { useLocale, useTranslations } from "next-intl";
+import clsx from "clsx";
 
 
 
 type Section2Props = {
     heroLayoutReady?: boolean;
 };
+
+const CARD_TITLE_CLASS = "font-medium md:text-[25.82px] md:leading-[38.8px] text-[19.03px] sm:text-[25px] leading-[26.94px]";
+const CARD_PARAGRAPH_CLASS = "xl:text-base text-sm";
+const CARD_CONTENT_GAP_CLASS = "flex flex-col gap-4 md:gap-6 xl:gap-8";
 
 const Section2 = ({ heroLayoutReady = false }: Section2Props) => {
     const locale = useLocale();
@@ -20,6 +25,7 @@ const Section2 = ({ heroLayoutReady = false }: Section2Props) => {
 
     useGSAP(() => {
         if (!heroLayoutReady || !scopeRef.current) return;
+        const isMdOrUp = window.innerWidth >= 768;
 
         const contents = cardsRefs.current.map(card =>
             card?.querySelector("#card-content")
@@ -70,21 +76,25 @@ const Section2 = ({ heroLayoutReady = false }: Section2Props) => {
             ease: "bounce",
         }, "<+=0.2");
 
-        // on leave opacity for card 2
-        const c2tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: scopeRef.current,
-                start: "30% top",
-                scrub: true,
-                // markers: true
-            }
-        })
+        // on leave opacity for card 2 (md+ only)
+        if (isMdOrUp) {
+            const c2tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: scopeRef.current,
+                    start: "30% top",
+                    scrub: true,
+                    // markers: true
+                }
+            });
 
-        c2tl.to(cardsRefs.current[1], {
-            opacity: 0.2,
-            duration: 1,
-            ease: "back.out(1)",
-        });
+            c2tl.to(cardsRefs.current[1], {
+                opacity: 0.2,
+                duration: 1,
+                ease: "back.out(1)",
+            });
+        } else if (cardsRefs.current[1]) {
+            gsap.set(cardsRefs.current[1], { opacity: 1 });
+        }
     }, { scope: scopeRef, dependencies: [heroLayoutReady] });
 
     return (
@@ -106,18 +116,19 @@ const Section2 = ({ heroLayoutReady = false }: Section2Props) => {
 
 
 
-const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {dir: string}>(({dir, ...props}, ref) => {
+const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section2.card1");
     return (
         <div ref={ref} {...props} className="relative h-fit">
-            <div className="max-h-[500px] bg-main-red overflow-hidden text-white rounded-4xl xl:space-y-[clamp(1.5rem,2vw,3rem)] opacity-0" id="card-content">
-                <div className="space-y-3 xl:px-12 lg:px-6 md:px-4 px-4 xl:py-10 lg:py-6 md:py-4 py-4" dir={dir}>
-                    <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
-                    <p className="xl:text-base text-sm">{t("description")}</p>
+            <div className={clsx("md:max-h-[500px] bg-main-red overflow-hidden text-white md:rounded-4xl rounded-3xl opacity-0", CARD_CONTENT_GAP_CLASS, "max-md:min-h-[490px]", "max-md:pb-8")} id="card-content">
+                <div className="space-y-3 xl:px-12 lg:px-10 px-7 xl:py-10 py-9" dir={dir}>
+                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
                 </div>
-                <Image src="/brand/pages/home/section2/truck.png" alt="truck" width={3072} height={1260} className="w-full h-auto" />
+                <Image src="/brand/pages/home/section2/truck.png" alt="truck" width={3072} height={1260} className="md:w-full md:h-auto max-md:hidden" />
+                <Image src="/brand/pages/home/section2/small-truck.png" alt="truck" width={3072} height={1260} className="w-full h-auto md:hidden translate-x-[3%]" />
             </div>
-            <div className="absolute -bottom-[22%] -left-[13%] h-fit max-sm:hidden" id="link">
+            <div className="absolute -bottom-[22%] -left-[13%] h-fit max-md:hidden" id="link">
                 <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%]" />
             </div>
         </div>
@@ -125,18 +136,18 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
 });
 Card1.displayName = "Card1";
 
-const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {dir: string}>(({dir, ...props}, ref) => {
+const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section2.card2");
     return (
-        <div ref={ref} {...props} className="relative h-fit">
-            <div className="bg-main-secondary rounded-4xl xl:px-14 lg:px-6 md:px-4 px-4 xl:py-10 lg:py-6 md:py-4 py-4 opacity-0" id="card-content">
-                <div className="xl:space-y-3 lg:space-y-2 md:space-y-1" dir={dir}>
-                    <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
-                    <p className="xl:text-base text-sm">{t("description")}</p>
+        <div ref={ref} {...props} className="relative h-fit text-black">
+            <div className={clsx("bg-main-secondary md:rounded-4xl rounded-3xl opacity-0", CARD_CONTENT_GAP_CLASS)} id="card-content">
+                <div className="space-y-3 xl:px-12 lg:px-10 px-7 xl:py-10 py-9" dir={dir}>
+                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
                 </div>
                 <Image src="/brand/pages/home/section2/transport.png" alt="truck" width={3072} height={1260} className="w-full h-auto" />
             </div>
-            <div className="absolute -bottom-[14%] -right-[22%] flex items-end justify-end max-sm:hidden" id="link">
+            <div className="absolute -bottom-[14%] -right-[22%] flex items-end justify-end max-md:hidden" id="link">
                 <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[25%] max-h-[25%] scale-x-[-1]" />
             </div>
         </div>
@@ -144,20 +155,20 @@ const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
 });
 Card2.displayName = "Card2";
 
-const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {dir: string}>(({dir, ...props}, ref) => {
+const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
     const t = useTranslations("home.section2.card3");
     return (
         <div ref={ref} {...props} className="relative h-fit flex justify-end" >
-            <div className=" text-white md:max-w-[80%] bg-main-ukraineBlue overflow-hidden rounded-4xl opacity-0" id="card-content">
-                <div className="xl:px-12 lg:px-6 md:px-4 px-4 xl:pt-10 lg:pt-6 md:pt-4 pt-4" dir={dir}>
-                    <h3 className="font-medium text-2xl md:text-xl xl:leading-7 leading-6">{t("title")}</h3>
-                    <p className="xl:text-base text-sm">{t("description")}</p>
+            <div className={clsx(" text-white md:max-w-[80%] bg-main-ukraineBlue overflow-hidden md:rounded-4xl rounded-3xl opacity-0", CARD_CONTENT_GAP_CLASS)} id="card-content">
+                <div className="space-y-3 xl:px-12 lg:px-10 px-7 xl:py-10 py-9" dir={dir}>
+                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
                 </div>
                 <div className="pl-10">
                     <Image src="/brand/pages/home/section2/happens.png" alt="truck" width={3072} height={1260} className="w-full h-auto" />
                 </div>
             </div>
-            <div className="absolute -bottom-[25%] -right-[13%] flex items-end justify-end max-sm:hidden" id="link">
+            <div className="absolute -bottom-[25%] -right-[13%] flex items-end justify-end max-md:hidden" id="link">
                 <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] scale-x-[-1]" />
             </div>
         </div>

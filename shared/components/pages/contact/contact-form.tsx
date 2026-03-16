@@ -6,9 +6,9 @@ import { useTranslations } from "next-intl";
 
 import { contactInfoItems, type IContactItem } from "@/shared/constants/contact";
 
-const contactInfoTitleClass = "font-medium text-[22.74px] leading-[34.11px] tracking-0 dark:text-main-dutchOrigin text-main-ukraineBlue";
+const contactInfoTitleClass = "font-medium md:text-[22.74px] text-lg leading-[34.11px] tracking-0 dark:text-main-dutchOrigin text-main-ukraineBlue";
 const contactIconClass = "w-[30.32px] h-[30.32px] dark:text-main-dutchOrigin text-main-ukraineBlue shrink-0";
-const contactItemClass = "font-normal text-[20.21px] leading-[30.32px] tracking-0";
+const contactItemClass = "font-normal md:text-[20.21px] text-[18px] leading-[30.32px] tracking-0";
 
 const formLabelClass = "font-medium text-[17.69px] leading-[17.69px] tracking-0 text-white";
 const formLabelIconClass = "w-5 h-5 dark:text-main-dutchOrigin text-main-ukraineBlue shrink-0";

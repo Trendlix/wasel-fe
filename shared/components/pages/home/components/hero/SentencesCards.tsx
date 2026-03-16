@@ -20,7 +20,7 @@ export const TruckCard = () => {
     const dir = locale === "ar" ? "rtl" : "ltr";
 
     return (<div id="truck-card" dir={dir}
-        className={clsx("border border-main-whiteMarble px-[clamp(0.45rem,1vw,1.2rem)] py-[clamp(0.3rem,1.7vh,0.85rem)] rounded-2xl bg-main-creamBrulee", "flex items-center justify-between", "scale-115", "relative top-[38%]", "opacity-0")}>
+        className={clsx("border border-main-whiteMarble px-[clamp(0.45rem,1vw,1.2rem)] py-[clamp(0.3rem,1.7vh,0.85rem)] rounded-2xl bg-main-creamBrulee", "flex items-center justify-between", "scale-115", "relative md:top-[38%] top-[42%]", "opacity-0")}>
         <div className={clsx("flex items-center gap-[clamp(0.55rem,1.8vw,1.8rem)]")}>
             <div className="text-[clamp(1.05rem,2.6vw,2.7rem)] leading-none">🚚</div>
             <div>
@@ -42,7 +42,7 @@ export const SelectPriceCard = () => {
     const dir = locale === "ar" ? "rtl" : "ltr";
 
     return (<div id="select-price-card" dir={dir}
-        className={clsx("py-[clamp(0.3rem,1vh,0.85rem)] px-[clamp(0.45rem,1vw,1.2rem)]", "bg-main-primary text-white", "flex flex-col gap-[clamp(0.15rem,0.4vh,0.5rem)] justify-between", "rounded-2xl", "scale-115", "relative top-[8.5%]", "opacity-0")}>
+        className={clsx("py-[clamp(0.3rem,1vh,0.85rem)] px-[clamp(0.45rem,1vw,1.2rem)]", "bg-main-primary text-white", "flex flex-col gap-[clamp(0.15rem,0.4vh,0.5rem)] justify-between", "rounded-2xl", "scale-115", "relative top-[22%] md:top-[8.5%]", "opacity-0")}>
         <p className={clsx("text-[clamp(0.5rem,0.65vw,0.82rem)] leading-[clamp(0.72rem,1.1vw,1.1rem)]")}>{t("title")}</p>
         <p className={clsx("font-bold text-[clamp(1rem,1.8vw,2rem)] leading-[clamp(1.2rem,2.2vw,2.4rem)]")}>{t("amount")}</p>
         <p className={clsx("text-[clamp(0.5rem,0.65vw,0.82rem)] leading-[clamp(0.72rem,1vw,1rem)]")}>{t("description")}</p>
@@ -54,7 +54,7 @@ export const SelectDriverCard = () => {
     const t = useTranslations("home.hero.cards.driver");
     const dir = locale === "ar" ? "rtl" : "ltr";
 
-    return (<div id="select-driver-card" dir={dir} className={clsx("bg-white rounded-2xl border", "scale-115 scale-x-120", "relative top-[5%] opacity-0", "p-[clamp(0.4rem,0.9vw,1rem)]")}>
+    return (<div id="select-driver-card" dir={dir} className={clsx("bg-white rounded-2xl border", "scale-115 scale-x-120", "relative md:top-[5%] top-[30%] opacity-0", "p-[clamp(0.4rem,0.9vw,1rem)]")}>
         <div>
             <div className={clsx("flex items-start justify-between")}>
                 <div className={clsx("flex items-start gap-[clamp(0.35rem,0.9vw,1rem)]")}>

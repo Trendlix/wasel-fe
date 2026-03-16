@@ -37,11 +37,11 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     return (
         <section ref={scopeRef} dir={dir} className="pb-28">
             <div className="container mt-36 space-y-8">
-                <div className={clsx("flex flex-col gap-1")}>
-                    <h1 ref={headingRef} className={clsx("font-medium 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl opacity-0 dark:text-white text-black")}>
+                <div className={clsx("flex flex-col gap-4")}>
+                    <h1 ref={headingRef} className={clsx("font-bold 2xl:text-5xl xl:text-4xl text-3xl opacity-0 dark:text-white text-black")}>
                         {t("title")}
                     </h1>
-                    <p ref={paragraphRef} className={clsx("text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] tracking-0 max-w-2xl opacity-0 dark:text-white text-black")}>
+                    <p ref={paragraphRef} className={clsx("lg:text-lg text-base leading-[21px] md:leading-[27px] tracking-0 max-w-2xl opacity-0 dark:text-white text-black")}>
                         {t("subtitle")}
                     </p>
                 </div>

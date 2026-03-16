@@ -29,6 +29,12 @@ const FAQ = ({ heroLayoutReady = false, className }: FAQProps) => {
     useGSAP(() => {
         if (!heroLayoutReady || !scopeRef.current || !elementsRefs.current[0] || !elementsRefs.current[1]) return;
 
+        const isMdOrUp = window.matchMedia("(min-width: 768px)").matches;
+        if (!isMdOrUp) {
+            gsap.set(elementsRefs.current, { autoAlpha: 1, y: 0 });
+            return;
+        }
+
         gsap.set(elementsRefs.current, { autoAlpha: 0.2, y: 150 });
 
         [0, 1].forEach((i) => {

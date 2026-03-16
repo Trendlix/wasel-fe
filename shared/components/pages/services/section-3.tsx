@@ -40,52 +40,73 @@ const Section3 = () => {
         const cards = cardRefs.current.filter((el): el is HTMLDivElement => !!el);
         if (!cards.length || !scopeRef.current) return;
 
-        gsap.set(cards, { autoAlpha: 0.2, y: 150 });
+        const mm = gsap.matchMedia();
 
-        cards.forEach((card) => {
-            if (!card) return;
+        mm.add("(min-width: 768px)", () => {
+            gsap.set(cards, { autoAlpha: 0.2, y: 150 });
 
-            const opacityTl = gsap.timeline({
-                scrollTrigger: {
+            cards.forEach((card) => {
+                if (!card) return;
+
+                const opacityTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top bottom",
+                        end: "top 60%",
+                        scrub: true,
+                    },
+                });
+                opacityTl.to(card, { autoAlpha: 1, ease: "none" });
+
+                ScrollTrigger.create({
                     trigger: card,
                     start: "top bottom",
-                    end: "top 60%",
+                    onEnter: () => {
+                        gsap.to(card, {
+                            y: 0,
+                            duration: 0.9,
+                            ease: "back.out(1.1)",
+                            overwrite: "auto",
+                        });
+                    },
+                    onEnterBack: () => {
+                        gsap.to(card, {
+                            y: 0,
+                            duration: 0.9,
+                            ease: "back.out(1.1)",
+                            overwrite: "auto",
+                        });
+                    },
+                });
+            });
+
+            const leaveTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: scopeRef.current,
+                    start: "30% top",
+                    end: "70% top",
                     scrub: true,
                 },
             });
-            opacityTl.to(card, { autoAlpha: 1, ease: "none" });
+            leaveTl.to(cards, { autoAlpha: 0.2, ease: "none" });
+        });
 
-            ScrollTrigger.create({
-                trigger: card,
-                start: "top bottom",
-                onEnter: () => {
-                    gsap.to(card, {
-                        y: 0,
-                        duration: 0.9,
-                        ease: "back.out(1.1)",
-                        overwrite: "auto",
-                    });
-                },
-                onEnterBack: () => {
-                    gsap.to(card, {
-                        y: 0,
-                        duration: 0.9,
-                        ease: "back.out(1.1)",
-                        overwrite: "auto",
-                    });
-                },
+        mm.add("(max-width: 767px)", () => {
+            gsap.set(cards, { autoAlpha: 0, y: 60 });
+            cards.forEach((card) => {
+                if (!card) return;
+                gsap.to(card, {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%",
+                    },
+                });
             });
         });
-
-        const leaveTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: scopeRef.current,
-                start: "30% top",
-                end: "70% top",
-                scrub: true,
-            },
-        });
-        leaveTl.to(cards, { autoAlpha: 0.2, ease: "none" });
     }, { scope: scopeRef, dependencies: [] });
 
     return (
@@ -122,9 +143,9 @@ const Heading = forwardRef<HTMLDivElement, { t: (key: string) => string; dir: st
     return (
         <div
             ref={ref}
-            className="flex flex-col items-center justify-center gap-y-2 sm:gap-y-3 text-center"
+            className="flex flex-col items-center justify-center gap-y-4 text-center"
         >
-            <h2 className="capitalize  font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight">
+            <h2 className="font-bold 2xl:text-5xl xl:text-4xl text-3xl leading-tight">
                 <p>
                     <span className={clsx("w-fit relative mt-1 text-nowrap text-white p-1")}>
                         <span className="relative z-10">{t("headingWord")}</span>
@@ -135,7 +156,7 @@ const Heading = forwardRef<HTMLDivElement, { t: (key: string) => string; dir: st
                 </p>
                 <p className="mt-1">{t("headingSuffix")}</p>
             </h2>
-            <p className="text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] tracking-0 max-w-2xl mx-auto px-2">
+            <p className="lg:text-lg text-base leading-[21px]  md:leading-[27px] tracking-0 max-w-2xl mx-auto px-2">
                 {t("subtitle")}
             </p>
         </div>
@@ -150,7 +171,7 @@ const Card = ({ card, content, reverse }: { card: IServiceSection3Card; content:
     return (
         <div
             className={clsx(
-                "rounded-2xl sm:rounded-3xl overflow-hidden relative flex flex-row md:flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-7 w-full h-full min-h-0",
+                "rounded-2xl sm:rounded-3xl overflow-hidden relative flex flex-col md:flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-7 w-full h-full min-h-0",
                 "px-4 py-6 sm:px-6 sm:py-8 md:px-8 md:py-10 lg:px-10 lg:py-10 xl:px-12 xl:py-10",
                 colors.bg
             )}
@@ -158,15 +179,15 @@ const Card = ({ card, content, reverse }: { card: IServiceSection3Card; content:
             {/* Text content: side-by-side on single-col, top/bottom on md+; reverse still swaps position */}
             <div
                 className={clsx(
-                    "relative z-10 shrink-0 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 min-w-0 md:min-w-[unset] max-md:flex-1 max-md:max-w-[55%]",
-                    reverse ? "order-first" : "order-last"
+                    "relative z-10 shrink-0 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 min-w-0 md:min-w-[unset]",
+                    reverse ? "md:order-first" : "md:order-last"
                 )}
             >
                 <div>
                     <span className={clsx("uppercase font-medium text-[10px] sm:text-xs lg:text-sm tracking-[4px] sm:tracking-[5px]", colors.tag)}>
                         {content.tag}
                     </span>
-                    <h2 className={clsx("font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-1 whitespace-pre-line leading-tight", textClass)}>
+                    <h2 className={clsx("font-bold 2xl:text-5xl xl:text-4xl text-3xl mt-1 whitespace-pre-line leading-tight", textClass)}>
                         {content.title}
                     </h2>
                 </div>
@@ -182,7 +203,7 @@ const Card = ({ card, content, reverse }: { card: IServiceSection3Card; content:
                 </div>
             </div>
             {/* Image: takes the rest of the space */}
-            <div className={clsx("flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-hidden", reverse ? "order-1" : "order-2")}>
+            <div className={clsx("flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-hidden", reverse ? "md:order-1" : "md:order-2")}>
                 <Image
                     src={image}
                     alt={content.title}

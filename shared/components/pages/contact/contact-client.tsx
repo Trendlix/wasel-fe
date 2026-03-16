@@ -16,8 +16,14 @@ const ContactClient = () => {
         <div className={clsx("dark:bg-main-codGray bg-white", "overflow-hidden", "relative")}>
             <Navbar />
             <Hero onLayoutReady={() => setHeroLayoutReady(true)} />
-            <BrandBanner heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
-            <HomeSection4 heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
+            <div className="flex flex-col w-full relative">
+                <div className="order-2 md:order-1 w-full">
+                    <BrandBanner heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
+                </div>
+                <div className="order-1 md:order-2 w-full">
+                    <HomeSection4 heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
+                </div>
+            </div>
             <FAQ heroLayoutReady={heroLayoutReady} className="py-10 dark:bg-main-codGray bg-white" />
             <Footer heroLayoutReady={heroLayoutReady} className="dark:bg-main-codGray bg-white" />
         </div>

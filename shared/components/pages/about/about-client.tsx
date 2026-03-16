@@ -26,7 +26,7 @@ const AboutClient = () => {
             <Section4 />
             <HomeSection4 heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
             <BrandBanner heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
-            <FAQ heroLayoutReady={heroLayoutReady} className="py-10 bg-white dark:bg-main-codGray dark:text-white text-black" />
+            <FAQ heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray dark:text-white text-black" />
             <Footer heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
         </div>
     );

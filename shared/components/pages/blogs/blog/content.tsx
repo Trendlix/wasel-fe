@@ -27,7 +27,7 @@ const Content = ({ description }: { description: string }) => {
     }, { scope: ref });
 
     return (
-        <div ref={ref} className="max-2xl:container 2xl:max-w-3xl mx-auto" dir={dir}>
+        <div ref={ref} className="2xl:max-w-3xl! mx-auto container" dir={dir}>
             <p>
                 {description}
             </p>

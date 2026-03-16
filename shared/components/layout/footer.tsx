@@ -27,6 +27,12 @@ const Footer = ({ heroLayoutReady = false, className }: FooterProps) => {
     useGSAP(() => {
         if (!heroLayoutReady || !scopeRef.current || !elementsRefs.current[0] || !elementsRefs.current[1] || !elementsRefs.current[2]) return;
 
+        const isMdOrUp = window.matchMedia("(min-width: 768px)").matches;
+        if (!isMdOrUp) {
+            gsap.set(elementsRefs.current, { autoAlpha: 1, y: 0 });
+            return;
+        }
+
         gsap.set(elementsRefs.current, { autoAlpha: 0, y: 80 });
 
         const startEnter = "top bottom-=100";

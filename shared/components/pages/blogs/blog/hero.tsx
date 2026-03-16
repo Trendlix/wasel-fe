@@ -53,7 +53,7 @@ const Hero = ({ blog, onLayoutReady }: { blog: IBlogCardItem; onLayoutReady?: ()
         >
             <div className="bg-linear-to-t from-main-codGray via-black/50 to-black/70 w-full h-full absolute inset-0 z-0" />
 
-            <div className={clsx("max-2xl:container relative z-10 h-full min-h-[600px] 2xl:max-w-3xl mx-auto", "flex items-end", dir === "rtl" ? "justify-end" : "justify-start", "py-14")} dir={dir}>
+            <div className={clsx("relative z-10 h-full min-h-[600px] 2xl:max-w-3xl! mx-auto container", "flex items-end", dir === "rtl" ? "justify-end" : "justify-start", "py-14")} dir={dir}>
                 <div className="h-full space-y-8">
                     <Link ref={backRef} href="/blogs" className="text-white/70 text-sm leading-[24px] tracking-0 flex items-center gap-2">
                         <span><ArrowLeftIcon size={20} /></span>
@@ -65,11 +65,11 @@ const Hero = ({ blog, onLayoutReady }: { blog: IBlogCardItem; onLayoutReady?: ()
                     </div>
 
                     <div ref={contentRef} className="space-y-4">
-                        <h2 className="text-white font-bold xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-2xl xl:leading-14">
+                        <h2 className="text-white font-bold 2xl:text-5xl xl:text-4xl text-3xl">
                             {tCards(`${blog.slug}.title`)}
                         </h2>
 
-                        <p className="text-white/70 text-sm sm:text-base md:text-lg xl:text-xl leading-normal sm:leading-[27px] max-w-3xl">
+                        <p className="text-white/70 lg:text-lg text-base leading-[21px] md:leading-[27px] max-w-3xl">
                             {tCards(`${blog.slug}.description`)}
                         </p>
 
