@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import { useLockScroll } from "@/shared/hooks/common/useScrollLock";
 import useLenis from "@/shared/hooks/animation/layout/useLenis";
 import useScrollToTopBeforeRefresh from "@/shared/hooks/animation/layout/useScrollToTopBeforeRefresh";
@@ -43,13 +43,16 @@ const HomeClient = () => {
     useScrollToTopBeforeRefresh();
     const [heroLayoutReady, setHeroLayoutReady] = useState(false);
     const [heroMountReady, setHeroMountReady] = useState(false);
+    const scrollTriggerRef = useRef<HTMLDivElement>(null);
 
     return (
         <HeroLayoutContext.Provider value={{ heroLayoutReady, setHeroLayoutReady, heroMountReady }}>
             <div className="relative min-h-screen bg-white dark:bg-main-codGray">
-                <Navbar />
+                <Navbar scrollTriggerRef={scrollTriggerRef} />
                 <Hero onLayoutReady={setHeroLayoutReady} onMountStart={() => setHeroMountReady(true)} />
-                <Section1 heroLayoutReady={heroLayoutReady} />
+                <div ref={scrollTriggerRef}>
+                    <Section1 heroLayoutReady={heroLayoutReady} />
+                </div>
                 <Section2 heroLayoutReady={heroLayoutReady} />
                 <Section3 heroLayoutReady={heroLayoutReady} />
                 <Section4 heroLayoutReady={heroLayoutReady} />

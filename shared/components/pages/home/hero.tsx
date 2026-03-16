@@ -562,18 +562,18 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                                     src={imageSrc}
                                     alt={tPhone("heroImageAlt")}
                                     fill
-                                    className="object-contain"
+                                    className={clsx("object-contain", "control-padding-media")}
                                 />
 
                                 {/* Dynamic Island + iPhone content: hidden on < md */}
-                                <div className="absolute top-[38%] md:top-5 w-full  flex items-center justify-center flex-col">
+                                <div className="absolute top-[38%] lg:top-5 md:top-12 w-full  flex items-center justify-center flex-col control-top-media">
                                     <div
                                         ref={dynamicIslandRef}
                                         className="w-[90%] max-w-[50%] hidden md:flex items-center justify-center"
                                     >
                                         <DynamicIsland />
                                     </div>
-                                    <div ref={phoneContentWrapperRef} className="mt-[0.5vw]">
+                                    <div ref={phoneContentWrapperRef} className="mt-[0.5vw] control-margin-media">
                                         <IPhoneContent subtitleBlockRef={subtitleBlockRef} headingRef={headingRef} />
                                     </div>
                                 </div>
@@ -617,18 +617,18 @@ type IPhoneContentProps = {
 const IPhoneContent = ({ subtitleBlockRef, headingRef }: IPhoneContentProps) => {
     const t = useTranslations("home.hero.phoneContent");
 
-    return (<div className="flex flex-col md:gap-y-[0.7vw] gap-y-[20px] items-center justify-center">
+    return (<div className="flex flex-col lg:gap-y-[0.7vw] md:gap-y-[1.4vw] gap-y-[15px] items-center justify-center">
         {/* upper part */}
         <div ref={subtitleBlockRef} className="flex flex-col items-center justify-center gap-y-[0.1vw]">
-            <p className="md:text-[0.3vw] text-[5px] font-light leading-2.5">{t("subtitle")}</p>
-            <p className="flex flex-col items-center font-medium md:text-[0.7vw] text-[10px] md:leading-[0.8vw] leading-[2.8vw]">
+            <p className="lg:text-[0.3vw] md:text-[0.6vw] text-[5px] font-light leading-2.5">{t("subtitle")}</p>
+            <p className="flex flex-col items-center font-medium lg:text-[0.7vw] md:text-[1.2vw] text-[10px] lg:leading-[0.8vw] md:leading-[1.4vw] leading-[2.8vw]">
                 <span>{t("requestToDelivery")}</span>
                 <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("allInOneApp")}</span>
             </p>
         </div>
 
         {/* lower part */}
-        <div ref={headingRef} className="flex flex-col items-center justify-center font-medium md:text-[1.5vw] text-[16px] md:leading-[1.5vw] leading-[4vw]">
+        <div ref={headingRef} className="flex flex-col items-center justify-center font-medium lg:text-[1.5vw] md:text-[3vw] text-[16px] lg:leading-[1.5vw] md:leading-[3vw] leading-[4vw]">
             <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("smartWayTo")}</p>
             <p className="max-md:flex max-md:flex-col max-md:items-center max-md:justify-center">
                 <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("moveYour")}</span>

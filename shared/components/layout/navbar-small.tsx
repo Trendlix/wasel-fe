@@ -127,7 +127,7 @@ const NavbarSmall = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<
     const menuOverlay = (
         <div
             className={clsx(
-                "fixed inset-0 top-[72px] z-[1500] flex",
+                "fixed inset-0 top-[72px] z-1500 flex",
                 "transition-opacity duration-300",
                 menuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
             )}
@@ -155,12 +155,13 @@ const NavbarSmall = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<
         <>
             <div
                 ref={navRef}
+                dir={dir}
                 className={clsx(
-                    "fixed top-0 left-0 right-0 w-full z-[2000]",
+                    "fixed top-0 left-0 right-0 w-full z-2000",
                     navbarBgClass
                 )}
             >
-                <div className="w-full max-w-[1400px] mx-auto flex items-center justify-between py-4 px-6">
+                <div className={clsx("w-full max-w-[1400px] mx-auto flex items-center justify-between py-4 px-6", isRtl && "flex-row-reverse")}>
                     <div className="flex items-center gap-3">
                         <button
                             type="button"
@@ -188,6 +189,9 @@ const NavbarSmall = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<
 };
 
 const NavbarSmallMenu = ({ onLinkClick }: { onLinkClick?: () => void }) => {
+    const locale = useLocale();
+    const isRtl = locale === "ar";
+    const dir = isRtl ? "rtl" : "ltr";
     const pathname = usePathname();
     const isHomePage = pathname === "/" || pathname?.endsWith("/");
     const isAboutPage = pathname === "/about" || pathname?.endsWith("/about");
@@ -201,7 +205,7 @@ const NavbarSmallMenu = ({ onLinkClick }: { onLinkClick?: () => void }) => {
     const t = useTranslations("nav");
 
     return (
-        <nav className="flex flex-col h-full overflow-auto px-6 py-6 w-full">
+        <nav dir={dir} className="flex flex-col h-full overflow-auto px-6 py-6 w-full">
             <div className="flex flex-col gap-1">
                 {navLinks.map(({ href, labelKey }) => {
                     const isActive = pathname === href || (href !== "/" && pathname?.startsWith(href));
@@ -212,7 +216,8 @@ const NavbarSmallMenu = ({ onLinkClick }: { onLinkClick?: () => void }) => {
                             onClick={onLinkClick}
                             className={clsx(
                                 isActive ? activeClass : inactiveClass,
-                                "font-medium transition-colors py-3 px-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-lg"
+                                "font-medium transition-colors py-3 px-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-lg",
+                                isRtl ? "text-right" : "text-left"
                             )}
                         >
                             {t(labelKey)}
@@ -221,7 +226,7 @@ const NavbarSmallMenu = ({ onLinkClick }: { onLinkClick?: () => void }) => {
                 })}
             </div>
 
-            <div className={clsx("mt-auto pt-6 border-t dark:border-white/10 border-black/10 space-y-4", isHomePage && "flex items-center justify-between *:first:flex-1 gap-4")}>
+            <div className={clsx("mt-auto pt-6 border-t dark:border-white/10 border-black/10 space-y-4", isHomePage && "flex items-center justify-between *:first:flex-1 gap-4", isHomePage && isRtl && "flex-row-reverse")}>
                 <Link href="/contact" onClick={onLinkClick}>
                     <Button className={clsx("w-full bg-main-ukraineBlue text-white border-none max-h-[50px] flex items-center justify-center font-medium")}>
                         {t("contact")}
@@ -229,7 +234,7 @@ const NavbarSmallMenu = ({ onLinkClick }: { onLinkClick?: () => void }) => {
                 </Link>
                 {isHomePage && <div className="h-full flex items-center justify-center *:text-base"><LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} /></div>}
                 {!isHomePage &&
-                    <div className="flex items-center gap-4 justify-between py-2">
+                    <div className={clsx("flex items-center gap-4 justify-between py-2", isRtl && "flex-row-reverse")}>
                         <ThemeSwitcher activeClass={activeClass} className="w-6 h-6" />
                         <LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} />
                     </div>

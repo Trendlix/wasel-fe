@@ -147,8 +147,8 @@ const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
                 </div>
                 <Image src="/brand/pages/home/section2/transport.png" alt="truck" width={3072} height={1260} className="w-full h-auto" />
             </div>
-            <div className="absolute -bottom-[14%] -right-[22%] flex items-end justify-end max-md:hidden" id="link">
-                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[25%] max-h-[25%] scale-x-[-1]" />
+            <div className="absolute -bottom-[7%] -right-[15%] flex items-end justify-end max-md:hidden" id="link">
+                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] scale-x-[-1]" />
             </div>
         </div>
     );
@@ -168,8 +168,8 @@ const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
                     <Image src="/brand/pages/home/section2/happens.png" alt="truck" width={3072} height={1260} className="w-full h-auto" />
                 </div>
             </div>
-            <div className="absolute -bottom-[25%] -right-[13%] flex items-end justify-end max-md:hidden" id="link">
-                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] scale-x-[-1]" />
+            <div className="absolute -bottom-[20%] -right-[18%] flex items-end justify-start max-md:hidden" id="link">
+                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] " />
             </div>
         </div>
     );
