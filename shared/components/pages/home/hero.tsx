@@ -42,6 +42,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
     const [imageSrc, setImageSrc] = useState("/brand/pages/home/iphone.png");
     const currentImageRef = useRef<string>("/brand/pages/home/iphone.png");
     const [firstImageLoaded, setFirstImageLoaded] = useState(false);
+    const [islandTop, setIslandTop] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         const firstSrc = getBaseIphoneSrc();
@@ -58,6 +59,25 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
         } else {
             img.onload = onLoad;
         }
+
+        const updateTop = () => {
+            const w = window.innerWidth;
+            if(w>=1050){
+                setIslandTop('3%');
+            }
+            else if (w >= 1024 && w < 1050) {
+                setIslandTop('20.5%');
+            } else if (w >= 800) {
+                setIslandTop('22.5%');
+            } else if (w >= 700) {
+                setIslandTop('20.5%');
+            } else if (w >= 400) {
+                setIslandTop("40%");
+            }
+        };
+        updateTop();
+        window.addEventListener('resize', updateTop);
+        return () => window.removeEventListener('resize', updateTop);
     }, [onMountStart]);
 
     // ── Mount animation for iPhone (waits for first image) ──
@@ -552,28 +572,31 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center h-full relative">
-                    <div ref={iphoneRef} className="absolute h-full w-full" style={{ bottom: "-130%", transform: "scale(1.9)" }}>
+                <div className="flex items-center justify-center h-full relative ">
+                    <div ref={iphoneRef} className="absolute h-full w-full " style={{ bottom: "-130%", transform: "scale(1.9)" }}>
                         {/* iPhone frame */}
                         <div className="w-full h-full flex items-center justify-center">
-                            <div className="relative h-full aspect-[150/480] md:aspect-[285/580]">
+                            <div className="relative h-full aspect-[150/480] md:aspect-[285/580] md:max-w-[100%] max-md:w-[150%]">
                                 <SentencesCards />
                                 <NextImage
                                     src={imageSrc}
                                     alt={tPhone("heroImageAlt")}
                                     fill
-                                    className={clsx("object-contain", "control-padding-media")}
+                                    className={clsx("object-contain")}
                                 />
 
                                 {/* Dynamic Island + iPhone content: hidden on < md */}
-                                <div className="absolute top-[38%] lg:top-5 md:top-12 w-full  flex items-center justify-center flex-col control-top-media">
+                                <div
+                                    className="absolute  w-full flex items-center justify-center flex-col"
+                                    style={{ top: islandTop }}
+                                >
                                     <div
                                         ref={dynamicIslandRef}
                                         className="w-[90%] max-w-[50%] hidden md:flex items-center justify-center"
                                     >
                                         <DynamicIsland />
                                     </div>
-                                    <div ref={phoneContentWrapperRef} className="mt-[0.5vw] control-margin-media">
+                                    <div ref={phoneContentWrapperRef} className="mt-[0.5vw]">
                                         <IPhoneContent subtitleBlockRef={subtitleBlockRef} headingRef={headingRef} />
                                     </div>
                                 </div>
