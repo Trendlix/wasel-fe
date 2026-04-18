@@ -43,6 +43,11 @@
   --main-coldBlack: #101215;
   --main-lightGray: #D4D4D4;
   --main-techWhite: #F5F5F5;
+  --main-flatBlack: #0D0D0E;
+  --main-blackOut: #1e1e1e;
+  --main-lightBlack: #2e2e2e;
+  --main-chineseBlack: #161618;
+  --main-gold: #FFD600;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -152,6 +157,11 @@
   --color-main-coldBlack: var(--main-coldBlack);
   --color-main-lightGray: var(--main-lightGray);
   --color-main-techWhite: var(--main-techWhite);
+  --color-main-flatBlack: var(--main-flatBlack);
+  --color-main-blackOut: var(--main-blackOut);
+  --color-main-lightBlack: var(--main-lightBlack);
+  --color-main-chineseBlack: var(--main-chineseBlack);
+  --color-main-gold: var(--main-gold);
   /* Fonts - Mapping to the variables from next/font/local */
   --font-sans: var(--font-roc-main), ui-sans-serif, system-ui, sans-serif;
   --font-condensed: var(--font-roc-cond);
@@ -164,6 +174,7 @@
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-main-chineseBlack: var(--main-chineseBlack);
   --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);

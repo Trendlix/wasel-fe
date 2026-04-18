@@ -61,9 +61,13 @@ const NavbarLarge = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<
     const navbarBgClass = isNotHomeOrAboutPage
         ? "bg-white/95 dark:bg-main-codGray/95 backdrop-blur-sm"
         : bgClass;
-    const logoSrc = isAboutPage && mounted && resolvedTheme === "light" && aboutScrolled
-        ? "/brand/logo-light.png"
-        : "/brand/logo.png";
+    const logoSrc = isNotHomeOrAboutPage
+        ? mounted && resolvedTheme === "light"
+            ? "/brand/logo-light.png"
+            : "/brand/logo.png"
+        : isAboutPage && mounted && resolvedTheme === "light" && aboutScrolled
+            ? "/brand/logo-light.png"
+            : "/brand/logo.png";
 
     useEffect(() => {
         setMounted(true);

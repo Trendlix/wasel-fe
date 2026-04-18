@@ -26,8 +26,12 @@
                 "title": "Show Driver Reviews",
                 "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima earum sit neque harum id totam at minus iste laborum, excepturi eum debitis dolor consequatur, ullam aut impedit porro omnis numquam!"
             },
-            "card3": { "title": "Wasel Payment Faster than any other App." },
-            "card4": { "title": "Wasel Payment Faster than any other App." }
+            "card3": {
+                "title": "Wasel Payment Faster than any other App."
+            },
+            "card4": {
+                "title": "Wasel Payment Faster than any other App."
+            }
         },
         "section2": {
             "card1": {
@@ -60,8 +64,14 @@
             }
         },
         "section4": {
-            "card1": { "title": "Download", "title2": "Users App" },
-            "card2": { "title": "Download", "title2": "Driver/Storage Owner App" }
+            "card1": {
+                "title": "Download",
+                "title2": "Users App"
+            },
+            "card2": {
+                "title": "Download",
+                "title2": "Driver/Storage Owner App"
+            }
         },
         "section-1": {
             "titles": [
@@ -188,12 +198,30 @@
             "noOrderFoundHint": "Double-check your tracking number and try again."
         },
         "status": {
-            "order_placed": { "label": "Order Placed", "description": "Shipment booking confirmed" },
-            "order_picked_up": { "label": "Picked Up", "description": "Package picked up from origin" },
-            "order_in_transit": { "label": "In Transit", "description": "En route to destination" },
-            "order_out_for_delivery": { "label": "Out for Delivery", "description": "Package out for final delivery" },
-            "order_delivered": { "label": "Delivered", "description": "Package delivered successfully" },
-            "order_cancelled": { "label": "Cancelled", "description": "Order has been cancelled" }
+            "order_placed": {
+                "label": "Order Placed",
+                "description": "Shipment booking confirmed"
+            },
+            "order_picked_up": {
+                "label": "Picked Up",
+                "description": "Package picked up from origin"
+            },
+            "order_in_transit": {
+                "label": "In Transit",
+                "description": "En route to destination"
+            },
+            "order_out_for_delivery": {
+                "label": "Out for Delivery",
+                "description": "Package out for final delivery"
+            },
+            "order_delivered": {
+                "label": "Delivered",
+                "description": "Package delivered successfully"
+            },
+            "order_cancelled": {
+                "label": "Cancelled",
+                "description": "Order has been cancelled"
+            }
         },
         "result": {
             "currentStatus": "Current Status",
@@ -238,16 +266,37 @@
             "sendMessageTitle": "Send us a Message",
             "sendButton": "Send Message",
             "fields": {
-                "name": { "label": "Name", "placeholder": "Your name" },
-                "email": { "label": "Email", "placeholder": "your.email@example.com" },
-                "phone": { "label": "Phone (Optional)", "placeholder": "+1 (234) 567-890" },
-                "message": { "label": "Message", "placeholder": "How can we help you?" }
+                "name": {
+                    "label": "Name",
+                    "placeholder": "Your name"
+                },
+                "email": {
+                    "label": "Email",
+                    "placeholder": "your.email@example.com"
+                },
+                "phone": {
+                    "label": "Phone (Optional)",
+                    "placeholder": "+1 (234) 567-890"
+                },
+                "message": {
+                    "label": "Message",
+                    "placeholder": "How can we help you?"
+                }
             }
         },
         "info": {
-            "mobile": { "label": "Mobile", "value": "+1 (234) 567-890" },
-            "landline": { "label": "Landline", "value": "+1 (234) 567-891" },
-            "email": { "label": "Email", "value": "contact@example.com" },
+            "mobile": {
+                "label": "Mobile",
+                "value": "+1 (234) 567-890"
+            },
+            "landline": {
+                "label": "Landline",
+                "value": "+1 (234) 567-891"
+            },
+            "email": {
+                "label": "Email",
+                "value": "contact@example.com"
+            },
             "address": {
                 "label": "Address",
                 "line1": "123 Business Street",
@@ -389,18 +438,63 @@
                 "business": "Business"
             },
             "slider": {
-                "1": { "title": "How AI Is Reshaping Software Development in 2026", "description": "Artificial intelligence is rapidly changing how developers write, test, and deploy code. From AI copilots to automated testing pipelines, discover how development teams are becoming faster and more efficient.", "readTime": "6 min read", "date": "January 28, 2026" },
-                "2": { "title": "Building Scalable SaaS Platforms: Lessons from Modern Startups", "description": "Startups today must design systems that scale from hundreds to millions of users. This article explores architecture patterns, microservices, and cloud-native strategies used by fast-growing SaaS companies.", "readTime": "8 min read", "date": "February 10, 2026" },
-                "3": { "title": "The Rise of AI Voice Agents in Customer Support", "description": "Voice AI is becoming a powerful tool for businesses. Learn how AI voice agents are reducing support costs, improving response times, and creating more natural customer experiences.", "readTime": "5 min read", "date": "February 22, 2026" }
+                "1": {
+                    "title": "How AI Is Reshaping Software Development in 2026",
+                    "description": "Artificial intelligence is rapidly changing how developers write, test, and deploy code. From AI copilots to automated testing pipelines, discover how development teams are becoming faster and more efficient.",
+                    "readTime": "6 min read",
+                    "date": "January 28, 2026"
+                },
+                "2": {
+                    "title": "Building Scalable SaaS Platforms: Lessons from Modern Startups",
+                    "description": "Startups today must design systems that scale from hundreds to millions of users. This article explores architecture patterns, microservices, and cloud-native strategies used by fast-growing SaaS companies.",
+                    "readTime": "8 min read",
+                    "date": "February 10, 2026"
+                },
+                "3": {
+                    "title": "The Rise of AI Voice Agents in Customer Support",
+                    "description": "Voice AI is becoming a powerful tool for businesses. Learn how AI voice agents are reducing support costs, improving response times, and creating more natural customer experiences.",
+                    "readTime": "5 min read",
+                    "date": "February 22, 2026"
+                }
             }
         },
         "cards": {
-            "how-heavy-transportation-is-construction": { "title": "How Heavy Transportation is Construction", "description": "From flatbeds to specialized vehicles, learn how on-demand heavy truck booking is changing the construction industry.", "readTime": "7 min read", "date": "February 12, 2026" },
-            "building-scalable-saas-platforms-lessons-from-modern-startups": { "title": "Building Scalable SaaS Platforms: Lessons from Modern Startups", "description": "Startups today must design systems that scale from hundreds to millions of users. This article explores architecture patterns, microservices, and cloud-native strategies used by fast-growing SaaS companies.", "readTime": "8 min read", "date": "February 10, 2026" },
-            "the-rise-of-ai-voice-agents-in-customer-support": { "title": "The Rise of AI Voice Agents in Customer Support", "description": "Voice AI is becoming a powerful tool for businesses. Learn how AI voice agents are reducing support costs, improving response times, and creating more natural customer experiences.", "readTime": "5 min read", "date": "February 22, 2026" },
-            "warehouse-storage-solutions-a-complete-guide": { "title": "Warehouse Storage Solutions: A Complete Guide", "description": "Everything you need to know about choosing the right warehouse storage solution for your business needs.", "readTime": "6 min read", "date": "February 10, 2026" },
-            "optimizing-your-supply-chain-with-digital-solutions": { "title": "Optimizing Your Supply Chain with Digital Solutions", "description": "Learn how digital transformation is streamlining supply chain operations and reducing costs for businesses.", "readTime": "8 min read", "date": "February 5, 2026" },
-            "the-rise-of-container-shipping-in-modern-trade": { "title": "The Rise of Container Shipping in Modern Trade", "description": "Explore how container shipping has become the backbone of global trade and what the future holds.", "readTime": "6 min read", "date": "February 2, 2026" }
+            "how-heavy-transportation-is-construction": {
+                "title": "How Heavy Transportation is Construction",
+                "description": "From flatbeds to specialized vehicles, learn how on-demand heavy truck booking is changing the construction industry.",
+                "readTime": "7 min read",
+                "date": "February 12, 2026"
+            },
+            "building-scalable-saas-platforms-lessons-from-modern-startups": {
+                "title": "Building Scalable SaaS Platforms: Lessons from Modern Startups",
+                "description": "Startups today must design systems that scale from hundreds to millions of users. This article explores architecture patterns, microservices, and cloud-native strategies used by fast-growing SaaS companies.",
+                "readTime": "8 min read",
+                "date": "February 10, 2026"
+            },
+            "the-rise-of-ai-voice-agents-in-customer-support": {
+                "title": "The Rise of AI Voice Agents in Customer Support",
+                "description": "Voice AI is becoming a powerful tool for businesses. Learn how AI voice agents are reducing support costs, improving response times, and creating more natural customer experiences.",
+                "readTime": "5 min read",
+                "date": "February 22, 2026"
+            },
+            "warehouse-storage-solutions-a-complete-guide": {
+                "title": "Warehouse Storage Solutions: A Complete Guide",
+                "description": "Everything you need to know about choosing the right warehouse storage solution for your business needs.",
+                "readTime": "6 min read",
+                "date": "February 10, 2026"
+            },
+            "optimizing-your-supply-chain-with-digital-solutions": {
+                "title": "Optimizing Your Supply Chain with Digital Solutions",
+                "description": "Learn how digital transformation is streamlining supply chain operations and reducing costs for businesses.",
+                "readTime": "8 min read",
+                "date": "February 5, 2026"
+            },
+            "the-rise-of-container-shipping-in-modern-trade": {
+                "title": "The Rise of Container Shipping in Modern Trade",
+                "description": "Explore how container shipping has become the backbone of global trade and what the future holds.",
+                "readTime": "6 min read",
+                "date": "February 2, 2026"
+            }
         },
         "backToBlogs": "Back to Blogs",
         "relatedBlogs": "Related Blogs"
@@ -439,13 +533,109 @@
         "heading": "Frequently Asked Questions (FAQ)",
         "description": "Have questions about Wasel? We've got you covered. Here you'll find answers to the most common inquiries",
         "items": {
-            "0": { "q": "Do you do web design or web development?", "a": "We offer both web design and web development services to suit your project needs." },
-            "1": { "q": "I'm an agency, do you develop Figma designs?", "a": "Yes, we develop pixel-perfect implementations from Figma designs." },
-            "2": { "q": "Why do I develop solely using Webflow?", "a": "Webflow provides a powerful visual development environment with flexible design control." },
-            "3": { "q": "How much does it cost?", "a": "Pricing depends on project scope, timeline, and complexity. Contact us for a custom quote." },
-            "4": { "q": "Is there any extra cost involved?", "a": "We provide transparent pricing with no hidden fees. Any additional work is discussed beforehand." },
-            "5": { "q": "How long does it take?", "a": "Project timelines vary based on scope. We'll provide a clear delivery estimate after reviewing your requirements." },
-            "6": { "q": "Do I need a developer to make future updates on my website?", "a": "Not necessarily. We can set up a CMS or provide training so you can manage updates yourself." }
+            "0": {
+                "q": "Do you do web design or web development?",
+                "a": "We offer both web design and web development services to suit your project needs."
+            },
+            "1": {
+                "q": "I'm an agency, do you develop Figma designs?",
+                "a": "Yes, we develop pixel-perfect implementations from Figma designs."
+            },
+            "2": {
+                "q": "Why do I develop solely using Webflow?",
+                "a": "Webflow provides a powerful visual development environment with flexible design control."
+            },
+            "3": {
+                "q": "How much does it cost?",
+                "a": "Pricing depends on project scope, timeline, and complexity. Contact us for a custom quote."
+            },
+            "4": {
+                "q": "Is there any extra cost involved?",
+                "a": "We provide transparent pricing with no hidden fees. Any additional work is discussed beforehand."
+            },
+            "5": {
+                "q": "How long does it take?",
+                "a": "Project timelines vary based on scope. We'll provide a clear delivery estimate after reviewing your requirements."
+            },
+            "6": {
+                "q": "Do I need a developer to make future updates on my website?",
+                "a": "Not necessarily. We can set up a CMS or provide training so you can manage updates yourself."
+            }
+        }
+    },
+    "faqs": {
+        "hero": {
+            "line1": "Frequently",
+            "line2": "Asked",
+            "line3": "Questions",
+            "subtitle": "Everything you need to know about Wasel Fleet. Can't find the answer you're looking for? Reach out to our support team."
+        },
+        "search": {
+            "placeholder": "Search Questions",
+            "btn": "Find"
+        },
+        "footer": {
+            "title": "Didn't find your answer?",
+            "subtitle": "Our support team is available 24/7 to help you with any questions.",
+            "emailSupport": "Email Support",
+            "privacyPolicy": "Privacy Policy",
+            "terms": "Terms & Conditions"
+        },
+        "contactCard": {
+            "title": "Still have questions?",
+            "description": "Can't find what you're looking for? Chat with our support team.",
+            "btn": "Contact Support"
+        }
+    },
+    "terms": {
+        "hero": {
+            "line1": "Terms",
+            "line2": "&",
+            "line3": "Conditions",
+            "subtitle": "Everything you need to know about Wasel Fleet. Can't find the answer you're looking for? Reach out to our support team.",
+            "lastUpdate": "Last Updated"
+        },
+        "warning": {
+            "title": "imprtant",
+            "descript": "These Terms & Conditions govern your use of the FlaneFleet platform. By creating an account or using our services, you acknowledge that you have read, understood, and agreed to be bound by these terms. If you are using the platform on behalf of an organization, you represent that you have the authority to bind that organization to these terms."
+        },
+        "sidebar": {
+            "contents": "Contents",
+            "contactQuestion": "Have questions about these terms?",
+            "related": "Related"
+        },
+        "contact": {
+            "title": "Contact Us",
+            "subtitle": "If you have any questions about these Terms & Conditions or our services, please don't hesitate to reach out. Our legal and support teams are here to help.",
+            "generalSupport": "General Support",
+            "legalInquiries": "Legal Inquiries",
+            "privacyConcerns": "Privacy Concerns",
+            "businessPartnerships": "Business Partnerships"
+        }
+    },
+    "policy": {
+        "hero": {
+            "line1": "Privacy",
+            "line2": "Policy",
+            "subtitle": "Everything you need to know about Wasel Fleet. Can't find the answer you're looking for? Reach out to our support team.",
+            "lastUpdate": "Last Updated"
+        },
+        "warning": {
+            "title": "imprtant",
+            "descript": "This Privacy Policy explains how FlaneFleet (\"we\", \"our\", or \"us\") collects, uses, shares, and protects your personal information when you use our logistics platform and services."
+        },
+        "sidebar": {
+            "contents": "Contents",
+            "contactQuestion": "Have questions about these terms?",
+            "related": "Related"
+        },
+        "contact": {
+            "title": "Contact Us",
+            "subtitle": "If you have any questions about these Terms & Conditions or our services, please don't hesitate to reach out. Our legal and support teams are here to help.",
+            "generalSupport": "General Support",
+            "legalInquiries": "Legal Inquiries",
+            "privacyConcerns": "Privacy Concerns",
+            "businessPartnerships": "Business Partnerships"
         }
     }
 }
