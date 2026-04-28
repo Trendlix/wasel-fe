@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import DynamicIsland from "./components/hero/dynamic-island";
 import SentencesCards from "./components/hero/SentencesCards";
 import clsx from "clsx";
+import { IHomePageResponse } from "@/shared/types/pages/home.types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,11 +22,21 @@ const backOut = (t: number, amplitude = 1.7): number => {
 type HeroProps = {
     onLayoutReady?: (ready: boolean) => void;
     onMountStart?: () => void;
+    heroContent: NonNullable<IHomePageResponse["content"]>["hero"] | null;
+    altImg: IHomePageResponse["alt_img"];
 };
 
-const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
+const Hero = ({ onLayoutReady, onMountStart, heroContent, altImg }: HeroProps) => {
     const tWords = useTranslations("home.hero.words");
     const tPhone = useTranslations("home.hero.phoneContent");
+    const heroTitles = {
+        screen2: heroContent?.screen_2 || tWords("selectLocation"),
+        screen3: heroContent?.screen_3 || tWords("chooseTruck"),
+        screen4: heroContent?.screen_4 || tWords("selectPrice"),
+        screen5: heroContent?.screen_5 || tWords("selectDriver"),
+        screen6: heroContent?.screen_6 || tWords("confirmed"),
+    };
+    const heroImageAlt = altImg || heroContent?.screen_2 || tPhone("heroImageAlt");
     const containerRef = useRef<HTMLDivElement>(null);
     const iphoneRef = useRef<HTMLDivElement>(null);
     const blurRef = useRef<HTMLDivElement>(null);
@@ -567,8 +578,8 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
             <div className="basis-[80%] grid grid-cols-3 items-center">
                 <div className="flex items-start justify-center h-full pt-[25%]">
                     <div className="relative">
-                        <div ref={(el) => setDesktopRef(el, 0)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left opacity-0 translate-y-[80px] invisible md:visible">{tWords("selectLocation")}</div>
-                        <div ref={(el) => setDesktopRef(el, 4)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left absolute inset-0 opacity-0 translate-y-[80px] invisible md:visible">{tWords("confirmed")}</div>
+                        <div ref={(el) => setDesktopRef(el, 0)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left opacity-0 translate-y-[80px] invisible md:visible">{heroTitles.screen2}</div>
+                        <div ref={(el) => setDesktopRef(el, 4)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-left absolute inset-0 opacity-0 translate-y-[80px] invisible md:visible">{heroTitles.screen6}</div>
                     </div>
                 </div>
 
@@ -580,7 +591,7 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                                 <SentencesCards />
                                 <NextImage
                                     src={imageSrc}
-                                    alt={tPhone("heroImageAlt")}
+                                    alt={heroImageAlt}
                                     fill
                                     className={clsx("object-contain")}
                                 />
@@ -597,7 +608,11 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                                         <DynamicIsland />
                                     </div>
                                     <div ref={phoneContentWrapperRef} className="mt-[0.5vw]">
-                                        <IPhoneContent subtitleBlockRef={subtitleBlockRef} headingRef={headingRef} />
+                                        <IPhoneContent
+                                            subtitleBlockRef={subtitleBlockRef}
+                                            headingRef={headingRef}
+                                            heroContent={heroContent}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -606,24 +621,24 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
                 </div>
 
                 <div className="flex items-center justify-center h-full">
-                    <div ref={(el) => setDesktopRef(el, 2)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-right opacity-0 translate-y-[80px] invisible md:visible">{tWords("selectPrice")}</div>
+                    <div ref={(el) => setDesktopRef(el, 2)} className="xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl  leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-right opacity-0 translate-y-[80px] invisible md:visible">{heroTitles.screen4}</div>
                 </div>
             </div>
 
             <div className="absolute left-1/2 bottom-[15vh] -translate-x-1/2 z-20 pointer-events-none md:hidden w-full">
                 <div className="relative w-full flex items-center justify-center">
-                    <div ref={(el) => setMobileRef(el, 0)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{tWords("selectLocation")}</div>
-                    <div ref={(el) => setMobileRef(el, 1)} className="absolute left-1/2 -translate-x-1/2 xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("chooseTruck")}</div>
-                    <div ref={(el) => setMobileRef(el, 2)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{tWords("selectPrice")}</div>
-                    <div ref={(el) => setMobileRef(el, 3)} className="absolute left-1/2 -translate-x-1/2 xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("selectDriver")}</div>
-                    <div ref={(el) => setMobileRef(el, 4)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{tWords("confirmed")}</div>
+                    <div ref={(el) => setMobileRef(el, 0)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{heroTitles.screen2}</div>
+                    <div ref={(el) => setMobileRef(el, 1)} className="absolute left-1/2 -translate-x-1/2 xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{heroTitles.screen3}</div>
+                    <div ref={(el) => setMobileRef(el, 2)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{heroTitles.screen4}</div>
+                    <div ref={(el) => setMobileRef(el, 3)} className="absolute left-1/2 -translate-x-1/2 xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{heroTitles.screen5}</div>
+                    <div ref={(el) => setMobileRef(el, 4)} className="absolute left-1/2 -translate-x-1/2 xl:text-5xl lg:text-4xl md:tet-3xl sm:text-2xl text-xl leading-[clamp(1.4rem,2.5vw,2.7rem)] font-bold text-center opacity-0 translate-y-[80px]">{heroTitles.screen6}</div>
                 </div>
             </div>
 
             <div className="basis-[10%] hidden md:flex items-center justify-center">
                 <div className="relative">
-                    <div ref={(el) => setDesktopRef(el, 1)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{tWords("chooseTruck")}</div>
-                    <div ref={(el) => setDesktopRef(el, 3)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center absolute inset-0 opacity-0 translate-y-[80px]">{tWords("selectDriver")}</div>
+                    <div ref={(el) => setDesktopRef(el, 1)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center opacity-0 translate-y-[80px]">{heroTitles.screen3}</div>
+                    <div ref={(el) => setDesktopRef(el, 3)} className="xl:text-4xl lg:text-3xl md:text-2xl sm:text-xl text-lg leading-[clamp(1.3rem,2.1vw,2.3rem)] font-semibold text-center absolute inset-0 opacity-0 translate-y-[80px]">{heroTitles.screen5}</div>
                 </div>
             </div>
         </section>
@@ -635,28 +650,32 @@ const Hero = ({ onLayoutReady, onMountStart }: HeroProps) => {
 type IPhoneContentProps = {
     subtitleBlockRef: React.RefObject<HTMLDivElement | null>;
     headingRef: React.RefObject<HTMLDivElement | null>;
+    heroContent: NonNullable<IHomePageResponse["content"]>["hero"] | null;
 };
 
-const IPhoneContent = ({ subtitleBlockRef, headingRef }: IPhoneContentProps) => {
+const IPhoneContent = ({ subtitleBlockRef, headingRef, heroContent }: IPhoneContentProps) => {
     const t = useTranslations("home.hero.phoneContent");
+    const screen1 = heroContent?.screen_1 ?? [];
+    const requestToDelivery = screen1[1] || t("requestToDelivery");
+    const allInOneApp = screen1[2] || t("allInOneApp");
+    const smartWayTo = screen1[3] || t("smartWayTo");
+    const moveYourCargo = screen1[4] || `${t("moveYour")} ${t("cargo")}`;
 
     return (<div className="flex flex-col lg:gap-y-[0.7vw] md:gap-y-[1.4vw] gap-y-[15px] items-center justify-center">
         {/* upper part */}
         <div ref={subtitleBlockRef} className="flex flex-col items-center justify-center gap-y-[0.1vw]">
             <p className="lg:text-[0.3vw] md:text-[0.6vw] text-[5px] font-light leading-2.5">{t("subtitle")}</p>
             <p className="flex flex-col items-center font-medium lg:text-[0.7vw] md:text-[1.2vw] text-[10px] lg:leading-[0.8vw] md:leading-[1.4vw] leading-[2.8vw]">
-                <span>{t("requestToDelivery")}</span>
-                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("allInOneApp")}</span>
+                <span>{requestToDelivery}</span>
+                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{allInOneApp}</span>
             </p>
         </div>
 
         {/* lower part */}
         <div ref={headingRef} className="flex flex-col items-center justify-center font-medium lg:text-[1.5vw] md:text-[3vw] text-[16px] lg:leading-[1.5vw] md:leading-[3vw] leading-[4vw]">
-            <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("smartWayTo")}</p>
+            <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{smartWayTo}</p>
             <p className="max-md:flex max-md:flex-col max-md:items-center max-md:justify-center">
-                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{t("moveYour")}</span>
-                {" "}
-                <span>{t("cargo")}</span>
+                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{moveYourCargo}</span>
             </p>
         </div>
     </div>)

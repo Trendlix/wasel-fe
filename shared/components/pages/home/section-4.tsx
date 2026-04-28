@@ -13,13 +13,29 @@ gsap.registerPlugin(ScrollTrigger);
 type Section4Props = {
     heroLayoutReady?: boolean;
     className?: string;
+    appContent?: {
+        user: {
+            title: string;
+            links: {
+                app_store: string;
+                play_store: string;
+            };
+        };
+        driver: {
+            title: string;
+            links: {
+                app_store: string;
+                play_store: string;
+            };
+        };
+    } | null;
 };
 
 const CARD_TITLE_CLASS = "font-bold md:text-[25.82px] md:leading-[38.8px] text-[19.03px] sm:text-[25px] leading-[26.94px]";
 const CARD_PADDING_CLASS = "pt-6 md:pt-8 px-5 sm:px-8 lg:px-10 xl:px-12";
 const CARD_CONTENT_BLOCK_CLASS = "xl:space-y-12 lg:space-y-10 md:space-y-8 space-y-6 flex-1 flex flex-col justify-center items-center text-center md:items-start md:text-left";
 
-const Section4 = ({ heroLayoutReady = false, className }: Section4Props) => {
+const Section4 = ({ heroLayoutReady = false, className, appContent = null }: Section4Props) => {
     const locale = useLocale();
     const dir = locale === "ar" ? "rtl" : "ltr";
     const cardsRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -91,29 +107,36 @@ const Section4 = ({ heroLayoutReady = false, className }: Section4Props) => {
     return (
         <section ref={scopeRef} className={clsx("bg-black", className)}>
             <div className="container py-10 md:py-16 flex items-stretch gap-6 xl:gap-11 *:flex-1 max-lg:flex-col">
-                <Card1 ref={(el) => { cardsRefs.current[0] = el; }} dir={dir} />
-                <Card2 ref={(el) => { cardsRefs.current[1] = el; }} dir={dir} />
+                <Card1 ref={(el) => { cardsRefs.current[0] = el; }} dir={dir} appContent={appContent} />
+                <Card2 ref={(el) => { cardsRefs.current[1] = el; }} dir={dir} appContent={appContent} />
             </div>
         </section>
     );
 };
 
-const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
+const Card1 = forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement> & {
+        dir: string;
+        appContent?: Section4Props["appContent"];
+    }
+>(({ dir, appContent, ...props }, ref) => {
     const t = useTranslations("home.section4.card1");
     return (<div ref={ref} dir={dir} {...props} className={clsx("h-full min-h-[380px] max-md:max-h-[541px] md:min-h-[460px] xl:min-h-[520px] text-white bg-main-ukraineBlue rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden", CARD_PADDING_CLASS)}>
         <div className={CARD_CONTENT_BLOCK_CLASS}>
             <h3 className={CARD_TITLE_CLASS}>
-                {t("title")}
-                <br className="max-lg:hidden" />
-                {" "}
-                {t("title2")}
+                {appContent?.user?.title || `${t("title")} ${t("title2")}`}
             </h3>
             <div className="space-y-3 max-md:flex max-md:flex-row max-md:gap-4 max-md:justify-center">
                 <div>
-                    <Image src="/brand/pages/home/section4/appstore.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    <a href={appContent?.user?.links?.app_store || "#"} target="_blank" rel="noreferrer">
+                        <Image src="/brand/pages/home/section4/appstore.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    </a>
                 </div>
                 <div>
-                    <Image src="/brand/pages/home/section4/google.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    <a href={appContent?.user?.links?.play_store || "#"} target="_blank" rel="noreferrer">
+                        <Image src="/brand/pages/home/section4/google.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    </a>
                 </div>
             </div>
         </div>
@@ -124,19 +147,29 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
 });
 Card1.displayName = "Card1";
 
-const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
+const Card2 = forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement> & {
+        dir: string;
+        appContent?: Section4Props["appContent"];
+    }
+>(({ dir, appContent, ...props }, ref) => {
     const t = useTranslations("home.section4.card2");
     return (<div ref={ref} dir={dir} {...props} className={clsx("h-full min-h-[380px] max-md:max-h-[541px] md:min-h-[460px] xl:min-h-[520px] text-black bg-main-secondary rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden", CARD_PADDING_CLASS)}>
         <div className={CARD_CONTENT_BLOCK_CLASS}>
             <h3 className={CARD_TITLE_CLASS}>
-                {t("title")} <br className="max-lg:hidden" /> {t("title2")}
+                {appContent?.driver?.title || `${t("title")} ${t("title2")}`}
             </h3>
             <div className="space-y-3 max-md:flex max-md:flex-row max-md:gap-4 max-md:justify-center">
                 <div>
-                    <Image src="/brand/pages/home/section4/appstore.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    <a href={appContent?.driver?.links?.app_store || "#"} target="_blank" rel="noreferrer">
+                        <Image src="/brand/pages/home/section4/appstore.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    </a>
                 </div>
                 <div>
-                    <Image src="/brand/pages/home/section4/google.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    <a href={appContent?.driver?.links?.play_store || "#"} target="_blank" rel="noreferrer">
+                        <Image src="/brand/pages/home/section4/google.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                    </a>
                 </div>
             </div>
         </div>

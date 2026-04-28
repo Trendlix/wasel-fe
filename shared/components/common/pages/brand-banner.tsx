@@ -13,7 +13,20 @@ gsap.registerPlugin(ScrollTrigger);
 
 type BrandBannerProps = { heroLayoutReady?: boolean, className?: string };
 
-const BrandBanner = ({ heroLayoutReady = false, className }: BrandBannerProps) => {
+const BrandBanner = ({
+    heroLayoutReady = false,
+    className,
+    brandContent = null,
+}: BrandBannerProps & {
+    brandContent?: {
+        title: string;
+        description: string;
+        cta: {
+            text: string;
+            link: string;
+        };
+    } | null;
+}) => {
     const locale = useLocale();
     const dir = locale === "ar" ? "rtl" : "ltr";
     const t = useTranslations("brandBanner");
@@ -63,11 +76,13 @@ const BrandBanner = ({ heroLayoutReady = false, className }: BrandBannerProps) =
                     </div>
                     <div ref={(el) => { elementsRefs.current[1] = el; }} className="space-y-3 self-center text-white text-center max-sm:w-full" dir={dir}>
                         <h3 className="font-bold xl:text-4xl text-2xl">
-                            {t("heading")}
+                            {brandContent?.title || t("heading")}
                         </h3>
-                        <p>{t("description")}</p>
+                        <p>{brandContent?.description || t("description")}</p>
                         <div className="flex items-center gap-4 justify-center mt-10 *:max-h-[60px] *:flex *:items-center *:justify-center max-sm:flex-col max-sm:w-full font-medium">
-                            <Button variant="primary" className="text-xs sm:text-sm md:text-base max-sm:w-full">{t("companiesPortal")}</Button>
+                            <a href={brandContent?.cta?.link || "#"} target="_blank" rel="noreferrer" className="max-sm:w-full">
+                                <Button variant="primary" className="text-xs sm:text-sm md:text-base max-sm:w-full">{brandContent?.cta?.text || t("companiesPortal")}</Button>
+                            </a>
                             <Button variant="secondary" className="text-xs sm:text-sm md:text-base max-sm:w-full">{t("driverPortal")}</Button>
                         </div>
                     </div>

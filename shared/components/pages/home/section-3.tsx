@@ -7,17 +7,19 @@ import { forwardRef, useRef } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useLocale, useTranslations } from "next-intl";
+import { IHomePageResponse } from "@/shared/types/pages/home.types";
 gsap.registerPlugin(ScrollTrigger);
 
 type Section3Props = {
     heroLayoutReady?: boolean;
+    maximizingContent?: NonNullable<IHomePageResponse["content"]>["maximizing"] | null;
 };
 
 const CARD_TITLE_CLASS = "font-medium md:text-[25.82px] md:leading-[38.8px] text-[19.03px] sm:text-[25px] leading-[26.94px]";
 const CARD_PARAGRAPH_CLASS = "xl:text-base text-sm";
 const CARD_CONTENT_GAP_CLASS = "flex flex-col gap-4 md:gap-6 xl:gap-8";
 
-const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
+const Section3 = ({ heroLayoutReady = false, maximizingContent = null }: Section3Props) => {
     const t = useTranslations("home.section3");
     const locale = useLocale();
     const dir = locale === "ar" ? "rtl" : "ltr";
@@ -147,19 +149,34 @@ const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
                 <div className="text-white space-y-4 text-center" ref={headingBlockRef}>
                     <h2
                         className={clsx("text-white font-bold text-center", "xl:text-7xl lg:text-6xl md:text-5xl sm:text-4xl text-2xl")}                     >
-                        {t("heading")}
+                        {maximizingContent?.title || t("heading")}
                     </h2>
                     <p className="xl:text-base md:text-sm text-xs">
-                        {t("subtitle")}
+                        {maximizingContent?.description || t("subtitle")}
                     </p>
                 </div>
                 <div className="flex gap-4 max-md:flex-col">
                     <div className="lg:w-[60%] md:w-[50%] w-full space-y-4 flex flex-col items-end *:h-fit">
-                        <Card1 ref={(el) => { cardsRefs.current[0] = el; }} dir={dir} />
-                        <Card3 ref={(el) => { cardsRefs.current[2] = el; }} dir={dir} />
+                        <Card1
+                            ref={(el) => { cardsRefs.current[0] = el; }}
+                            dir={dir}
+                            title={maximizingContent?.cards?.card_1?.title}
+                            description={maximizingContent?.cards?.card_1?.description}
+                        />
+                        <Card3
+                            ref={(el) => { cardsRefs.current[2] = el; }}
+                            dir={dir}
+                            title={maximizingContent?.cards?.card_3?.title}
+                            description={maximizingContent?.cards?.card_3?.description}
+                        />
                     </div>
                     <div className="lg:w-[40%] md:w-[50%] w-full 2xl:mt-62 xl:mt-48 lg:mt-36 md:mt-24 *:h-fit">
-                        <Card2 ref={(el) => { cardsRefs.current[1] = el; }} dir={dir} />
+                        <Card2
+                            ref={(el) => { cardsRefs.current[1] = el; }}
+                            dir={dir}
+                            title={maximizingContent?.cards?.card_2?.title}
+                            description={maximizingContent?.cards?.card_2?.description}
+                        />
                     </div>
                 </div>
             </div>
@@ -167,14 +184,18 @@ const Section3 = ({ heroLayoutReady = false }: Section3Props) => {
     );
 };
 
-const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
+const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {
+    dir: string;
+    title?: string;
+    description?: string;
+}>(({ dir, title, description, ...props }, ref) => {
     const t = useTranslations("home.section3.card1");
     return (
         <div ref={ref} {...props} className="relative h-fit text-white">
             <div className={clsx("xl:pl-12 pl-6", "bg-main-ukraineBlue", "rounded-4xl", "overflow-hidden", CARD_CONTENT_GAP_CLASS)}>
                 <div className="xl:pr-12 lg:pr-8 md:pr-6 pr-4 xl:py-10 md:py-10 py-4 space-y-3" dir={dir}>
-                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
-                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
+                    <h3 className={CARD_TITLE_CLASS}>{title || t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{description || t("description")}</p>
                 </div>
                 <Image src="/brand/pages/home/section3/manage.png" alt="truck" width={3072} height={1260} className="w-full h-auto mt-auto" />
             </div>
@@ -186,14 +207,18 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
 });
 Card1.displayName = "Card1";
 
-const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
+const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {
+    dir: string;
+    title?: string;
+    description?: string;
+}>(({ dir, title, description, ...props }, ref) => {
     const t = useTranslations("home.section3.card2");
     return (
         <div ref={ref} {...props} className="relative h-fit text-black">
             <div className={clsx("xl:pr-12 pr-6", "bg-main-secondary", "rounded-4xl", "overflow-hidden", CARD_CONTENT_GAP_CLASS)}>
                 <div className="xl:pl-12 pl-6 xl:py-10 py-4 space-y-3" dir={dir}>
-                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
-                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
+                    <h3 className={CARD_TITLE_CLASS}>{title || t("title")}</h3>
+                    <p className={clsx(CARD_PARAGRAPH_CLASS, "whitespace-pre-line")}>{description || t("description")}</p>
                 </div>
                 <Image src="/brand/pages/home/section3/instant.png" alt="truck" width={3072} height={1260} className="w-full h-auto mt-auto" />
             </div>
@@ -205,14 +230,18 @@ const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
 });
 Card2.displayName = "Card2";
 
-const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { dir: string }>(({ dir, ...props }, ref) => {
+const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & {
+    dir: string;
+    title?: string;
+    description?: string;
+}>(({ dir, title, description, ...props }, ref) => {
     const t = useTranslations("home.section3.card3");
     return (
         <div ref={ref} {...props} className="relative h-fit text-white  2xl:max-w-[70%] xl:w-[80%] lg:w-[90%] w-full">
             <div className={clsx("xl:pl-12 pl-6", "bg-main-red", "rounded-4xl", "overflow-hidden", CARD_CONTENT_GAP_CLASS)}>
                 <div className="xl:pr-12 pr-6 xl:py-10 py-4 space-y-3" dir={dir}>
-                    <h3 className={CARD_TITLE_CLASS}>{t("title")}</h3>
-                    <p className={CARD_PARAGRAPH_CLASS}>{t("description")}</p>
+                    <h3 className={CARD_TITLE_CLASS}>{title || t("title")}</h3>
+                    <p className={CARD_PARAGRAPH_CLASS}>{description || t("description")}</p>
                 </div>
                 <div className="w-full flex items-end justify-end">
                     <Image src="/brand/pages/home/section3/easy.png" alt="truck" width={3072} height={1260} className="w-[80%] max-w-[380px] max-h-[306px] mt-auto" />
