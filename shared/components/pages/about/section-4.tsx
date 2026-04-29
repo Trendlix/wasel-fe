@@ -9,10 +9,15 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import { aboutTruck, type IAboutTruck } from "@/shared/constants/about-truck";
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
+import { IAboutPageContent, IAboutFutureCard } from "@/shared/types/pages/about.types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Section4 = () => {
+type Section4Props = {
+    future?: IAboutPageContent["future"];
+};
+
+const Section4 = ({ future }: Section4Props) => {
     const locale = useLocale();
     const dir = locale === "ar" ? "rtl" : "ltr";
     const isAr = locale === "ar";
@@ -103,7 +108,7 @@ const Section4 = () => {
                         className="will-change-transform"
                         dir={dir}
                     >
-                        <Card item={item} index={index} dir={dir} isAr={isAr} />
+                        <Card item={item} index={index} dir={dir} isAr={isAr} content={future?.cards?.[index]} />
                     </div>
                 ))}
             </div>
@@ -111,7 +116,19 @@ const Section4 = () => {
     );
 };
 
-const Card = ({ item, index, dir, isAr }: { item: IAboutTruck; index: number; dir: string; isAr: boolean }) => {
+const Card = ({
+    item,
+    index,
+    dir,
+    isAr,
+    content,
+}: {
+    item: IAboutTruck;
+    index: number;
+    dir: string;
+    isAr: boolean;
+    content?: IAboutFutureCard;
+}) => {
     const t = useTranslations(`about.section4.card${index}`);
     const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
@@ -123,6 +140,10 @@ const Card = ({ item, index, dir, isAr }: { item: IAboutTruck; index: number; di
     }, []);
 
     const imgSrc = !mounted ? imageLight : (resolvedTheme ?? "light") === "dark" ? image : imageLight;
+    const title0 = content?.titles?.[0] || t("title0");
+    const title1 = content?.titles?.[1] || t("title1");
+    const title2 = content?.titles?.[2] || t("title2");
+    const description = content?.descriptions?.[0] || t("description");
 
     const barClass = clsx("absolute top-0 left-0 w-full h-full z-0", isAr ? "right-0 left-auto origin-right" : "origin-left", xWidthColor);
     const barClassWide = clsx("absolute top-0 h-full z-0 p-1", isAr ? "-right-[200%] w-[250%] origin-right" : "-left-[95%] w-[195%] origin-left ", xWidthColor);
@@ -130,27 +151,27 @@ const Card = ({ item, index, dir, isAr }: { item: IAboutTruck; index: number; di
     if (cardShape === 1) {
         // Layout: content left, image right. Title: part0, <br />, [part1 with bar] part2
         return (
-            <div className="dark:bg-main-lightGray dark:bg-linear-to-b dark:from-main-paleBlack/45 dark:to-main-classicMatteGrey rounded-[24px] md:rounded-[30px] p-px overflow-hidden flex flex-col  ">
+            <div className="bg-main-lightGray/55 dark:bg-main-lightGray dark:bg-linear-to-b dark:from-main-paleBlack/45 dark:to-main-classicMatteGrey rounded-[24px] md:rounded-[30px] p-px overflow-hidden flex flex-col  ">
                 <div className={clsx("rounded-[24px] md:rounded-[30px] dark:bg-main-codGray bg-white dark:text-white text-main-codGray overflow-hidden py-6 md:py-7 lg:py-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-10 flex-1 min-h-0", isAr ? "px-4 sm:px-6 md:px-9" : "")}>
                     <div className="order-2 sm:order-1 w-full space-y-4 md:space-y-6 sm:basis-1/2 sm:flex-1" >
                         <h3 className={clsx("font-bold text-2xl sm:text-3xl md:text-3xl lg:text-4xl 2xl:text-5xl", isAr && "leading-tight")} dir={dir}>
-                            <span className={clsx(isAr ? "" : "pl-0 sm:pl-10 md:pl-12 lg:pl-20")}>{t("title0")}</span>
+                            <span className={clsx(isAr ? "" : "pl-0 sm:pl-10 md:pl-12 lg:pl-20")}>{title0}</span>
                             {" "}
                             <br className={clsx(isAr && "hidden")} />
                             <span className={clsx("relative", "w-fit")}>
-                                <span className={clsx("relative z-10 text-white", isAr ? "px-1.5 py-1" : "pr-1")}>{t("title1")}</span>
+                                <span className={clsx("relative z-10 text-white", isAr ? "px-1.5 py-1" : "pr-1")}>{title1}</span>
                                 <span className={barClass} data-bar data-bar-width={"100%"} />
                             </span>
                             <br className={clsx(!isAr && "hidden")} />
                             {" "}
-                            <span>{t("title2")}</span>
+                            <span>{title2}</span>
                         </h3>
                         <p className="text-base sm:text-lg md:text-xl xl:text-2xl 2xl:text-3xl tracking-[-2%] pl-0 sm:pl-10 md:pl-12 lg:pl-20">
-                            {t("description")}
+                            {description}
                         </p>
                     </div>
                     <div className="order-1 sm:order-2 w-full pr-0 sm:pr-10 md:pr-12 lg:pr-20 max-w-full sm:max-w-none sm:basis-1/2 sm:flex-1">
-                        <Image src={imgSrc} alt={cardShape === 1 ? [t("title0"), t("title1"), t("title2")].join(" ") : [t("title0"), t("title1")].join(" ")} width={1000} height={1000} className={clsx("w-full h-auto max-h-[262px] md:h-full md:max-h-none object-cover", isAr ? "scale-x-[-1]" : "")} />
+                        <Image src={imgSrc} alt={cardShape === 1 ? [title0, title1, title2].join(" ") : [title0, title1].join(" ")} width={1000} height={1000} className={clsx("w-full h-auto max-h-[262px] md:h-full md:max-h-none object-cover", isAr ? "scale-x-[-1]" : "")} />
                     </div>
                 </div>
             </div>
@@ -160,7 +181,7 @@ const Card = ({ item, index, dir, isAr }: { item: IAboutTruck; index: number; di
     if (cardShape === 2) {
         // Layout: image left, content right. Title: [part0 with bar] part1
         return (
-            <div className="dark:bg-main-lightGray dark:bg-linear-to-b dark:from-main-paleBlack/45 dark:to-main-classicMatteGrey rounded-[24px] md:rounded-[30px] p-px overflow-hidden flex flex-col  ">
+            <div className="bg-main-lightGray/55 dark:bg-main-lightGray dark:bg-linear-to-b dark:from-main-paleBlack/45 dark:to-main-classicMatteGrey rounded-[24px] md:rounded-[30px] p-px overflow-hidden flex flex-col  ">
                 <div className={clsx("rounded-[24px] md:rounded-[30px] dark:bg-main-codGray bg-white dark:text-white text-main-codGray overflow-hidden py-6 md:py-7 lg:py-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-10 flex-1 min-h-0", isAr ? "px-4 sm:px-6 md:px-9" : "px-4 sm:px-6")}>
                     <div className="order-1 sm:order-2 lg:order-1 w-full pl-0 sm:pl-10 md:pl-12 lg:pl-20 max-w-full sm:max-w-none sm:basis-1/2 sm:flex-1 relative z-10">
                         <Image src={imgSrc} alt={[t("title0"), t("title1")].join(" ")} width={1000} height={1000} className={clsx("w-full h-auto max-h-[262px] md:h-full md:max-h-none object-cover", isAr ? "scale-x-[-1]" : "")} />
@@ -168,14 +189,14 @@ const Card = ({ item, index, dir, isAr }: { item: IAboutTruck; index: number; di
                     <div className="order-2 sm:order-1 lg:order-2 w-full space-y-4 md:space-y-6 sm:basis-1/2 sm:flex-1">
                         <h3 className={clsx("font-bold text-2xl sm:text-3xl md:text-3xl lg:text-4xl 2xl:text-5xl", isAr && "leading-tight")}>
                             <span className={clsx("relative", "w-fit")}>
-                                <span className={clsx("relative z-10 text-white", isAr ? "px-1.5 py-1" : "pr-1 pl-0 sm:pl-10 md:pl-12 lg:pl-20")}>{t("title0")}</span>
+                                <span className={clsx("relative z-10 text-white", isAr ? "px-1.5 py-1" : "pr-1 pl-0 sm:pl-10 md:pl-12 lg:pl-20")}>{title0}</span>
                                 <span className={barClassWide} data-bar data-bar-width={isAr ? "300%" : "195%"} />
                             </span>
                             {" "}
-                            <span>{t("title1")}</span>
+                            <span>{title1}</span>
                         </h3>
                         <p className="text-base sm:text-lg md:text-xl xl:text-2xl 2xl:text-3xl tracking-[-2%] pr-0 sm:pr-10 md:pr-12 lg:pr-20">
-                            {t("description")}
+                            {description}
                         </p>
                     </div>
                 </div>
@@ -185,23 +206,23 @@ const Card = ({ item, index, dir, isAr }: { item: IAboutTruck; index: number; di
 
     // cardShape === 3: Layout: content left, image right. Title: [part0 with bar] <br /> part1
     return (
-        <div className="dark:bg-main-lightGray dark:bg-linear-to-b dark:from-main-paleBlack/45 dark:to-main-classicMatteGrey rounded-[24px] md:rounded-[30px] p-px overflow-hidden flex flex-col  ">
+        <div className="bg-main-lightGray/55 dark:bg-main-lightGray dark:bg-linear-to-b dark:from-main-paleBlack/45 dark:to-main-classicMatteGrey rounded-[24px] md:rounded-[30px] p-px overflow-hidden flex flex-col  ">
             <div className={clsx("rounded-[24px] md:rounded-[30px] dark:bg-main-codGray bg-white dark:text-white text-main-codGray overflow-hidden py-6 md:py-7 lg:py-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 sm:gap-10 flex-1 min-h-0", isAr ? "px-4 sm:px-6 md:px-9" : "px-4 sm:px-6")}>
                 <div className="order-2 sm:order-1 w-full space-y-4 md:space-y-6 sm:basis-1/2 sm:flex-1">
                     <h3 className={clsx("font-bold text-2xl sm:text-3xl md:text-3xl lg:text-4xl 2xl:text-5xl", isAr && "leading-tight")}>
                         <span className={clsx("relative", "w-fit")}>
-                            <span className={clsx("relative z-10 text-white", isAr ? "px-1.5 py-1" : "pr-1 pl-0 sm:pl-10 md:pl-12 lg:pl-20")}>{t("title0")}</span>
+                            <span className={clsx("relative z-10 text-white", isAr ? "px-1.5 py-1" : "pr-1 pl-0 sm:pl-10 md:pl-12 lg:pl-20")}>{title0}</span>
                             <span className={barClassWide} data-bar data-bar-width={isAr ? "300%" : "195%"} />
                         </span>
                         <br />
-                        <span className="pl-0 sm:pl-10 md:pl-12 lg:pl-20">{t("title1")}</span>
+                        <span className="pl-0 sm:pl-10 md:pl-12 lg:pl-20">{title1}</span>
                     </h3>
                     <p className="text-base sm:text-lg md:text-xl xl:text-2xl 2xl:text-3xl tracking-[-2%] pl-0 sm:pl-10 md:pl-12 lg:pl-20">
-                        {t("description")}
+                        {description}
                     </p>
                 </div>
                 <div className="order-1 sm:order-2 w-full pr-0 sm:pr-10 md:pr-12 lg:pr-20 max-w-full sm:max-w-none sm:basis-1/2 sm:flex-1">
-                    <Image src={imgSrc} alt={[t("title0"), t("title1")].join(" ")} width={1000} height={1000} className={clsx("w-full h-auto max-h-[262px] md:h-full md:max-h-none object-cover", isAr ? "scale-x-[-1]" : "")} />
+                    <Image src={imgSrc} alt={[title0, title1].join(" ")} width={1000} height={1000} className={clsx("w-full h-auto max-h-[262px] md:h-full md:max-h-none object-cover", isAr ? "scale-x-[-1]" : "")} />
                 </div>
             </div>
         </div>

@@ -11,11 +11,16 @@ import clsx from "clsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type BrandBannerProps = { heroLayoutReady?: boolean, className?: string };
+type BrandBannerProps = {
+    heroLayoutReady?: boolean;
+    className?: string;
+    keepVisibleOnScroll?: boolean;
+};
 
 const BrandBanner = ({
     heroLayoutReady = false,
     className,
+    keepVisibleOnScroll = false,
     brandContent = null,
 }: BrandBannerProps & {
     brandContent?: {
@@ -61,24 +66,26 @@ const BrandBanner = ({
             });
         });
 
-        const leaveTl = gsap.timeline({
-            scrollTrigger: { trigger: scopeRef.current, start: "30% top", end: "70% top", scrub: true },
-        });
-        leaveTl.to(elementsRefs.current, { autoAlpha: 0.2, ease: "none" });
-    }, { scope: scopeRef, dependencies: [heroLayoutReady] });
+        if (!keepVisibleOnScroll) {
+            const leaveTl = gsap.timeline({
+                scrollTrigger: { trigger: scopeRef.current, start: "30% top", end: "70% top", scrub: true },
+            });
+            leaveTl.to(elementsRefs.current, { autoAlpha: 0.2, ease: "none" });
+        }
+    }, { scope: scopeRef, dependencies: [heroLayoutReady, keepVisibleOnScroll] });
 
     return (
-        <section ref={scopeRef} className={clsx("bg-black pb-32", className)}>
+        <section ref={scopeRef} className={clsx("bg-white dark:bg-black pb-32", className)}>
             <div className="container">
-                <div className="rounded-4xl overflow-hidden flex flex-col justify-between bg-main-flatBlack xl:px-9 lg:px-6 md:px-4 px-4">
+                <div className="rounded-4xl overflow-hidden flex flex-col justify-between bg-gradient-to-br from-main-ukraineBlue/12 via-white to-main-secondary/15 dark:bg-main-flatBlack dark:from-main-flatBlack dark:via-main-flatBlack dark:to-main-flatBlack xl:px-9 lg:px-6 md:px-4 px-4">
                     <div ref={(el) => { elementsRefs.current[0] = el; }} className="self-end max-sm:self-center flex items-start justify-end max-sm:justify-end">
                         <Image src="/common/Link (1).png" alt="truck" width={1000} height={1000} className="xl:max-w-[15%] xl:max-h-[15%] lg:max-w-[15%] lg:max-h-[15%] md:max-w-[25%] max-w-[40%]" />
                     </div>
-                    <div ref={(el) => { elementsRefs.current[1] = el; }} className="space-y-3 self-center text-white text-center max-sm:w-full" dir={dir}>
+                    <div ref={(el) => { elementsRefs.current[1] = el; }} className="space-y-3 self-center text-main-codGray dark:text-white text-center max-sm:w-full" dir={dir}>
                         <h3 className="font-bold xl:text-4xl text-2xl">
                             {brandContent?.title || t("heading")}
                         </h3>
-                        <p>{brandContent?.description || t("description")}</p>
+                        <p className="text-main-paleBlack dark:text-main-matteLightGray">{brandContent?.description || t("description")}</p>
                         <div className="flex items-center gap-4 justify-center mt-10 *:max-h-[60px] *:flex *:items-center *:justify-center max-sm:flex-col max-sm:w-full font-medium">
                             <a href={brandContent?.cta?.link || "#"} target="_blank" rel="noreferrer" className="max-sm:w-full">
                                 <Button variant="primary" className="text-xs sm:text-sm md:text-base max-sm:w-full">{brandContent?.cta?.text || t("companiesPortal")}</Button>

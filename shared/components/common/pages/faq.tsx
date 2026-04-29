@@ -15,11 +15,16 @@ import clsx from "clsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type FAQProps = { heroLayoutReady?: boolean, className?: string };
+type FAQProps = {
+    heroLayoutReady?: boolean;
+    className?: string;
+    keepVisibleOnScroll?: boolean;
+};
 
 const FAQ = ({
     heroLayoutReady = false,
     className,
+    keepVisibleOnScroll = false,
     faqContent = null,
 }: FAQProps & {
     faqContent?: {
@@ -67,14 +72,16 @@ const FAQ = ({
             });
         });
 
-        const leaveTl = gsap.timeline({
-            scrollTrigger: { trigger: scopeRef.current, start: "30% top", end: "70% top", scrub: true },
-        });
-        leaveTl.to(elementsRefs.current, { autoAlpha: 0.2, ease: "none" });
-    }, { scope: scopeRef, dependencies: [heroLayoutReady] });
+        if (!keepVisibleOnScroll) {
+            const leaveTl = gsap.timeline({
+                scrollTrigger: { trigger: scopeRef.current, start: "30% top", end: "70% top", scrub: true },
+            });
+            leaveTl.to(elementsRefs.current, { autoAlpha: 0.2, ease: "none" });
+        }
+    }, { scope: scopeRef, dependencies: [heroLayoutReady, keepVisibleOnScroll] });
 
     return (
-        <section ref={scopeRef} className={clsx("text-black dark:text-white", className)} dir={dir}>
+        <section ref={scopeRef} className={clsx("text-black dark:text-white","mb-27", className)} dir={dir}>
             <div className="container flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-12 xl:gap-16">
                 <div ref={(el) => { elementsRefs.current[0] = el; }} className="w-full lg:max-w-md xl:max-w-lg shrink-0">
                     <h3 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[54px] leading-tight xl:leading-[56px] text-black dark:text-white">

@@ -4,10 +4,15 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
+import { IAboutPageContent } from "@/shared/types/pages/about.types";
 gsap.registerPlugin(ScrollTrigger);
 
 
-const Section1 = () => {
+type Section1Props = {
+    founded?: IAboutPageContent["founded"];
+};
+
+const Section1 = ({ founded }: Section1Props) => {
     const t = useTranslations("about.section1");
     const scopeRef = useRef<HTMLDivElement>(null);
     const headingRef = useRef<HTMLHeadingElement>(null);
@@ -71,34 +76,44 @@ const Section1 = () => {
         }
     }, { scope: scopeRef })
 
+    const title0 = founded?.titles?.[0] || t("foundedIn");
+    const title1 = founded?.titles?.[1] || t("year");
+    const title2 = founded?.titles?.[2] || t("wasel");
+    const title3 = founded?.titles?.[3] || t("technologyDriven");
+    const title4 = founded?.titles?.[4] || t("logistics");
+    const title5 = founded?.titles?.[5] || t("platform");
+    const para1 = founded?.descriptions?.[0] || t("para1");
+    const para2 = founded?.descriptions?.[1] || t("para2");
+    const para3 = founded?.descriptions?.[2] || t("para3");
+
     return (
         <section ref={scopeRef} className={clsx("py-28")}>
             <div className="container *: space-y-10">
                 <div className="text-black dark:text-white *:text-center">
                     <h2 ref={headingRef} className={clsx("font-bold xl:text-5xl lg:text-4xl md:text-3xl sm:text-2xl text-xl xl:leading-14 opacity-0")}>
-                        <span className="">{t("foundedIn")}</span>
+                        <span className="">{title0}</span>
                         {" "}
                         <span className={clsx("w-fit", "relative")}>
-                            <span className="relative z-10 text-white dark:text-black">{t("year")}</span>
+                            <span className="relative z-10 text-white dark:text-black">{title1}</span>
                             <span ref={(el) => { headingXWidthRefs.current[0] = el; }} className={clsx("absolute", "inset-0 w-0 h-full bg-main-secondary z-0")}></span>
                         </span>
                         {" "}
                         <br />
                         <span className={clsx("w-fit", "relative")}>
-                            <span className="relative z-10 text-white dark:text-black">{t("wasel")}</span>
+                            <span className="relative z-10 text-white dark:text-black">{title2}</span>
                             <span ref={(el) => { headingXWidthRefs.current[1] = el; }} className={clsx("absolute", "inset-0 w-0 h-full bg-main-red z-0")}></span>
                         </span>
                         {" "}
-                        <span className="font-medium">{t("technologyDriven")}</span>
+                        <span className="font-medium">{title3}</span>
                         {" "}
-                        <span>{t("logistics")}<br className="max-md:hidden" /> {t("platform")}</span>
+                        <span>{title4}<br className="max-md:hidden" /> {title5}</span>
                     </h2>
                 </div>
                 <div className="text-black dark:text-white *:text-center md:max-w-[80%] mx-auto font-medium 2xl:text-3xl lg:text-2xl md:text-xl sm:text-sm text-xs">
                     <p ref={paragraphRef} className="opacity-0">
-                        <span ref={(el) => { spanRefs.current[0] = el; }}>{t("para1")}</span>
-                        <span ref={(el) => { spanRefs.current[1] = el; }}>{t("para2")}</span>
-                        <span ref={(el) => { spanRefs.current[2] = el; }}>{t("para3")}</span>
+                        <span ref={(el) => { spanRefs.current[0] = el; }}>{para1}</span>
+                        <span ref={(el) => { spanRefs.current[1] = el; }}>{para2}</span>
+                        <span ref={(el) => { spanRefs.current[2] = el; }}>{para3}</span>
                     </p>
                 </div>
             </div>

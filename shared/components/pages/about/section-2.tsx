@@ -6,9 +6,14 @@ import { useGSAP } from "@gsap/react";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
 import Section3 from "./section-3";
+import { IAboutPageContent } from "@/shared/types/pages/about.types";
 gsap.registerPlugin(ScrollTrigger);
 
-const Section2 = () => {
+type Section2Props = {
+    standFor?: IAboutPageContent["stand_for"];
+};
+
+const Section2 = ({ standFor }: Section2Props) => {
     const t = useTranslations("about.section2");
     const sectionRef = useRef<HTMLElement>(null);
     const scopeRef = useRef<HTMLDivElement>(null);
@@ -73,18 +78,22 @@ const Section2 = () => {
     }, { scope: sectionRef })
 
 
+    const titleWhatWe = standFor?.titles?.[0] || t("whatWe");
+    const titleStand = standFor?.titles?.[1] || t("stand");
+    const titleFor = standFor?.titles?.[2] || t("for");
+
     return (
         <section ref={sectionRef} className="relative min-h-screen">
             <div ref={scopeRef} className="relative z-0 py-28 flex flex-col items-center justify-center min-h-screen" id="about-section2">
                 <div className="container space-y-4">
                     <h3 className={clsx("text-black dark:text-white font-bold 2xl:text-5xl xl:text-4xl md:text-3xl text-2xl text-center")}>
-                        <span>{t("whatWe")}</span>
+                        <span>{titleWhatWe}</span>
                         {" "}
                         <span className={clsx("w-fit", "relative")}>
-                            <span className="relative z-10 text-white dark:text-black">{t("stand")}</span>
+                            <span className="relative z-10 text-white dark:text-black">{titleStand}</span>
                             <span ref={headingXWidthRef} className={clsx("absolute", "inset-0 w-full h-full bg-main-ukraineBlue z-0")}></span>
                         </span>
-                        {t("for") ? <>{" "}<span>{t("for")}</span></> : null}
+                        {titleFor ? <>{" "}<span>{titleFor}</span></> : null}
                     </h3>
                     {/* arrows */}
                     <div className="flex flex-col items-center justify-center">
@@ -95,7 +104,15 @@ const Section2 = () => {
             </div>
             <div className="absolute inset-0 z-10 pointer-events-none">
                 <div ref={cardsScopeRef} className="h-full w-full pointer-events-auto">
-                    <Section3 card1Ref={card1Ref} card2Ref={card2Ref} card3Ref={card3Ref} bar1Ref={bar1Ref} bar2Ref={bar2Ref} bar3Ref={bar3Ref} />
+                    <Section3
+                        card1Ref={card1Ref}
+                        card2Ref={card2Ref}
+                        card3Ref={card3Ref}
+                        bar1Ref={bar1Ref}
+                        bar2Ref={bar2Ref}
+                        bar3Ref={bar3Ref}
+                        cards={standFor?.cards}
+                    />
                 </div>
             </div>
         </section>

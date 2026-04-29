@@ -122,24 +122,23 @@ const Card1 = forwardRef<
     }
 >(({ dir, appContent, ...props }, ref) => {
     const t = useTranslations("home.section4.card1");
-    return (<div ref={ref} dir={dir} {...props} className={clsx("h-full min-h-[380px] max-md:max-h-[541px] md:min-h-[460px] xl:min-h-[520px] text-white bg-main-ukraineBlue rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden", CARD_PADDING_CLASS)}>
-        <div className={CARD_CONTENT_BLOCK_CLASS}>
-            <h3 className={CARD_TITLE_CLASS}>
-                {appContent?.user?.title || `${t("title")} ${t("title2")}`}
-            </h3>
-            <div className="space-y-3 max-md:flex max-md:flex-row max-md:gap-4 max-md:justify-center">
-                <div>
-                    <a href={appContent?.user?.links?.app_store || "#"} target="_blank" rel="noreferrer">
-                        <Image src="/brand/pages/home/section4/appstore.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
-                    </a>
-                </div>
-                <div>
-                    <a href={appContent?.user?.links?.play_store || "#"} target="_blank" rel="noreferrer">
-                        <Image src="/brand/pages/home/section4/google.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
-                    </a>
-                </div>
+    return (<div ref={ref} dir={dir} {...props} className={clsx("h-full min-h-[380px] max-md:max-h-[541px] md:min-h-[460px] xl:min-h-[520px] text-white bg-main-ukraineBlue rounded-4xl flex flex-col md:flex-row justify-between gap-6 overflow-hidden", CARD_PADDING_CLASS)}>        <div className={CARD_CONTENT_BLOCK_CLASS}>
+        <h3 className={CARD_TITLE_CLASS}>
+            {appContent?.user?.title || `${t("title")} ${t("title2")}`}
+        </h3>
+        <div className="space-y-3 max-md:flex max-md:flex-row max-md:gap-4 max-md:justify-center">
+            <div>
+                <a href={appContent?.user?.links?.app_store || "#"} target="_blank" rel="noreferrer">
+                    <Image src="/brand/pages/home/section4/appstore.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                </a>
+            </div>
+            <div>
+                <a href={appContent?.user?.links?.play_store || "#"} target="_blank" rel="noreferrer">
+                    <Image src="/brand/pages/home/section4/google.png" alt="app-store" width={1000} height={1000} className="w-[130px] sm:w-[152px] h-auto" />
+                </a>
             </div>
         </div>
+    </div>
         <div className="flex-1 flex items-end justify-center md:justify-end mt-auto">
             <Image src="/brand/pages/home/section4/homw-drag.png" alt="phone" width={1440} height={1000} className="max-sm:w-[160px] md:w-full md:max-w-[420px] lg:max-w-[460px] md:h-auto object-contain object-bottom" />
         </div>
