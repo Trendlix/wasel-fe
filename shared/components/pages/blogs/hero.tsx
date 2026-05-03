@@ -5,10 +5,16 @@ import { RefObject, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import { IBlogsHeroSection } from "@/shared/types/pages/blogs.types";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Hero = ({ onLayoutReady }: { onLayoutReady?: () => void }) => {
+interface HeroProps {
+    heroData: IBlogsHeroSection | null;
+    onLayoutReady?: () => void;
+}
+
+const Hero = ({ heroData, onLayoutReady }: HeroProps) => {
     const locale = useLocale();
     const dir = locale === "ar" ? "rtl" : "ltr";
     const isAr = locale === "ar";
@@ -45,29 +51,50 @@ const Hero = ({ onLayoutReady }: { onLayoutReady?: () => void }) => {
     return (
         <section ref={scopeRef} dir={dir}>
             <div className="container space-y-10 mt-36">
-                <Heading headingRef={headingRef} />
-                <Banner bannerRef={bannerRef} dir={dir} isAr={isAr} />
+                <Heading headingRef={headingRef} heroData={heroData} />
+                <Banner bannerRef={bannerRef} dir={dir} isAr={isAr} bannerData={heroData?.banner ?? []} />
             </div>
         </section>
     );
 };
 
-const Heading = ({ headingRef }: { headingRef: RefObject<HTMLDivElement | null> }) => {
+interface HeadingProps {
+    headingRef: RefObject<HTMLDivElement | null>;
+    heroData: IBlogsHeroSection | null;
+}
+
+const Heading = ({ headingRef, heroData }: HeadingProps) => {
     const t = useTranslations("blogs.hero");
+    const locale = useLocale();
+    const isAr = locale === "ar";
+
+    // Use CMS data if available, otherwise fall back to i18n
+    const title = heroData?.title || t("title");
+    const description = heroData?.description || t("subtitle");
+
     return (
         <div className="space-y-4" ref={headingRef}>
-            <h1 className="dark:text-white text-black font-bold 2xl:text-5xl xl:text-4xl text-3xl">
-                {t("title")}
-            </h1>
+            <h1
+                className="dark:text-white text-black font-bold 2xl:text-5xl xl:text-4xl text-3xl"
+                dangerouslySetInnerHTML={{ __html: title }}
+            />
 
-            <p className="lg:text-lg text-base leading-[21px] md:leading-[27px] max-w-3xl dark:text-white text-black">
-                {t("subtitle")}
-            </p>
+            <p
+                className="lg:text-lg text-base leading-[21px] md:leading-[27px] max-w-3xl dark:text-white text-black"
+                dangerouslySetInnerHTML={{ __html: description }}
+            />
         </div>
     );
 };
 
-const Banner = ({ bannerRef, dir, isAr }: { bannerRef: RefObject<HTMLDivElement | null>; dir?: "ltr" | "rtl"; isAr?: boolean }) => {
+interface BannerProps {
+    bannerRef: RefObject<HTMLDivElement | null>;
+    dir?: "ltr" | "rtl";
+    isAr?: boolean;
+    bannerData: IBlogsHeroSection["banner"];
+}
+
+const Banner = ({ bannerRef, dir, isAr, bannerData }: BannerProps) => {
     return (
         <div
             ref={bannerRef}
@@ -77,7 +104,6 @@ const Banner = ({ bannerRef, dir, isAr }: { bannerRef: RefObject<HTMLDivElement 
                 "rounded-[30px] overflow-hidden",
                 "relative",
                 "flex items-end justify-start",
-                // "aspect-video"
             )}
             style={{
                 backgroundImage:
@@ -90,7 +116,7 @@ const Banner = ({ bannerRef, dir, isAr }: { bannerRef: RefObject<HTMLDivElement 
             <div className="bg-linear-to-t from-main-ukraineBlue to-main-primary absolute inset-0 z-0 opacity-80 w-full h-full"></div>
 
             <div className={clsx("relative h-full w-full flex items-end", isAr ? "justify-start" : "justify-end")}>
-                <BannerSlider isAr={isAr} />
+                <BannerSlider isAr={isAr} bannerData={bannerData} />
             </div>
         </div>
     );

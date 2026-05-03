@@ -429,7 +429,12 @@
             "subtitle": "Stay updated with the latest trends, insights, and innovations in logistics, transportation, and supply chain management."
         },
         "banner": {
+            "allContent": {
+                "title": "Explore All Our Articles",
+                "description": "Browse every insight, trend, and expert story from the Wasel team — covering logistics, smart transportation, supply chain innovation, and more."
+            },
             "tabs": {
+                "all": "All",
                 "technology": "Technology",
                 "featured": "Featured",
                 "industry": "Industry",

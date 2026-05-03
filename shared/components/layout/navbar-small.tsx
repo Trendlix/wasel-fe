@@ -20,7 +20,7 @@ import { useHeroMountReady } from "@/shared/components/pages/home/home-client";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const NavbarSmall = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<HTMLDivElement | null> } = {}) => {
+const NavbarSmall = ({ scrollTriggerRef, hideLanguageSwitcher }: { scrollTriggerRef?: React.RefObject<HTMLDivElement | null>; hideLanguageSwitcher?: boolean } = {}) => {
     const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
     const [menuOpen, setMenuOpen] = useState(false);
     const navRef = useRef<HTMLDivElement>(null);
@@ -124,33 +124,6 @@ const NavbarSmall = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<
         return () => { document.body.style.overflow = ""; };
     }, [menuOpen]);
 
-    const menuOverlay = (
-        <div
-            className={clsx(
-                "fixed inset-0 top-[72px] z-1500 flex",
-                "transition-opacity duration-300",
-                menuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
-            )}
-            aria-hidden={!menuOpen}
-        >
-            <div
-                className="absolute inset-0 bg-black/30"
-                onClick={closeMenu}
-                aria-hidden
-            />
-            <div
-                ref={menuPanelRef}
-                className={clsx(
-                    "relative w-full h-full",
-                    "bg-white dark:bg-main-codGray backdrop-blur-sm",
-                    "overflow-auto"
-                )}
-            >
-                <NavbarSmallMenu onLinkClick={closeMenu} />
-            </div>
-        </div>
-    );
-
     return (
         <>
             <div
@@ -183,12 +156,27 @@ const NavbarSmall = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<
                     </div>
                 </div>
             </div>
-            {mounted && createPortal(menuOverlay, document.body)}
+            {mounted && createPortal(
+                <div
+                    className={clsx(
+                        "fixed inset-0 top-[72px] z-1500 flex",
+                        "transition-opacity duration-300",
+                        menuOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+                    )}
+                    aria-hidden={!menuOpen}
+                >
+                    <div className="absolute inset-0 bg-black/30" onClick={closeMenu} aria-hidden />
+                    <div ref={menuPanelRef} className={clsx("relative w-full h-full", "bg-white dark:bg-main-codGray backdrop-blur-sm", "overflow-auto")}>
+                        <NavbarSmallMenu onLinkClick={closeMenu} hideLanguageSwitcher={hideLanguageSwitcher} />
+                    </div>
+                </div>,
+                document.body
+            )}
         </>
     );
 };
 
-const NavbarSmallMenu = ({ onLinkClick }: { onLinkClick?: () => void }) => {
+const NavbarSmallMenu = ({ onLinkClick, hideLanguageSwitcher }: { onLinkClick?: () => void; hideLanguageSwitcher?: boolean }) => {
     const locale = useLocale();
     const isRtl = locale === "ar";
     const dir = isRtl ? "rtl" : "ltr";
@@ -232,11 +220,11 @@ const NavbarSmallMenu = ({ onLinkClick }: { onLinkClick?: () => void }) => {
                         {t("contact")}
                     </Button>
                 </Link>
-                {isHomePage && <div className="h-full flex items-center justify-center *:text-base"><LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} /></div>}
+                {isHomePage && !hideLanguageSwitcher && <div className="h-full flex items-center justify-center *:text-base"><LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} /></div>}
                 {!isHomePage &&
                     <div className={clsx("flex items-center gap-4 justify-between py-2", isRtl && "flex-row-reverse")}>
                         <ThemeSwitcher activeClass={activeClass} className="w-6 h-6" />
-                        <LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} />
+                        {!hideLanguageSwitcher && <LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} />}
                     </div>
                 }
             </div>

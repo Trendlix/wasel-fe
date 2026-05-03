@@ -27,10 +27,11 @@ const Content = ({ description }: { description: string }) => {
     }, { scope: ref });
 
     return (
-        <div ref={ref} className="2xl:max-w-3xl! mx-auto container" dir={dir}>
-            <p>
-                {description}
-            </p>
+        <div ref={ref} className="2xl:max-w-3xl! mx-auto container py-10" dir={dir}>
+            <div
+                className="blog-content"
+                dangerouslySetInnerHTML={{ __html: description ?? "" }}
+            />
         </div>
     );
 };

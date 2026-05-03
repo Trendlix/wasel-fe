@@ -1,7 +1,7 @@
 "use client";
 
-import { IBlogCardItem } from "@/shared/constants/blogs";
-import { useLocale, useTranslations } from "next-intl";
+import { IBlogItem, IBlogsCommonContent } from "@/shared/types/pages/blogs.types";
+import { useLocale } from "next-intl";
 import Hero from "./hero";
 import Content from "./content";
 import RelatedBlogs from "./related-blogs";
@@ -11,21 +11,37 @@ import Footer from "@/shared/components/layout/footer";
 import { useState } from "react";
 import Navbar from "@/shared/components/layout/navbar";
 
-const SingleBlogClient = ({ blog }: { blog: IBlogCardItem }) => {
-    const tCards = useTranslations("blogs.cards");
+interface SingleBlogClientProps {
+    blog: IBlogItem;
+    related: IBlogItem[];
+    common: IBlogsCommonContent | null;
+    schemas: Record<string, unknown>[];
+}
+
+const SingleBlogClient = ({ blog, related, common }: SingleBlogClientProps) => {
     const locale = useLocale();
     const dir = locale === "ar" ? "rtl" : "ltr";
     const [heroLayoutReady, setHeroLayoutReady] = useState(false);
-    const description = blog ? tCards(`${blog.slug}.description`) : "";
-    return (<div className="space-y-10 bg-white dark:bg-main-codGray" dir={dir}>
-        <Navbar />
-        <Hero blog={blog} onLayoutReady={() => setHeroLayoutReady(true)} />
-        <Content description={description} />
-        <RelatedBlogs blog={blog} />
-        <BrandBanner heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
-        <FAQ heroLayoutReady={heroLayoutReady} className="py-10 bg-white dark:bg-main-codGray" />
-        <Footer heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
-    </div>)
-}
+
+    return (
+        <div className="bg-white dark:bg-main-codGray" dir={dir}>
+            <Navbar hideLanguageSwitcher />
+            <Hero blog={blog} onLayoutReady={() => setHeroLayoutReady(true)} />
+            <Content description={blog.description} />
+            {related.length > 0 && <RelatedBlogs related={related} />}
+            <BrandBanner
+                heroLayoutReady={heroLayoutReady}
+                className="bg-white dark:bg-main-codGray"
+                brandContent={common?.brand ?? null}
+            />
+            <FAQ
+                heroLayoutReady={heroLayoutReady}
+                className="py-10 bg-white dark:bg-main-codGray"
+                faqContent={common?.faqs ?? null}
+            />
+            <Footer heroLayoutReady={heroLayoutReady} className="bg-white dark:bg-main-codGray" />
+        </div>
+    );
+};
 
 export default SingleBlogClient;

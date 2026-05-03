@@ -25,7 +25,7 @@ export const navLinks = [
     { href: "/order-tracking", labelKey: "orderTracking" },
 ] as const;
 
-const NavbarLarge = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<HTMLDivElement | null> } = {}) => {
+const NavbarLarge = ({ scrollTriggerRef, hideLanguageSwitcher }: { scrollTriggerRef?: React.RefObject<HTMLDivElement | null>; hideLanguageSwitcher?: boolean } = {}) => {
     const t = useTranslations("nav");
     const pathname = usePathname();
     const heroMountReady = useHeroMountReady();
@@ -162,7 +162,7 @@ const NavbarLarge = ({ scrollTriggerRef }: { scrollTriggerRef?: React.RefObject<
                         </Button>
                     </div>
                     {!isHomePage && <ThemeSwitcher activeClass={activeClass} />}
-                    <LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} />
+                    {!hideLanguageSwitcher && <LanguageSwitcher inactiveClass={inactiveClass} activeClass={activeClass} />}
                 </div>
             </nav>
         </div>
