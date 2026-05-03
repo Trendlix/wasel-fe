@@ -5,9 +5,9 @@ import {
 } from "@/shared/constants/terms";
 import type { MarketingFaqApiLocale } from "@/shared/lib/marketing-faq-api";
 import {
-    fetchMarketingTermsPublic,
+    fetchMarketingPrivacyPublic,
     type MarketingLegalApiPayload,
-} from "@/shared/lib/marketing-terms-api";
+} from "@/shared/lib/marketing-privacy-api";
 import { create } from "zustand";
 import {
     AlertTriangle,
@@ -28,8 +28,7 @@ const ICON_ROTATION: LucideIcon[] = [
     AlertTriangle,
 ];
 
-/** Dedupes concurrent hydration (e.g. React Strict Mode double mount). */
-let hydrateInFlight: Promise<void> | null = null;
+let policyHydrateInFlight: Promise<void> | null = null;
 
 interface IArgument {
     title: string;
@@ -95,7 +94,7 @@ function applyLegalLocale(payload: MarketingLegalApiPayload, locale: "en" | "ar"
     };
 }
 
-interface ITermsStore {
+interface IPolicyStore {
     termsItems: ITermItem[];
     arguments: IArgument[];
     cmsPayload: MarketingLegalApiPayload | null;
@@ -109,7 +108,7 @@ interface ITermsStore {
     hydrateFromCms: () => Promise<void>;
 }
 
-const useTermsStore = create<ITermsStore>((set, get) => ({
+const usePolicyStore = create<IPolicyStore>((set, get) => ({
     termsItems: termsItemsEn,
     arguments: generateArguments(termsItemsEn),
     cmsPayload: null,
@@ -145,21 +144,21 @@ const useTermsStore = create<ITermsStore>((set, get) => ({
 
     hydrateFromCms: async () => {
         if (get().cmsHydrated) return;
-        if (!hydrateInFlight) {
-            hydrateInFlight = (async () => {
+        if (!policyHydrateInFlight) {
+            policyHydrateInFlight = (async () => {
                 try {
-                    const payload = await fetchMarketingTermsPublic();
+                    const payload = await fetchMarketingPrivacyPublic();
                     set({
                         cmsHydrated: true,
                         cmsPayload: payload,
                     });
                 } finally {
-                    hydrateInFlight = null;
+                    policyHydrateInFlight = null;
                 }
             })();
         }
-        await hydrateInFlight;
+        await policyHydrateInFlight;
     },
 }));
 
-export default useTermsStore;
+export default usePolicyStore;

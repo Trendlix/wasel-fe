@@ -1,4 +1,5 @@
 "use client";
+import { RichTextHtml } from "@/shared/components/common/rich-text-html";
 import { IFaqItem } from "@/shared/constants/faq";
 import useFaqsStore from "@/shared/hooks/store/pages/faqs/usefaqsStore";
 import { useGSAP } from "@gsap/react";
@@ -56,16 +57,16 @@ const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; 
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-main-secondary/60"
                 )}
             >
-                <span
+                <RichTextHtml
+                    as="span"
+                    html={item.q}
                     className={clsx(
-                        "text-base font-semibold leading-snug transition-colors duration-200",
+                        "text-base font-semibold leading-snug transition-colors duration-200 flex-1 min-w-0 text-start",
                         isOpen
                             ? "text-black dark:text-white"
                             : "text-gray-600 dark:text-[#c8c8c8]"
                     )}
-                >
-                    {item.q}
-                </span>
+                />
 
                 <span
                     className={clsx(
@@ -85,16 +86,9 @@ const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; 
                     ref={dividerRef}
                     className="mx-6 mb-3 w-8 h-[3px] rounded-full bg-main-secondary"
                 />
-                {item.aHtml ? (
-                    <div
-                        className="px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-[#9a9a9a] [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:underline"
-                        dangerouslySetInnerHTML={{ __html: item.aHtml }}
-                    />
-                ) : (
-                    <p className="px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-[#9a9a9a]">
-                        {item.a}
-                    </p>
-                )}
+                <div className="px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-[#9a9a9a]">
+                    <RichTextHtml html={item.aHtml?.trim() ? item.aHtml : item.a} />
+                </div>
             </div>
         </div>
     );
@@ -157,7 +151,11 @@ const FaqContent = () => {
                     isAr ? "before:right-[-15px]" : "before:left-[-15px]"
                 )}
             >
-                {category.category}
+                <RichTextHtml
+                    as="span"
+                    html={category.category}
+                    className="font-bold text-[22px] leading-[33px] text-black dark:text-white [&_p]:inline [&_p]:mb-0"
+                />
             </h1>
 
             <div ref={listRef} className="flex flex-col gap-3">

@@ -1,5 +1,7 @@
 "use client";
 
+import { RichTextHtml } from "@/shared/components/common/rich-text-html";
+import useTermsStore from "@/shared/hooks/store/pages/terms/useTermsStore";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
@@ -11,16 +13,18 @@ type HeroProps = { onLayoutReady?: () => void };
 const Hero = ({ onLayoutReady }: HeroProps) => {
     const locale = useLocale();
     const t = useTranslations("terms");
+    const heroTitles = useTermsStore((s) => s.heroTitles);
+    const heroDescription = useTermsStore((s) => s.heroDescription);
     const dir = locale === "ar" ? "rtl" : "ltr";
     const isAr = locale === "ar";
 
     const headingRef = useRef<HTMLHeadingElement>(null);
     const highlightWidthRef = useRef<HTMLSpanElement | null>(null);
-    const subtitleRef = useRef<HTMLParagraphElement | null>(null);
+    const subtitleRef = useRef<HTMLDivElement | null>(null);
     const badgeRef = useRef<HTMLDivElement | null>(null);
 
     const setHighlightWidthRef = (el: HTMLSpanElement | null) => { highlightWidthRef.current = el; };
-    const setSubtitleRef = (el: HTMLParagraphElement | null) => { subtitleRef.current = el; };
+    const setSubtitleRef = (el: HTMLDivElement | null) => { subtitleRef.current = el; };
     const setBadgeRef = (el: HTMLDivElement | null) => { badgeRef.current = el; };
 
     useGSAP(() => {
@@ -52,6 +56,8 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
             <Heading
                 t={t}
                 isAr={isAr}
+                heroTitles={heroTitles}
+                heroDescription={heroDescription}
                 headingRef={headingRef}
                 setHighlightWidthRef={setHighlightWidthRef}
                 setSubtitleRef={setSubtitleRef}
@@ -62,14 +68,27 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
 };
 
 const Heading = ({
-    t, isAr, headingRef, setHighlightWidthRef, setSubtitleRef,
+    t,
+    isAr,
+    heroTitles,
+    heroDescription,
+    headingRef,
+    setHighlightWidthRef,
+    setSubtitleRef,
 }: {
     t: ReturnType<typeof useTranslations<"terms">>;
     isAr: boolean;
+    heroTitles: string[] | null;
+    heroDescription: string | null;
     headingRef: RefObject<HTMLHeadingElement | null>;
     setHighlightWidthRef: (el: HTMLSpanElement | null) => void;
-    setSubtitleRef: (el: HTMLParagraphElement | null) => void;
+    setSubtitleRef: (el: HTMLDivElement | null) => void;
 }) => {
+    const cmsL1 = heroTitles?.[0]?.trim() ?? "";
+    const cmsL2 = heroTitles?.[1]?.trim() ?? "";
+    const line3 = t("hero.line3");
+    const cmsSubtitle = heroDescription?.trim() ?? "";
+
     return (
         <div className="flex flex-col items-center justify-center gap-y-6">
             <h1
@@ -83,16 +102,32 @@ const Heading = ({
                 )}
             >
                 <span className="dark:text-white text-main-flatBlack">
-                    {t("hero.line1")}
+                    {cmsL1 ? (
+                        <RichTextHtml
+                            as="span"
+                            html={cmsL1}
+                            className="dark:text-white text-main-flatBlack [&_p]:inline [&_p]:mb-0"
+                        />
+                    ) : (
+                        t("hero.line1")
+                    )}
                 </span>
 
                 <span className="dark:text-white text-main-flatBlack">
-                    {t("hero.line2")}
+                    {cmsL2 ? (
+                        <RichTextHtml
+                            as="span"
+                            html={cmsL2}
+                            className="dark:text-white text-main-flatBlack [&_p]:inline [&_p]:mb-0"
+                        />
+                    ) : (
+                        t("hero.line2")
+                    )}
                 </span>
 
                 <span className="relative py-1 px-2">
                     <span className="relative z-10 text-white">
-                        {t("hero.line3")}
+                        {line3}
                     </span>
                     <span
                         ref={setHighlightWidthRef}
@@ -101,7 +136,7 @@ const Heading = ({
                 </span>
             </h1>
 
-            <p
+            <div
                 ref={setSubtitleRef}
                 className={clsx(
                     "opacity-0 text-center font-sans font-normal",
@@ -110,8 +145,19 @@ const Heading = ({
                     "2xl:max-w-[60%] xl:max-w-[70%] max-w-[90%]"
                 )}
             >
-                {t("hero.subtitle")}
-            </p>
+                {cmsSubtitle ? (
+                    <RichTextHtml
+                        html={cmsSubtitle}
+                        className={clsx(
+                            "text-center font-sans font-normal",
+                            "text-[20px] leading-[27px] tracking-[0px]",
+                            "dark:text-white/60 text-main-flatBlack/60"
+                        )}
+                    />
+                ) : (
+                    t("hero.subtitle")
+                )}
+            </div>
         </div>
     );
 };

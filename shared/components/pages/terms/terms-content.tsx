@@ -1,6 +1,9 @@
 "use client";
 
+import { RichTextHtml } from "@/shared/components/common/rich-text-html";
+import useContactEmailsStore from "@/shared/hooks/store/useContactEmailsStore";
 import useTermsStore from "@/shared/hooks/store/pages/terms/useTermsStore";
+import type { ContactEmailsPayload } from "@/shared/lib/contact-emails-api";
 import clsx from "clsx";
 import { AlertTriangleIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -13,32 +16,30 @@ const ArgumentsColors = [
     { iconBg: "bg-main-red/20", iconText: "text-main-red", bar: "bg-main-red" },
 ];
 
-const contactCards = [
-    {
-        labelKey: "generalSupport",
-        email: "support@flanefleet.com",
-        color: "text-main-secondary",
-    },
-    {
-        labelKey: "legalInquiries",
-        email: "legal@flanefleet.com",
-        color: "text-main-red",
-    },
-    {
-        labelKey: "privacyConcerns",
-        email: "privacy@flanefleet.com",
-        color: "text-main-primary",
-    },
-    {
-        labelKey: "businessPartnerships",
-        email: "partners@flanefleet.com",
-        color: "text-main-secondary",
-    },
+const contactCardDefs: Array<{
+    labelKey: "generalSupport" | "legalInquiries" | "privacyConcerns" | "businessPartnerships";
+    emailKey: keyof ContactEmailsPayload;
+    color: string;
+}> = [
+    { labelKey: "generalSupport", emailKey: "general_support", color: "text-main-secondary" },
+    { labelKey: "legalInquiries", emailKey: "legal_inquiries", color: "text-main-red" },
+    { labelKey: "privacyConcerns", emailKey: "privacy_concerns", color: "text-main-primary" },
+    { labelKey: "businessPartnerships", emailKey: "business_partnerships", color: "text-main-secondary" },
 ];
+
+const emailFallbacks: ContactEmailsPayload = {
+    general_support: "support@flanefleet.com",
+    legal_inquiries: "legal@flanefleet.com",
+    privacy_concerns: "privacy@flanefleet.com",
+    business_partnerships: "partners@flanefleet.com",
+};
 
 const TermsContent = () => {
     const termsItems = useTermsStore((state) => state.termsItems);
     const setLocalizedTermsItems = useTermsStore((state) => state.setLocalizedTermsItems);
+    const cmsHydrated = useTermsStore((state) => state.cmsHydrated);
+    const alertCms = useTermsStore((state) => state.alert);
+    const cmsEmails = useContactEmailsStore((state) => state.emails);
     const locale = useLocale();
     const isAr = locale === "ar";
     const t = useTranslations("terms.warning");
@@ -46,7 +47,7 @@ const TermsContent = () => {
 
     useEffect(() => {
         setLocalizedTermsItems(locale);
-    }, [locale, setLocalizedTermsItems]);
+    }, [locale, cmsHydrated, setLocalizedTermsItems]);
 
     return (
         <div className="space-y-14" dir={isAr ? "rtl" : "ltr"}>
@@ -63,13 +64,19 @@ const TermsContent = () => {
                     <AlertTriangleIcon className="text-main-red" />
                 </div>
                 <div className={clsx("text-sm leading-5", isAr ? "text-right" : "text-left")}>
-                    <span className="capitalize text-foreground font-bold">
-                        {t("title")}
-                    </span>
-                    {": "}
-                    <span className="text-foreground/70">
-                        {t("descript")}
-                    </span>
+                    {alertCms ? (
+                        <RichTextHtml html={alertCms} className="text-foreground/90" />
+                    ) : (
+                        <>
+                            <span className="capitalize text-foreground font-bold">
+                                {t("title")}
+                            </span>
+                            {": "}
+                            <span className="text-foreground/70">
+                                {t("descript")}
+                            </span>
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -91,7 +98,11 @@ const TermsContent = () => {
                                 </div>
                                 <div className={isAr ? "text-right" : "text-left"}>
                                     <h3 className="text-xl font-bold text-foreground">
-                                        {item.title}
+                                        <RichTextHtml
+                                            as="span"
+                                            html={item.title}
+                                            className="text-xl font-bold text-foreground [&_p]:inline [&_p]:mb-0"
+                                        />
                                     </h3>
                                     <div className={clsx(
                                         "mt-1 h-0.5 w-8",
@@ -108,15 +119,31 @@ const TermsContent = () => {
                             )}>
                                 {item.higlights.map((hl, idx) => (
                                     <li key={idx} className={clsx("text-sm", isAr ? "text-right" : "text-left")}>
-                                        <p className="font-semibold text-foreground/80">
-                                            {isAr
-                                                ? <>{hl.title} .{item.id}.{idx + 1}</>
-                                                : <>{item.id}.{idx + 1} {hl.title}</>
-                                            }
-                                        </p>
-                                        <p className="text-foreground/50 mt-0.5 leading-relaxed">
-                                            {hl.descript}
-                                        </p>
+                                        <div className="font-semibold text-foreground/80">
+                                            {isAr ? (
+                                                <>
+                                                    <RichTextHtml
+                                                        as="span"
+                                                        html={hl.title}
+                                                        className="font-semibold text-foreground/80 inline [&_p]:inline [&_p]:mb-0"
+                                                    />
+                                                    <span>{` .${item.id}.${idx + 1}`}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>{`${item.id}.${idx + 1} `}</span>
+                                                    <RichTextHtml
+                                                        as="span"
+                                                        html={hl.title}
+                                                        className="font-semibold text-foreground/80 inline [&_p]:inline [&_p]:mb-0"
+                                                    />
+                                                </>
+                                            )}
+                                        </div>
+                                        <RichTextHtml
+                                            html={hl.descript}
+                                            className="text-foreground/50 mt-0.5 leading-relaxed"
+                                        />
                                     </li>
                                 ))}
                             </ul>
@@ -156,10 +183,13 @@ const TermsContent = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {contactCards.map((card) => (
+                    {contactCardDefs.map((card) => {
+                        const email =
+                            cmsEmails[card.emailKey]?.trim() || emailFallbacks[card.emailKey];
+                        return (
                         <a
                             key={card.labelKey}
-                            href={`mailto:${card.email}`}
+                            href={`mailto:${email}`}
                             className={clsx(
                                 "flex flex-col gap-3 rounded-xl px-5 py-4",
                                 "dark:bg-[#111113] bg-white",
@@ -186,10 +216,11 @@ const TermsContent = () => {
                                     "dark:text-white/70 text-main-flatBlack/70"
                                 )}
                             >
-                                {card.email}
+                                {email}
                             </span>
                         </a>
-                    ))}
+                    );
+                    })}
                 </div>
             </section >
 

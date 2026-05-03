@@ -1,8 +1,10 @@
 "use client";
 
-import useTermsStore from "@/shared/hooks/store/pages/terms/useTermsStore";
+import useContactEmailsStore from "@/shared/hooks/store/useContactEmailsStore";
+import usePolicyStore from "@/shared/hooks/store/pages/policy/usePolicyStore";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const ArgumentsColors = [
@@ -11,8 +13,10 @@ const ArgumentsColors = [
     "bg-main-red",
 ];
 
+const LEGAL_EMAIL_FALLBACK = "legal@flanefleet.com";
+
 const PolicySidebar = () => {
-    const argumentsList = useTermsStore((state) => state.arguments);
+    const argumentsList = usePolicyStore((state) => state.arguments);
     const locale = useLocale();
     const isAr = locale === "ar";
     const t = useTranslations("terms.sidebar");
@@ -148,6 +152,9 @@ const ContactSupport = ({
     t: ReturnType<typeof useTranslations<"terms.sidebar">>;
     isAr: boolean;
 }) => {
+    const legalEmail =
+        useContactEmailsStore((s) => s.emails.legal_inquiries)?.trim() || LEGAL_EMAIL_FALLBACK;
+
     return (
         <div className="space-y-4">
             <SidebarCard isAr={isAr}>
@@ -163,14 +170,37 @@ const ContactSupport = ({
                         "font-sans font-medium text-xs leading-4 tracking-[0]",
                         "text-main-secondary hover:underline transition-all"
                     )}
-                    href="mailto:legal@flanefleet.com"
+                    href={`mailto:${legalEmail}`}
                     dir="ltr"
                 >
-                    legal@flanefleet.com
+                    {legalEmail}
                 </a>
             </SidebarCard>
 
-
+            <SidebarCard isAr={isAr}>
+                <p className={clsx(
+                    "font-sans font-normal text-xs leading-5 tracking-[0] uppercase",
+                    "text-main-flatBlack/30 dark:text-white/30"
+                )}>
+                    {t("related")}
+                </p>
+                <ul className={clsx(
+                    "capitalize space-y-1",
+                    "text-main-flatBlack/45 dark:text-white/45",
+                    isAr && "text-right"
+                )}>
+                    <li className="transition-colors hover:text-main-flatBlack/70 dark:hover:text-white/70">
+                        <Link href="/terms">
+                            {isAr ? "الشروط والأحكام ←" : "→ Terms & Conditions"}
+                        </Link>
+                    </li>
+                    <li className="transition-colors hover:text-main-flatBlack/70 dark:hover:text-white/70">
+                        <Link href="/faqs">
+                            {isAr ? "الأسئلة الشائعة ←" : "→ FAQ"}
+                        </Link>
+                    </li>
+                </ul>
+            </SidebarCard>
         </div >
     );
 };

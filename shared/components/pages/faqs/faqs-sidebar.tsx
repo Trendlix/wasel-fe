@@ -4,6 +4,7 @@ import useFaqsStore from "@/shared/hooks/store/pages/faqs/usefaqsStore";
 import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { useEffect } from "react";
 
 interface CategoryItem {
@@ -88,9 +89,10 @@ const ContactSupportButton = () => {
                 {t("description")}
             </p>
 
-            <button
+            <Link
+                href="/contact"
                 className={clsx(
-                    "mt-3 w-full rounded-full py-3.5 text-sm font-bold",
+                    "mt-3 w-full rounded-full py-3.5 text-sm font-bold text-center block",
                     "transition-all duration-200",
 
                     "bg-[#ffb400] text-black",
@@ -98,7 +100,7 @@ const ContactSupportButton = () => {
                 )}
             >
                 {t("btn")}
-            </button>
+            </Link>
         </div>
     );
 };
@@ -108,11 +110,11 @@ const FaqsSidebar = () => {
     const lang = locale as "en" | "ar";
     const isAr = lang === "ar";
 
-    const { activeCategoryKey, setActiveCategory, categories, setLang } = useFaqsStore();
+    const { activeCategoryKey, setActiveCategory, categories, setLang, cmsHydrated } = useFaqsStore();
 
     useEffect(() => {
         setLang(lang);
-    }, [lang, setLang]);
+    }, [lang, setLang, cmsHydrated]);
 
     const displayedCategories = categories.map((cat) => ({
         categoryKey: cat.categoryKey,

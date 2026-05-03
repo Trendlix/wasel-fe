@@ -1,5 +1,6 @@
 "use client";
 
+import { RichTextHtml } from "@/shared/components/common/rich-text-html";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
@@ -18,11 +19,11 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     const dir = locale === "ar" ? "rtl" : "ltr";
     const headingRef = useRef<HTMLHeadingElement>(null);
     const headingXWidthRef = useRef<HTMLSpanElement | null>(null);
-    const paragraphRef = useRef<HTMLParagraphElement | null>(null);
+    const paragraphRef = useRef<HTMLDivElement | null>(null);
     const searchbarRef = useRef<HTMLDivElement | null>(null);
 
     const setHeadingXWidthRef = (el: HTMLSpanElement | null) => { headingXWidthRef.current = el; };
-    const setParagraphRef = (el: HTMLParagraphElement | null) => { paragraphRef.current = el; };
+    const setParagraphRef = (el: HTMLDivElement | null) => { paragraphRef.current = el; };
     const setSearchbarRef = (el: HTMLDivElement | null) => { searchbarRef.current = el; };
 
     useGSAP(() => {
@@ -77,7 +78,7 @@ const Heading = ({
     dir: string;
     headingRef: RefObject<HTMLHeadingElement | null>;
     setHeadingXWidthRef: (el: HTMLSpanElement | null) => void;
-    setParagraphRef: (el: HTMLParagraphElement | null) => void;
+    setParagraphRef: (el: HTMLDivElement | null) => void;
     cmsTitles: string[] | null;
     cmsDescription: string | null;
 }) => {
@@ -85,7 +86,7 @@ const Heading = ({
     const line1 = useCms ? cmsTitles[0] : t("hero.line1");
     const line2 = useCms ? cmsTitles[1] : t("hero.line2");
     const line3 = useCms ? (cmsTitles[2] ?? "") : t("hero.line3");
-    const subtitle = cmsDescription?.trim() ? cmsDescription : t("hero.subtitle");
+    const cmsSubtitle = cmsDescription?.trim() ?? "";
 
     return (
         <div className="flex flex-col items-center justify-center gap-y-4" dir={dir}>
@@ -97,25 +98,58 @@ const Heading = ({
                 ref={headingRef}
             >
                 <p className="flex gap-3 flex-wrap justify-center">
-                    <span className="dark:text-white text-black">{line1}</span>
+                    {useCms ? (
+                        <RichTextHtml
+                            as="span"
+                            html={line1}
+                            className="dark:text-white text-black [&_p]:inline [&_p]:mb-0"
+                        />
+                    ) : (
+                        <span className="dark:text-white text-black">{line1}</span>
+                    )}
                     {line3 ? (
-                        <span className="mt-1 dark:text-white text-black">{line3}</span>
+                        useCms ? (
+                            <RichTextHtml
+                                as="span"
+                                html={line3}
+                                className="mt-1 dark:text-white text-black [&_p]:inline [&_p]:mb-0"
+                            />
+                        ) : (
+                            <span className="mt-1 dark:text-white text-black">{line3}</span>
+                        )
                     ) : null}
                 </p>
                 <span className={clsx("w-fit", "relative py-1")}>
-                    <span className="relative z-10 text-white p-1">{line2}</span>
+                    <span className="relative z-10 text-white p-1">
+                        {useCms ? (
+                            <RichTextHtml
+                                as="span"
+                                html={line2}
+                                className="text-white [&_p]:inline [&_p]:mb-0"
+                            />
+                        ) : (
+                            line2
+                        )}
+                    </span>
                     <span
                         ref={setHeadingXWidthRef}
                         className={clsx("absolute", "inset-0 w-full h-full bg-main-ukraineBlue z-0")}
                     />
                 </span>
             </h1>
-            <p
+            <div
                 ref={setParagraphRef}
                 className={clsx("lg:text-lg text-base leading-[21px] md:leading-[27px] text-center 2xl:max-w-[70%] opacity-0")}
             >
-                {subtitle}
-            </p>
+                {cmsSubtitle ? (
+                    <RichTextHtml
+                        html={cmsSubtitle}
+                        className="lg:text-lg text-base leading-[21px] md:leading-[27px] text-center text-inherit"
+                    />
+                ) : (
+                    t("hero.subtitle")
+                )}
+            </div>
         </div>
     );
 };

@@ -1,10 +1,10 @@
 "use client";
 
+import useContactEmailsStore from "@/shared/hooks/store/useContactEmailsStore";
 import useTermsStore from "@/shared/hooks/store/pages/terms/useTermsStore";
 import clsx from "clsx";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { title } from "process";
 import { useEffect, useState } from "react";
 
 const ArgumentsColors = [
@@ -143,6 +143,8 @@ const SidebarCard = ({
     </div>
 );
 
+const LEGAL_EMAIL_FALLBACK = "legal@flanefleet.com";
+
 const ContactSupport = ({
     t,
     isAr,
@@ -150,6 +152,9 @@ const ContactSupport = ({
     t: ReturnType<typeof useTranslations<"terms.sidebar">>;
     isAr: boolean;
 }) => {
+    const legalEmail =
+        useContactEmailsStore((s) => s.emails.legal_inquiries)?.trim() || LEGAL_EMAIL_FALLBACK;
+
     return (
         <div className="space-y-4">
             <SidebarCard isAr={isAr}>
@@ -165,10 +170,10 @@ const ContactSupport = ({
                         "font-sans font-medium text-xs leading-4 tracking-[0]",
                         "text-main-secondary hover:underline transition-all"
                     )}
-                    href="mailto:legal@flanefleet.com"
+                    href={`mailto:${legalEmail}`}
                     dir="ltr"
                 >
-                    legal@flanefleet.com
+                    {legalEmail}
                 </a>
             </SidebarCard>
 

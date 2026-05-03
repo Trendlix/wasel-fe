@@ -1,5 +1,6 @@
 "use client";
 
+import useContactEmailsStore from "@/shared/hooks/store/useContactEmailsStore";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
@@ -7,6 +8,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRef } from "react";
+
+const GENERAL_SUPPORT_FALLBACK = "legal@flanefleet.com";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +19,8 @@ const FaqsFooterBanner = () => {
     const subtitleRef = useRef<HTMLParagraphElement>(null);
     const buttonsRef = useRef<HTMLDivElement>(null);
     const t = useTranslations("faqs.footer");
+    const supportEmail =
+        useContactEmailsStore((s) => s.emails.general_support)?.trim() || GENERAL_SUPPORT_FALLBACK;
 
     useGSAP(() => {
         if (!sectionRef.current || !titleRef.current || !subtitleRef.current || !buttonsRef.current) return;
@@ -97,7 +102,7 @@ const FaqsFooterBanner = () => {
             <div ref={buttonsRef} className="flex flex-wrap items-center justify-center gap-3 mt-4">
                 {/* Email — opens mail client */}
                 <a
-                    href="mailto:legal@flanefleet.com"
+                    href={`mailto:${supportEmail}`}
                     className={clsx(
                         "px-7 py-3.5 rounded-full font-bold text-sm",
                         "bg-main-secondary text-black",
