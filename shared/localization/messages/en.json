@@ -265,6 +265,22 @@
             "contactInfoTitle": "Contact Information",
             "sendMessageTitle": "Send us a Message",
             "sendButton": "Send Message",
+            "validation": {
+                "nameRequired": "Name is required.",
+                "contactRequired": "Please provide either an email address or a phone number (at least one is required).",
+                "messageRequired": "Message is required.",
+                "emailInvalid": "Please enter a valid email address.",
+                "configMissing": "The contact form is temporarily unavailable. Please try again later.",
+                "submitNetworkError": "We could not reach the server. Check your internet connection and try again.",
+                "submitTimeout": "The request timed out. Please try again.",
+                "submitGenericError": "Something went wrong while sending your message. Please try again later.",
+                "unexpectedResponse": "Your message may have been sent, but the server returned an unexpected status. If unsure, try again or contact us directly."
+            },
+            "successModal": {
+                "title": "Message sent",
+                "description": "Thank you for contacting us. We have received your message and will get back to you as soon as possible.",
+                "closeAria": "Close dialog"
+            },
             "fields": {
                 "name": {
                     "label": "Name",
