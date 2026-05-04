@@ -2,9 +2,11 @@ import { LucideIcon, ShieldCheck, User, Lock, CreditCard, Globe, AlertTriangle }
 
 export interface ITermItem {
     id: number;
+    /** Anchor id for sidebar / in-page navigation (prefer CMS categoryKey). */
+    slug?: string;
     title: string;
     higlights: { title: string; descript: string }[];
-    icon: LucideIcon
+    icon: LucideIcon;
 }
 
 export const termsItems: ITermItem[] = [

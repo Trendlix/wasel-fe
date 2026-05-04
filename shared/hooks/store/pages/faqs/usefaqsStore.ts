@@ -5,6 +5,8 @@ import {
 } from "@/shared/lib/marketing-faq-api";
 import { create } from "zustand";
 
+export { faqUiLang } from "@/shared/lib/ui-locale";
+
 /** Dedupes concurrent hydration (e.g. React Strict Mode double mount). */
 let hydrateInFlight: Promise<void> | null = null;
 
@@ -62,7 +64,8 @@ interface IFaqsStore {
     heroDescription: string | null;
     cmsHydrated: boolean;
     cmsPayload: MarketingFaqApiPayload | null;
-    hydrateFromCms: () => Promise<void>;
+    /** Pass UI locale so hydration applies the correct branch before sidebar mounts. Re-applies when CMS is already loaded (SPA locale change). */
+    hydrateFromCms: (lang?: "en" | "ar") => Promise<void>;
 }
 
 const useFaqsStore = create<IFaqsStore>((set, get) => ({
@@ -104,8 +107,19 @@ const useFaqsStore = create<IFaqsStore>((set, get) => ({
         }
     },
 
-    hydrateFromCms: async () => {
-        if (get().cmsHydrated) return;
+    hydrateFromCms: async (langFromCaller?: "en" | "ar") => {
+        const resolvedLang = langFromCaller ?? get().lang;
+        const { cmsHydrated, cmsPayload } = get();
+        if (cmsHydrated && cmsPayload) {
+            set(
+                applyLocaleFromPayload(
+                    cmsPayload,
+                    resolvedLang,
+                    get().activeCategoryKey,
+                ),
+            );
+            return;
+        }
         if (!hydrateInFlight) {
             hydrateInFlight = (async () => {
                 try {
@@ -114,10 +128,10 @@ const useFaqsStore = create<IFaqsStore>((set, get) => ({
                         set({ cmsHydrated: true, cmsPayload: null });
                         return;
                     }
-                    const lang = get().lang;
+                    const langAfterFetch = langFromCaller ?? get().lang;
                     const patch = applyLocaleFromPayload(
                         payload,
-                        lang,
+                        langAfterFetch,
                         get().activeCategoryKey,
                     );
                     set({

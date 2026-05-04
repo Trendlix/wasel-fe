@@ -7,12 +7,13 @@ import { useRef } from "react";
 import FaqContent from "./faq-content";
 import FaqsSidebar from "./faqs-sidebar";
 import { useLocale } from "next-intl";
+import { faqUiLang } from "@/shared/hooks/store/pages/faqs/usefaqsStore";
 
 const FaqsSection = () => {
     const sidebarRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const locale = useLocale();
-    const dir = locale === "ar" ? "rtl" : "ltr";
+    const dir = faqUiLang(locale) === "ar" ? "rtl" : "ltr";
 
     useGSAP(() => {
         if (!sidebarRef.current || !contentRef.current) return;
@@ -32,14 +33,14 @@ const FaqsSection = () => {
 
     return (
         <section dir={dir} className={clsx(
-            "container",
+            "container relative",
             "md:flex lg:[&>*:first-child]:flex-1 lg:[&>*:last-child]:flex-5 md:gap-7.75 md:[&>*:first-child]:flex-1 md:[&>*:last-child]:flex-3",
-            "space-y-7.75 md:space-y-0 my-16"
+            "space-y-7.75 md:space-y-0 mt-20 mb-24"
         )}>
-            <div ref={sidebarRef} className="opacity-0">
+            <div ref={sidebarRef} className="opacity-0 md:sticky md:top-28 self-start">
                 <FaqsSidebar />
             </div>
-            <div ref={contentRef} className="opacity-0">
+            <div ref={contentRef} className="opacity-0 min-w-0 md:relative md:top-8">
                 <FaqContent />
             </div>
         </section>

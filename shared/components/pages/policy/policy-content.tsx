@@ -4,6 +4,7 @@ import { RichTextHtml } from "@/shared/components/common/rich-text-html";
 import usePolicyStore from "@/shared/hooks/store/pages/policy/usePolicyStore";
 import clsx from "clsx";
 import { AlertTriangleIcon } from "lucide-react";
+import { faqUiLang, formatLegalClauseRef } from "@/shared/lib/ui-locale";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -20,7 +21,7 @@ const PolicyContent = () => {
     const cmsHydrated = usePolicyStore((state) => state.cmsHydrated);
     const alertCms = usePolicyStore((state) => state.alert);
     const locale = useLocale();
-    const isAr = locale === "ar";
+    const isAr = faqUiLang(locale) === "ar";
     const t = useTranslations("terms.warning");
 
     useEffect(() => {
@@ -35,7 +36,7 @@ const PolicyContent = () => {
                 className={clsx(
                     "border border-main-red/20 bg-main-red/5 dark:bg-main-flatBlack",
                     "flex items-start gap-4 rounded-lg p-4",
-                    isAr ? "flex-row-reverse" : "flex-row"
+                    "flex-row"
                 )}
             >
                 <div className="flex-shrink-0">
@@ -88,36 +89,26 @@ const PolicyContent = () => {
                                 </div>
                             </div>
 
-                            <ul className={clsx(
-                                "space-y-4",
-                                isAr ? "pr-12 pl-0" : "pl-12 pr-0"
-                            )}>
+                            <ul className="space-y-4 ps-12">
                                 {item.higlights.map((hl, idx) => (
-                                    <li key={idx} className={clsx("text-sm", isAr ? "text-right" : "text-left")}>
-                                        <div className="font-semibold text-foreground/80">
-                                            {isAr ? (
-                                                <>
-                                                    <RichTextHtml
-                                                        as="span"
-                                                        html={hl.title}
-                                                        className="font-semibold text-foreground/80 inline [&_p]:inline [&_p]:mb-0"
-                                                    />
-                                                    <span>{` .${item.id}.${idx + 1}`}</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <span>{`${item.id}.${idx + 1} `}</span>
-                                                    <RichTextHtml
-                                                        as="span"
-                                                        html={hl.title}
-                                                        className="font-semibold text-foreground/80 inline [&_p]:inline [&_p]:mb-0"
-                                                    />
-                                                </>
-                                            )}
+                                    <li key={idx} className="text-sm text-start">
+                                        <div className="flex flex-row items-baseline gap-2 font-semibold text-foreground/80">
+                                            <span
+                                                dir="ltr"
+                                                translate="no"
+                                                className="shrink-0 tabular-nums text-foreground/55"
+                                            >
+                                                {formatLegalClauseRef(item.id, idx + 1, locale)}
+                                            </span>
+                                            <RichTextHtml
+                                                as="span"
+                                                html={hl.title}
+                                                className="min-w-0 flex-1 font-semibold text-foreground/80 [&_p]:mb-0 [&_p]:inline"
+                                            />
                                         </div>
                                         <RichTextHtml
                                             html={hl.descript}
-                                            className="text-foreground/50 mt-0.5 leading-relaxed"
+                                            className="mt-0.5 leading-relaxed text-foreground/50"
                                         />
                                     </li>
                                 ))}

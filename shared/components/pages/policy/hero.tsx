@@ -94,10 +94,10 @@ const Heading = ({
                 ref={headingRef}
                 className={clsx(
                     "font-sans font-bold opacity-0",
-                    "text-[76.5px] leading-[81px] tracking-[0px]",
+                    "lg:text-[76.5px] text-[56px] lg:leading-[81px] leading-[60px] tracking-[0px]",
                     "text-center",
                     "flex items-center justify-center flex-wrap",
-                    isAr ? "gap-x-3 flex-row-reverse" : "gap-x-3 flex-row"
+                    isAr ? "gap-x-3 flex-row" : "gap-x-3 flex-row"
                 )}
             >
 

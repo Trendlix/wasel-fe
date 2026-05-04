@@ -3,10 +3,10 @@ import {
     termsItemsAr,
     termsItems as termsItemsEn,
 } from "@/shared/constants/terms";
-import type { MarketingFaqApiLocale } from "@/shared/lib/marketing-faq-api";
 import {
-    fetchMarketingTermsPublic,
-    type MarketingLegalApiPayload,
+    fetchTermsPage,
+    type TermsAudience,
+    type TermsPagePayload,
 } from "@/shared/lib/marketing-terms-api";
 import { create } from "zustand";
 import {
@@ -28,137 +28,158 @@ const ICON_ROTATION: LucideIcon[] = [
     AlertTriangle,
 ];
 
-/** Dedupes concurrent hydration (e.g. React Strict Mode double mount). */
-let hydrateInFlight: Promise<void> | null = null;
+let hydrateRequestId = 0;
 
 interface IArgument {
     title: string;
     slug: string;
 }
 
+function stripHtmlToPlain(value: string): string {
+    return value.replace(/<[^>]*>/g, "").trim();
+}
+
+function slugifyNav(value: string): string {
+    return stripHtmlToPlain(value)
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "");
+}
+
 function generateArguments(items: ITermItem[]): IArgument[] {
     return items.map((item) => ({
         title: item.title,
-        slug: item.title.toLocaleLowerCase().replace(/\s+/g, "-"),
+        slug:
+            (item.slug && item.slug.trim()) ||
+            slugifyNav(item.title) ||
+            `section-${item.id}`,
     }));
 }
 
-function mapLocaleToTermItems(loc: MarketingFaqApiLocale | undefined): ITermItem[] {
-    const groups = loc?.items ?? [];
-    if (!groups.length) return [];
-    return groups.map((group, idx) => {
-        const title =
-            (typeof group.category === "string" && group.category.trim()
-                ? group.category
-                : "") ||
-            (typeof group.label === "string" && group.label.trim() ? group.label : "") ||
-            (typeof group.categoryKey === "string" ? group.categoryKey : "");
+function mapTermsPageToState(data: TermsPagePayload | null, staticLocale: "en" | "ar") {
+    const staticItems = staticLocale === "ar" ? termsItemsAr : termsItemsEn;
+
+    if (!data?.content) {
         return {
-            id: idx + 1,
-            title,
-            higlights: (group.items ?? group.points ?? []).map((p) => ({
-                title: p.question ?? "",
-                descript: p.answer ?? "",
-            })),
-            icon: ICON_ROTATION[idx % ICON_ROTATION.length],
+            termsPagePayload: null,
+            termsItems: staticItems,
+            arguments: generateArguments(staticItems),
+            heroTitles: null,
+            heroDescription: null,
+            alert: null,
+            heroUpdatedAt: null,
+            legalInquiries: "",
         };
-    });
-}
+    }
 
-function applyLegalLocale(payload: MarketingLegalApiPayload, locale: "en" | "ar") {
-    const loc = locale === "ar" ? payload.ar : payload.en;
-    const mapped = mapLocaleToTermItems(loc);
-    const staticItems = locale === "ar" ? termsItemsAr : termsItemsEn;
-    const termsItems = mapped.length ? mapped : staticItems;
+    const groups = data.content.items ?? [];
+    const termsItems: ITermItem[] = groups.length
+        ? groups.map((group, idx) => {
+              const key =
+                  typeof group.categoryKey === "string" && group.categoryKey.trim()
+                      ? group.categoryKey.trim()
+                      : slugifyNav(
+                            typeof group.category === "string" ? group.category : "",
+                        ) || `cat-${idx + 1}`;
+              const title =
+                  typeof group.category === "string" && group.category.trim()
+                      ? group.category
+                      : key;
+              return {
+                  id: idx + 1,
+                  slug: key,
+                  title,
+                  higlights: (group.items ?? []).map((p) => ({
+                      title: p.question ?? "",
+                      descript: p.answer ?? "",
+                  })),
+                  icon: ICON_ROTATION[idx % ICON_ROTATION.length],
+              };
+          })
+        : staticItems;
 
-    const titles = loc?.titles;
+    const titles = data.content.hero?.titles;
     const heroTitles =
         Array.isArray(titles) && titles.filter((t) => t && String(t).trim()).length >= 2
             ? titles.map((t) => (typeof t === "string" ? t : ""))
             : null;
 
     const heroDescription =
-        typeof loc?.description === "string" && loc.description.trim()
-            ? loc.description
+        typeof data.content.hero?.description === "string" &&
+        data.content.hero.description.trim()
+            ? data.content.hero.description
             : null;
 
-    const alertRaw = locale === "ar" ? payload.alert?.ar : payload.alert?.en;
+    const alertRaw = data.content.alert;
     const alert =
         typeof alertRaw === "string" && alertRaw.trim() ? alertRaw.trim() : null;
 
+    const legalInquiries =
+        typeof data.content.legal_inquiries === "string"
+            ? data.content.legal_inquiries.trim()
+            : "";
+
     return {
+        termsPagePayload: data,
         termsItems,
         arguments: generateArguments(termsItems),
         heroTitles,
         heroDescription,
         alert,
+        heroUpdatedAt: data.content.hero?.updated_at ?? null,
+        legalInquiries,
     };
 }
 
 interface ITermsStore {
+    termsAudience: TermsAudience;
+    setTermsAudience: (audience: TermsAudience) => void;
     termsItems: ITermItem[];
     arguments: IArgument[];
-    cmsPayload: MarketingLegalApiPayload | null;
+    termsPagePayload: TermsPagePayload | null;
     cmsHydrated: boolean;
     heroTitles: string[] | null;
     heroDescription: string | null;
     alert: string | null;
+    heroUpdatedAt: string | null;
+    legalInquiries: string;
     setTermsItems: (items: ITermItem[]) => void;
-    getLocalizedTermsItems: (locale: string) => ITermItem[];
-    setLocalizedTermsItems: (locale: string) => void;
-    hydrateFromCms: () => Promise<void>;
+    hydrateFromCms: (lang: "en" | "ar", audience: TermsAudience) => Promise<void>;
 }
 
-const useTermsStore = create<ITermsStore>((set, get) => ({
+const useTermsStore = create<ITermsStore>((set) => ({
+    termsAudience: "all",
     termsItems: termsItemsEn,
     arguments: generateArguments(termsItemsEn),
-    cmsPayload: null,
+    termsPagePayload: null,
     cmsHydrated: false,
     heroTitles: null,
     heroDescription: null,
     alert: null,
+    heroUpdatedAt: null,
+    legalInquiries: "",
+
+    setTermsAudience: (audience) => set({ termsAudience: audience }),
 
     setTermsItems: (items) =>
         set({ termsItems: items, arguments: generateArguments(items) }),
 
-    getLocalizedTermsItems: (locale) => {
-        if (locale === "ar") return termsItemsAr;
-        return termsItemsEn;
-    },
-
-    setLocalizedTermsItems: (locale) => {
-        const lang: "en" | "ar" = locale === "ar" ? "ar" : "en";
-        const { cmsHydrated, cmsPayload } = get();
-        if (cmsHydrated && cmsPayload) {
-            set(applyLegalLocale(cmsPayload, lang));
-        } else {
-            const items = lang === "ar" ? termsItemsAr : termsItemsEn;
+    hydrateFromCms: async (lang, audience) => {
+        const id = ++hydrateRequestId;
+        try {
+            const payload = await fetchTermsPage(lang, audience);
+            if (id !== hydrateRequestId) return;
             set({
-                termsItems: items,
-                arguments: generateArguments(items),
-                heroTitles: null,
-                heroDescription: null,
-                alert: null,
+                cmsHydrated: true,
+                ...mapTermsPageToState(payload, lang),
+            });
+        } catch {
+            if (id !== hydrateRequestId) return;
+            set({
+                cmsHydrated: true,
+                ...mapTermsPageToState(null, lang),
             });
         }
-    },
-
-    hydrateFromCms: async () => {
-        if (get().cmsHydrated) return;
-        if (!hydrateInFlight) {
-            hydrateInFlight = (async () => {
-                try {
-                    const payload = await fetchMarketingTermsPublic();
-                    set({
-                        cmsHydrated: true,
-                        cmsPayload: payload,
-                    });
-                } finally {
-                    hydrateInFlight = null;
-                }
-            })();
-        }
-        await hydrateInFlight;
     },
 }));
 

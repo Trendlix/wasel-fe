@@ -6,17 +6,22 @@ import FaqsFooterBanner from "./faqs-footer-banner";
 import FaqsSection from "./faqs-section";
 import Hero from "./hero";
 import useContactEmailsStore from "@/shared/hooks/store/useContactEmailsStore";
-import useFaqsStore from "@/shared/hooks/store/pages/faqs/usefaqsStore";
+import useFaqsStore, { faqUiLang } from "@/shared/hooks/store/pages/faqs/usefaqsStore";
+import { useLocale } from "next-intl";
 import { useEffect } from "react";
 
 const FaqsClient = () => {
+    const locale = useLocale();
+    const lang = faqUiLang(locale);
+    const setLang = useFaqsStore((s) => s.setLang);
     const hydrateFromCms = useFaqsStore((s) => s.hydrateFromCms);
     const hydrateEmails = useContactEmailsStore((s) => s.hydrateEmails);
 
     useEffect(() => {
-        void hydrateFromCms();
+        setLang(lang);
+        void hydrateFromCms(lang);
         void hydrateEmails();
-    }, [hydrateFromCms, hydrateEmails]);
+    }, [lang, setLang, hydrateFromCms, hydrateEmails]);
 
     return (<div>
         <Navbar />

@@ -31,7 +31,7 @@ const TermsSection = () => {
     return (<section dir={dir} className={clsx(
         "container relative",
         "md:flex lg:[&>*:first-child]:flex-1 lg:[&>*:last-child]:flex-5 md:gap-7.75 md:[&>*:first-child]:flex-1 md:[&>*:last-child]:flex-3",
-        "space-y-7.75 md:space-y-0 mt-20 mb-24"
+        "space-y-7.75 md:space-y-0 my-4 mb-24"
     )}>
         <div ref={sidebarRef} className="opacity-0 md:sticky md:top-28 self-start">
             <TermsSidebar />

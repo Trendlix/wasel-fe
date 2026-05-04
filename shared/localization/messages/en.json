@@ -590,9 +590,18 @@
             "title": "Still have questions?",
             "description": "Can't find what you're looking for? Chat with our support team.",
             "btn": "Contact Support"
+        },
+        "sidebar": {
+            "categories": "Categories"
         }
     },
     "terms": {
+        "audience": {
+            "label": "View terms for",
+            "all": "Everyone",
+            "user": "Customers",
+            "driver": "Drivers"
+        },
         "hero": {
             "line1": "Terms",
             "line2": "&",

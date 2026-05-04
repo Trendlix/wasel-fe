@@ -15,6 +15,7 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     const t = useTranslations("terms");
     const heroTitles = useTermsStore((s) => s.heroTitles);
     const heroDescription = useTermsStore((s) => s.heroDescription);
+    const heroUpdatedAt = useTermsStore((s) => s.heroUpdatedAt);
     const dir = locale === "ar" ? "rtl" : "ltr";
     const isAr = locale === "ar";
 
@@ -62,7 +63,12 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
                 setHighlightWidthRef={setHighlightWidthRef}
                 setSubtitleRef={setSubtitleRef}
             />
-            <Badge t={t} setBadgeRef={setBadgeRef} />
+            <Badge
+                t={t}
+                setBadgeRef={setBadgeRef}
+                heroUpdatedAt={heroUpdatedAt}
+                locale={locale}
+            />
         </section>
     );
 };
@@ -86,7 +92,7 @@ const Heading = ({
 }) => {
     const cmsL1 = heroTitles?.[0]?.trim() ?? "";
     const cmsL2 = heroTitles?.[1]?.trim() ?? "";
-    const line3 = t("hero.line3");
+    // const line3 = t("hero.line3");
     const cmsSubtitle = heroDescription?.trim() ?? "";
 
     return (
@@ -95,10 +101,10 @@ const Heading = ({
                 ref={headingRef}
                 className={clsx(
                     "font-sans font-bold opacity-0",
-                    "text-[76.5px] leading-[81px] tracking-[0px]",
+                    "lg:text-[76.5px] text-[56px] lg:leading-[81px] leading-[60px] tracking-[0px]",
                     "text-center",
                     "flex items-center justify-center flex-wrap",
-                    isAr ? "gap-x-3 flex-row-reverse" : "gap-x-3 flex-row"
+                    isAr ? "gap-x-3 flex-row" : "gap-x-3 flex-row"
                 )}
             >
                 <span className="dark:text-white text-main-flatBlack">
@@ -113,21 +119,17 @@ const Heading = ({
                     )}
                 </span>
 
-                <span className="dark:text-white text-main-flatBlack">
-                    {cmsL2 ? (
-                        <RichTextHtml
-                            as="span"
-                            html={cmsL2}
-                            className="dark:text-white text-main-flatBlack [&_p]:inline [&_p]:mb-0"
-                        />
-                    ) : (
-                        t("hero.line2")
-                    )}
-                </span>
-
                 <span className="relative py-1 px-2">
                     <span className="relative z-10 text-white">
-                        {line3}
+                        {cmsL2 ? (
+                            <RichTextHtml
+                                as="span"
+                                html={cmsL2}
+                                className="dark:text-white text-main-flatBlack [&_p]:inline [&_p]:mb-0"
+                            />
+                        ) : (
+                            t("hero.line2")
+                        )}
                     </span>
                     <span
                         ref={setHighlightWidthRef}
@@ -165,11 +167,16 @@ const Heading = ({
 const Badge = ({
     t,
     setBadgeRef,
+    heroUpdatedAt,
+    locale,
 }: {
     t: ReturnType<typeof useTranslations<"terms">>;
     setBadgeRef: (el: HTMLDivElement | null) => void;
+    heroUpdatedAt: string | null;
+    locale: string;
 }) => {
-    const date = new Date().toLocaleDateString("en-US", {
+    const parsed = heroUpdatedAt ? new Date(heroUpdatedAt) : new Date();
+    const date = parsed.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
         month: "long",
         day: "numeric",
         year: "numeric",

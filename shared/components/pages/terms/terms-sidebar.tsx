@@ -15,6 +15,7 @@ const ArgumentsColors = [
 
 const TermsSidebar = () => {
     const argumentsList = useTermsStore((state) => state.arguments);
+    const legalInquiriesFromTerms = useTermsStore((state) => state.legalInquiries);
     const locale = useLocale();
     const isAr = locale === "ar";
     const t = useTranslations("terms.sidebar");
@@ -54,7 +55,7 @@ const TermsSidebar = () => {
             <Header title={t("contents")} />
             <div className={clsx(isAr ? "pr-4" : "pl-4", "space-y-8")}>
                 <ArgumentsList argumentsList={argumentsList} activeSlug={activeSlug} isAr={isAr} />
-                <ContactSupport t={t} isAr={isAr} />
+                <ContactSupport t={t} isAr={isAr} legalInquiriesFromTerms={legalInquiriesFromTerms} />
             </div>
         </aside>
     );
@@ -148,12 +149,15 @@ const LEGAL_EMAIL_FALLBACK = "legal@flanefleet.com";
 const ContactSupport = ({
     t,
     isAr,
+    legalInquiriesFromTerms,
 }: {
     t: ReturnType<typeof useTranslations<"terms.sidebar">>;
     isAr: boolean;
+    legalInquiriesFromTerms: string;
 }) => {
+    const legalFromContact = useContactEmailsStore((s) => s.emails.legal_inquiries)?.trim();
     const legalEmail =
-        useContactEmailsStore((s) => s.emails.legal_inquiries)?.trim() || LEGAL_EMAIL_FALLBACK;
+        legalInquiriesFromTerms?.trim() || legalFromContact || LEGAL_EMAIL_FALLBACK;
 
     return (
         <div className="space-y-4">

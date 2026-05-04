@@ -1,17 +1,31 @@
 "use client";
 import { RichTextHtml } from "@/shared/components/common/rich-text-html";
 import { IFaqItem } from "@/shared/constants/faq";
-import useFaqsStore from "@/shared/hooks/store/pages/faqs/usefaqsStore";
+import useFaqsStore, { faqUiLang } from "@/shared/hooks/store/pages/faqs/usefaqsStore";
+import { formatLegalClauseRef } from "@/shared/lib/ui-locale";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
 import { useLocale } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
-const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; onToggle: () => void }) => {
+const FaqItem = ({
+    item,
+    isOpen,
+    onToggle,
+    clauseRef,
+    isRtl,
+}: {
+    item: IFaqItem;
+    isOpen: boolean;
+    onToggle: () => void;
+    clauseRef: string;
+    isRtl: boolean;
+}) => {
     const answerRef = useRef<HTMLDivElement>(null);
     const dividerRef = useRef<HTMLDivElement>(null);
     const isFirstRender = useRef(true);
+    const dividerOrigin = isRtl ? "right center" : "left center";
 
     useEffect(() => {
         if (!answerRef.current) return;
@@ -30,8 +44,8 @@ const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; 
             if (dividerRef.current) {
                 gsap.fromTo(
                     dividerRef.current,
-                    { scaleX: 0, transformOrigin: "left center" },
-                    { scaleX: 1, duration: 0.35, ease: "power2.out", delay: 0.15 }
+                    { scaleX: 0, transformOrigin: dividerOrigin },
+                    { scaleX: 1, duration: 0.35, ease: "power2.out", delay: 0.15 },
                 );
             }
         } else {
@@ -39,7 +53,7 @@ const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; 
                 height: 0, opacity: 0, duration: 0.35, ease: "power2.in",
             });
         }
-    }, [isOpen]);
+    }, [isOpen, dividerOrigin]);
 
     return (
         <div
@@ -51,26 +65,34 @@ const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; 
             )}
         >
             <button
+                type="button"
                 onClick={onToggle}
                 className={clsx(
-                    "w-full flex items-center justify-between gap-4 px-6 py-5 text-left",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-main-secondary/60"
+                    "flex w-full items-center justify-between gap-4 px-6 py-5 text-start",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-main-secondary/60",
                 )}
             >
-                <RichTextHtml
-                    as="span"
-                    html={item.q}
-                    className={clsx(
-                        "text-base font-semibold leading-snug transition-colors duration-200 flex-1 min-w-0 text-start",
-                        isOpen
-                            ? "text-black dark:text-white"
-                            : "text-gray-600 dark:text-[#c8c8c8]"
-                    )}
-                />
+                <span className="flex min-w-0 flex-1 items-baseline gap-2 pe-2">
+                    <span
+                        dir="ltr"
+                        translate="no"
+                        className="shrink-0 tabular-nums text-xs font-semibold text-foreground/50 sm:text-sm"
+                    >
+                        {clauseRef}
+                    </span>
+                    <RichTextHtml
+                        as="span"
+                        html={item.q}
+                        className={clsx(
+                            "min-w-0 flex-1 text-start font-sans text-sm font-semibold leading-5 tracking-tight transition-colors duration-200 sm:text-base sm:leading-snug",
+                            isOpen ? "text-foreground" : "text-foreground/70",
+                        )}
+                    />
+                </span>
 
                 <span
                     className={clsx(
-                        "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xl font-light leading-none transition-colors duration-200",
+                        "size-8 shrink-0 flex items-center justify-center text-xl font-light leading-none transition-colors duration-200 rounded-full",
                         isOpen
                             ? "bg-main-secondary text-black"
                             : "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-main-lightBlack dark:text-[#aaaaaa] dark:hover:bg-[#3a3a3a]"
@@ -86,7 +108,7 @@ const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; 
                     ref={dividerRef}
                     className="mx-6 mb-3 w-8 h-[3px] rounded-full bg-main-secondary"
                 />
-                <div className="px-6 pb-6 text-sm leading-relaxed text-gray-600 dark:text-[#9a9a9a]">
+                <div className="px-6 pb-6 font-sans text-sm leading-5 text-foreground/60 dark:text-[#9a9a9a]">
                     <RichTextHtml html={item.aHtml?.trim() ? item.aHtml : item.a} />
                 </div>
             </div>
@@ -95,13 +117,13 @@ const FaqItem = ({ item, isOpen, onToggle }: { item: IFaqItem; isOpen: boolean; 
 };
 
 const FaqContent = () => {
-    const { category } = useFaqsStore();
+    const { category, categories } = useFaqsStore();
     const [openIndex, setOpenIndex] = useState<number | null>(0);
     const listRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
     const isFirstRender = useRef(true);
     const locale = useLocale();
-    const isAr = locale === "ar";
+    const isAr = faqUiLang(locale) === "ar";
 
     useGSAP(() => {
         if (!listRef.current || !titleRef.current) return;
@@ -140,21 +162,27 @@ const FaqContent = () => {
         setOpenIndex((prev) => (prev === index ? null : index));
     };
 
+    const sectionNum =
+        Math.max(
+            1,
+            categories.findIndex((c) => c.categoryKey === category.categoryKey) + 1,
+        );
+
     return (
-        <div className="mx-auto px-4">
+        <div className="min-w-0">
             <h1
                 ref={titleRef}
                 className={clsx(
-                    "w-fit font-bold text-[22px] leading-[33px] relative mb-6",
-                    "text-black dark:text-white",
-                    "before:content-[''] before:w-[4px] before:h-full before:bg-main-secondary before:absolute before:top-0 before:rounded-full",
+                    "relative mb-6 w-fit font-sans font-bold text-xl leading-7 tracking-[0px]",
+                    "text-foreground",
+                    "before:absolute before:top-0 before:h-full before:w-1 before:rounded-full before:bg-main-secondary before:content-['']",
                     isAr ? "before:right-[-15px]" : "before:left-[-15px]"
                 )}
             >
                 <RichTextHtml
                     as="span"
                     html={category.category}
-                    className="font-bold text-[22px] leading-[33px] text-black dark:text-white [&_p]:inline [&_p]:mb-0"
+                    className="font-sans font-bold text-xl leading-7 text-foreground [&_p]:mb-0 [&_p]:inline"
                 />
             </h1>
 
@@ -164,6 +192,8 @@ const FaqContent = () => {
                         key={`${category.categoryKey}-${index}`}
                         item={item}
                         isOpen={openIndex === index}
+                        clauseRef={formatLegalClauseRef(sectionNum, index + 1, locale)}
+                        isRtl={isAr}
                         onToggle={() => handleToggle(index)}
                     />
                 ))}

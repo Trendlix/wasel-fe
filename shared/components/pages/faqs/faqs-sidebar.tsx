@@ -1,11 +1,17 @@
 "use client";
 
-import useFaqsStore from "@/shared/hooks/store/pages/faqs/usefaqsStore";
+import useFaqsStore, { faqUiLang } from "@/shared/hooks/store/pages/faqs/usefaqsStore";
 import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
+import { Link } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
 import { useEffect } from "react";
+
+const argumentsColors = [
+    "bg-main-secondary",
+    "bg-main-primary",
+    "bg-main-red",
+];
 
 interface CategoryItem {
     categoryKey: string;
@@ -16,13 +22,12 @@ interface CategoryItem {
 interface ItemProps {
     item: CategoryItem;
     isActive: boolean;
+    color: string;
     onClick: () => void;
+    isRtl: boolean;
 }
 
-const Item = ({ item, isActive, onClick }: ItemProps) => {
-    const locale = useLocale();
-    const isAr = locale === "ar";
-
+const Item = ({ item, isActive, color, onClick, isRtl }: ItemProps) => {
     return (
         <button
             type="button"
@@ -30,31 +35,33 @@ const Item = ({ item, isActive, onClick }: ItemProps) => {
             aria-selected={isActive}
             aria-label={`${item.category} — ${item.length} questions`}
             className={clsx(
-                "w-full font-bold text-base leading-5",
-                "p-4 rounded-[14px]",
-                "flex items-center justify-between",
-                "cursor-pointer transition-colors duration-200",
-
-                isActive
-                    ? "bg-main-secondary text-main-flatBlack dark:text-main-flatBlack"
-                    : [
-                        "text-black dark:text-white",
-                        "hover:bg-main-secondary/30",
-                        "hover:text-main-flatBlack dark:hover:text-main-flatBlack"
-                    ]
+                "flex w-full items-start gap-1.5 py-1 text-start text-sm font-medium leading-4 tracking-tight transition-colors",
+                isActive ? "text-foreground" : "text-foreground/30 hover:text-foreground/50",
             )}
             onClick={onClick}
         >
-            <span>{item.category}</span>
+            <span
+                className={clsx(
+                    "mt-[3px] h-1.5 w-1.5 shrink-0 rounded-full transition-colors",
+                    color,
+                    !isActive && "opacity-50",
+                )}
+                aria-hidden
+            />
+            <span className="min-w-0 flex-1">{item.category}</span>
 
             {isActive ? (
                 <ChevronRight
-                    size={16}
-                    className={clsx("font-bold", isAr && "rotate-180")}
+                    size={14}
+                    className={clsx("mt-0.5 shrink-0", isRtl && "-scale-x-100")}
                     aria-hidden
                 />
             ) : (
-                <span className="text-sm opacity-70">
+                <span
+                    className={clsx(
+                        "shrink-0 text-xs font-medium tabular-nums leading-4 text-foreground/40",
+                    )}
+                >
                     {item.length}
                 </span>
             )}
@@ -62,28 +69,40 @@ const Item = ({ item, isActive, onClick }: ItemProps) => {
     );
 };
 
+const Header = ({ title }: { title: string }) => (
+    <h2 className="text-start text-sm font-medium uppercase leading-4 tracking-tight text-foreground/30">
+        {title}
+    </h2>
+);
+
+const SidebarCard = ({ children }: { children: React.ReactNode }) => (
+    <div
+        className={clsx(
+            "space-y-2.5 rounded-lg px-4 py-5 text-start",
+            "border border-main-whiteMarble bg-main-beautifulWhite transition-colors duration-200",
+            "dark:border-[#FFFFFF0D] dark:bg-[#111113]",
+        )}
+    >
+        {children}
+    </div>
+);
+
 const ContactSupportButton = () => {
     const t = useTranslations("faqs.contactCard");
 
     return (
-        <div
-            className={clsx(
-                "mt-4 rounded-3xl border p-6 flex flex-col gap-3",
-                "transition-colors duration-200",
-
-                "bg-[#f9f9f9] border-[#e5e5e5] text-black",
-                "dark:bg-white/5 dark:border-[#2a2a2a] dark:text-white"
-            )}
-        >
-            <h3 className="text-lg font-bold">
+        <SidebarCard>
+            <h3
+                className={clsx(
+                    "font-sans text-sm font-semibold leading-5 tracking-tight text-main-flatBlack dark:text-white",
+                )}
+            >
                 {t("title")}
             </h3>
 
             <p
                 className={clsx(
-                    "text-sm leading-relaxed",
-                    "text-[#666]",
-                    "dark:text-[#9a9a9a]"
+                    "font-sans text-xs font-normal leading-5 tracking-[0] text-main-flatBlack/60 dark:text-[#FFFFFF8C]",
                 )}
             >
                 {t("description")}
@@ -92,23 +111,22 @@ const ContactSupportButton = () => {
             <Link
                 href="/contact"
                 className={clsx(
-                    "mt-3 w-full rounded-full py-3.5 text-sm font-bold text-center block",
-                    "transition-all duration-200",
-
-                    "bg-[#ffb400] text-black",
-                    "hover:brightness-110 active:scale-[0.98]"
+                    "mt-1 inline-flex w-full items-center justify-center rounded-full py-2.5",
+                    "text-center font-sans text-xs font-medium leading-4 tracking-tight transition-all duration-200",
+                    "bg-main-secondary text-main-flatBlack hover:brightness-110 active:scale-[0.98]",
                 )}
             >
                 {t("btn")}
             </Link>
-        </div>
+        </SidebarCard>
     );
 };
 
 const FaqsSidebar = () => {
     const locale = useLocale();
-    const lang = locale as "en" | "ar";
-    const isAr = lang === "ar";
+    const lang = faqUiLang(locale);
+    const isRtl = lang === "ar";
+    const t = useTranslations("faqs.sidebar");
 
     const { activeCategoryKey, setActiveCategory, categories, setLang, cmsHydrated } = useFaqsStore();
 
@@ -124,23 +142,30 @@ const FaqsSidebar = () => {
 
     return (
         <aside
-            aria-label={isAr ? "فئات الأسئلة" : "FAQ categories"}
-            dir={isAr ? "rtl" : "ltr"}
+            className="space-y-8"
+            dir={isRtl ? "rtl" : "ltr"}
+            lang={locale}
+            aria-label={isRtl ? "فئات الأسئلة" : "FAQ categories"}
         >
-            <nav>
-                <ul className="flex flex-col gap-1 list-none p-0 m-0">
-                    {displayedCategories.map((category) => (
-                        <li key={category.categoryKey}>
-                            <Item
-                                item={category}
-                                isActive={category.categoryKey === activeCategoryKey}
-                                onClick={() => setActiveCategory(category.categoryKey, lang)}
-                            />
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-            <ContactSupportButton />
+            <Header title={t("categories")} />
+            <div className="space-y-8 ps-4">
+                <nav>
+                    <ul className="m-0 flex list-none flex-col gap-3 p-0">
+                        {displayedCategories.map((category, index) => (
+                            <li key={category.categoryKey}>
+                                <Item
+                                    item={category}
+                                    color={argumentsColors[index % argumentsColors.length]}
+                                    isActive={category.categoryKey === activeCategoryKey}
+                                    isRtl={isRtl}
+                                    onClick={() => setActiveCategory(category.categoryKey, lang)}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+                <ContactSupportButton />
+            </div>
         </aside>
     );
 };

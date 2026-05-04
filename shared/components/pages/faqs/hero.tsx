@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { RefObject, useRef } from "react";
 import gsap from "gsap";
 import { Search } from "lucide-react";
-import useFaqsStore from "@/shared/hooks/store/pages/faqs/usefaqsStore";
+import useFaqsStore, { faqUiLang } from "@/shared/hooks/store/pages/faqs/usefaqsStore";
 
 type HeroProps = { onLayoutReady?: () => void };
 
@@ -16,7 +16,7 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     const t = useTranslations("faqs");
     const heroTitles = useFaqsStore((s) => s.heroTitles);
     const heroDescription = useFaqsStore((s) => s.heroDescription);
-    const dir = locale === "ar" ? "rtl" : "ltr";
+    const dir = faqUiLang(locale) === "ar" ? "rtl" : "ltr";
     const headingRef = useRef<HTMLHeadingElement>(null);
     const headingXWidthRef = useRef<HTMLSpanElement | null>(null);
     const paragraphRef = useRef<HTMLDivElement | null>(null);
@@ -50,7 +50,7 @@ const Hero = ({ onLayoutReady }: HeroProps) => {
     }, { scope: headingRef });
 
     return (
-        <section className="container mt-36 gap-y-14 flex flex-col items-center justify-center" dir={dir}>
+        <section className="container mt-36 gap-y-8 flex flex-col items-center justify-center text-center" dir={dir}>
             <Heading
                 t={t}
                 dir={dir}
@@ -89,15 +89,17 @@ const Heading = ({
     const cmsSubtitle = cmsDescription?.trim() ?? "";
 
     return (
-        <div className="flex flex-col items-center justify-center gap-y-4" dir={dir}>
+        <div className="flex flex-col items-center justify-center gap-y-6" dir={dir}>
             <h1
-                className={clsx("text-white font-bold 2xl:text-5xl xl:text-4xl text-3xl",
-                    "flex  items-center justify-center", "opacity-0", "text-start",
+                className={clsx(
+                    "font-sans font-bold opacity-0",
+                    "lg:text-[76.5px] text-[56px] lg:leading-[81px] leading-[60px] tracking-[0px]",
+                    "flex items-center justify-center", "text-start",
                     dir === "rtl" ? "text-end flex-row" : "flex-col"
                 )}
                 ref={headingRef}
             >
-                <p className="flex gap-3 flex-wrap justify-center">
+                <p className="flex gap-3 flex-wrap justify-center *:mx-2">
                     {useCms ? (
                         <RichTextHtml
                             as="span"
@@ -139,12 +141,21 @@ const Heading = ({
             </h1>
             <div
                 ref={setParagraphRef}
-                className={clsx("lg:text-lg text-base leading-[21px] md:leading-[27px] text-center 2xl:max-w-[70%] opacity-0")}
+                className={clsx(
+                    "opacity-0 text-center font-sans font-normal",
+                    "text-[20px] leading-[27px] tracking-[0px]",
+                    "dark:text-white/60 text-main-flatBlack/60",
+                    "2xl:max-w-[60%] xl:max-w-[70%] max-w-[90%]"
+                )}
             >
                 {cmsSubtitle ? (
                     <RichTextHtml
                         html={cmsSubtitle}
-                        className="lg:text-lg text-base leading-[21px] md:leading-[27px] text-center text-inherit"
+                        className={clsx(
+                            "text-center font-sans font-normal",
+                            "text-[20px] leading-[27px] tracking-[0px]",
+                            "dark:text-white/60 text-main-flatBlack/60"
+                        )}
                     />
                 ) : (
                     t("hero.subtitle")
