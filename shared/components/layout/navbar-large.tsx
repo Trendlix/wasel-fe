@@ -9,6 +9,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 import { Link, usePathname, useRouter } from "@/i18n/routing";
+import { faqUiLang } from "@/shared/lib/ui-locale";
 import { useHeroMountReady } from "@/shared/components/pages/home/home-client";
 import { Button } from "../ui/button";
 import clsx from "clsx";
@@ -35,7 +36,7 @@ const NavbarLarge = ({ scrollTriggerRef, hideLanguageSwitcher }: { scrollTrigger
 
     const navRef = useRef<HTMLDivElement>(null);
     const locale = useLocale();
-    const dir = locale === "ar" ? "rtl" : "ltr";
+    const dir = faqUiLang(locale) === "ar" ? "rtl" : "ltr";
     const { colors, setColors, aboutScrolled, setAboutScrolled } = useNavbarStore();
     const { resolvedTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
@@ -112,13 +113,13 @@ const NavbarLarge = ({ scrollTriggerRef, hideLanguageSwitcher }: { scrollTrigger
     }, { scope: navRef, dependencies: [heroMountReady, scrollTriggerRef, isAboutPage] });
 
     return (
-        <div ref={navRef} className={clsx("fixed top-0 z-1000 w-full -translate-y-full", navbarBgClass)}>
+        <div ref={navRef} className={clsx("fixed top-0 z-1000 w-full -translate-y-full", navbarBgClass)} dir={dir}>
             <nav className="max-w-[90%] xl:max-w-[85%] mx-auto flex items-center justify-between py-4">
                 <div className="flex items-center xl:gap-6 2xl:gap-9 lg:gap-5 gap-3">
                     <Link href="/">
                         <Image src={logoSrc} alt="logo" width={100} height={100} className="max-w-[75px] max-h-[75px]" />
                     </Link>
-                    <div className="hidden md:flex items-center gap-6" dir={dir}>
+                    <div className="hidden md:flex items-center gap-6">
                         {navLinks.map(({ href, labelKey }) => {
                             const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
                             return (

@@ -10,6 +10,10 @@ import gsap from "gsap";
 
 type HeroProps = { onLayoutReady?: () => void };
 
+function stripHtmlToPlain(value: string): string {
+    return value.replace(/<[^>]*>/g, "").trim();
+}
+
 const Hero = ({ onLayoutReady }: HeroProps) => {
     const locale = useLocale();
     const t = useTranslations("terms");
@@ -90,9 +94,10 @@ const Heading = ({
     setHighlightWidthRef: (el: HTMLSpanElement | null) => void;
     setSubtitleRef: (el: HTMLDivElement | null) => void;
 }) => {
-    const cmsL1 = heroTitles?.[0]?.trim() ?? "";
-    const cmsL2 = heroTitles?.[1]?.trim() ?? "";
-    // const line3 = t("hero.line3");
+    const rawL1 = heroTitles?.[0]?.trim() ?? "";
+    const rawL2 = heroTitles?.[1]?.trim() ?? "";
+    const cmsL1 = stripHtmlToPlain(rawL1) ? rawL1 : "";
+    const cmsL2 = stripHtmlToPlain(rawL2) ? rawL2 : "";
     const cmsSubtitle = heroDescription?.trim() ?? "";
 
     return (
@@ -120,12 +125,12 @@ const Heading = ({
                 </span>
 
                 <span className="relative py-1 px-2">
-                    <span className="relative z-10 text-white">
+                    <span className="relative z-10 text-white [&_a]:!text-white [&_a]:underline">
                         {cmsL2 ? (
                             <RichTextHtml
                                 as="span"
                                 html={cmsL2}
-                                className="dark:text-white text-main-flatBlack [&_p]:inline [&_p]:mb-0"
+                                className="text-white [&_p]:inline [&_p]:mb-0 [&_a]:!text-white"
                             />
                         ) : (
                             t("hero.line2")

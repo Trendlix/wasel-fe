@@ -6,9 +6,12 @@ import Footer from "../../layout/footer";
 import Navbar from "../../layout/navbar";
 import Hero from "./hero";
 import PolicySection from "./policy-section";
+import { useLocale } from "next-intl";
 import { useEffect } from "react";
 
 const PolicyClient = () => {
+    const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const hydrateFromCms = usePolicyStore((s) => s.hydrateFromCms);
     const hydrateEmails = useContactEmailsStore((s) => s.hydrateEmails);
 
@@ -17,7 +20,7 @@ const PolicyClient = () => {
         void hydrateEmails();
     }, [hydrateFromCms, hydrateEmails]);
 
-    return (<div className="bg-white dark:bg-main-codGray">
+    return (<div className="bg-white dark:bg-main-codGray" dir={dir}>
         <Navbar />
         <Hero />
         <PolicySection />

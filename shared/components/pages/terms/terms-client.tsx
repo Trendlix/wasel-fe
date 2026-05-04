@@ -6,7 +6,7 @@ import useTermsStore from "@/shared/hooks/store/pages/terms/useTermsStore";
 import Footer from "../../layout/footer";
 import Navbar from "../../layout/navbar";
 import Hero from "./hero";
-import TermsAudienceFilter from "./terms-audience-filter";
+// import TermsAudienceFilter from "./terms-audience-filter";
 import TermsSection from "./terms-section";
 import gsap from "gsap";
 import { useLocale } from "next-intl";
@@ -16,14 +16,14 @@ const TermsClient = () => {
     const belowHeroRef = useRef<HTMLDivElement>(null);
     const locale = useLocale();
     const lang = locale === "ar" ? "ar" : "en";
-    const audience = useTermsStore((s) => s.termsAudience);
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const hydrateFromCms = useTermsStore((s) => s.hydrateFromCms);
     const hydrateEmails = useContactEmailsStore((s) => s.hydrateEmails);
 
     useEffect(() => {
-        void hydrateFromCms(lang, audience);
+        void hydrateFromCms(lang, "all");
         void hydrateEmails();
-    }, [lang, audience, hydrateFromCms, hydrateEmails]);
+    }, [lang, hydrateFromCms, hydrateEmails]);
 
     useGSAP(
         () => {
@@ -38,15 +38,15 @@ const TermsClient = () => {
                 ease: "back.out(1.45)",
             });
         },
-        { dependencies: [lang, audience] },
+        { dependencies: [lang] },
     );
 
     return (
-        <div className="bg-white dark:bg-main-codGray">
+        <div className="bg-white dark:bg-main-codGray" dir={dir}>
             <Navbar />
             <Hero />
             <div ref={belowHeroRef} className="opacity-0">
-                <TermsAudienceFilter />
+                {/* <TermsAudienceFilter /> */}
                 <TermsSection />
             </div>
             <Footer className="bg-white dark:bg-main-codGray" />

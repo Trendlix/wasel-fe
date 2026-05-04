@@ -603,8 +603,8 @@
             "driver": "Drivers"
         },
         "hero": {
-            "line1": "Terms",
-            "line2": "&",
+            "line1": "Terms &",
+            "line2": "Conditions",
             "line3": "Conditions",
             "subtitle": "Everything you need to know about Wasel Fleet. Can't find the answer you're looking for? Reach out to our support team.",
             "lastUpdate": "Last Updated"

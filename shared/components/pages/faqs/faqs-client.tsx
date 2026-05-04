@@ -12,6 +12,7 @@ import { useEffect } from "react";
 
 const FaqsClient = () => {
     const locale = useLocale();
+    const dir = locale === "ar" ? "rtl" : "ltr";
     const lang = faqUiLang(locale);
     const setLang = useFaqsStore((s) => s.setLang);
     const hydrateFromCms = useFaqsStore((s) => s.hydrateFromCms);
@@ -23,13 +24,15 @@ const FaqsClient = () => {
         void hydrateEmails();
     }, [lang, setLang, hydrateFromCms, hydrateEmails]);
 
-    return (<div>
+    return (
+        <div className="bg-white dark:bg-main-codGray" dir={dir}>
         <Navbar />
         <Hero />
         <FaqsSection />
         <FaqsFooterBanner />
         <Footer className="bg-white dark:bg-main-codGray" />
-    </div>)
+    </div>
+    );
 }
 
 export default FaqsClient;

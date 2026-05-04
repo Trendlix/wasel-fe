@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import ThemeSwitcher from "../common/layout/theme-switcher";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocale } from "next-intl";
+import { faqUiLang } from "@/shared/lib/ui-locale";
 import useNavbarStore from "@/shared/hooks/store/layout/useNavbr";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -27,7 +28,7 @@ const NavbarSmall = ({ scrollTriggerRef, hideLanguageSwitcher }: { scrollTrigger
     const menuPanelRef = useRef<HTMLDivElement>(null);
     const heroMountReady = useHeroMountReady();
     const locale = useLocale();
-    const dir = locale === "ar" ? "rtl" : "ltr";
+    const dir = faqUiLang(locale) === "ar" ? "rtl" : "ltr";
     const isRtl = dir === "rtl";
     const t = useTranslations("nav");
     const pathname = usePathname();
@@ -158,6 +159,7 @@ const NavbarSmall = ({ scrollTriggerRef, hideLanguageSwitcher }: { scrollTrigger
             </div>
             {mounted && createPortal(
                 <div
+                    dir={dir}
                     className={clsx(
                         "fixed inset-0 top-[72px] z-1500 flex",
                         "transition-opacity duration-300",
@@ -178,7 +180,7 @@ const NavbarSmall = ({ scrollTriggerRef, hideLanguageSwitcher }: { scrollTrigger
 
 const NavbarSmallMenu = ({ onLinkClick, hideLanguageSwitcher }: { onLinkClick?: () => void; hideLanguageSwitcher?: boolean }) => {
     const locale = useLocale();
-    const isRtl = locale === "ar";
+    const isRtl = faqUiLang(locale) === "ar";
     const dir = isRtl ? "rtl" : "ltr";
     const pathname = usePathname();
     const isHomePage = pathname === "/" || pathname?.endsWith("/");

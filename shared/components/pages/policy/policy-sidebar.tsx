@@ -3,6 +3,8 @@
 import useContactEmailsStore from "@/shared/hooks/store/useContactEmailsStore";
 import usePolicyStore from "@/shared/hooks/store/pages/policy/usePolicyStore";
 import clsx from "clsx";
+import { getElementDocumentY } from "@/shared/lib/dom-scroll";
+import { faqUiLang } from "@/shared/lib/ui-locale";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -18,7 +20,7 @@ const LEGAL_EMAIL_FALLBACK = "legal@flanefleet.com";
 const PolicySidebar = () => {
     const argumentsList = usePolicyStore((state) => state.arguments);
     const locale = useLocale();
-    const isAr = locale === "ar";
+    const isAr = faqUiLang(locale) === "ar";
     const t = useTranslations("terms.sidebar");
 
     const [activeSlug, setActiveSlug] = useState<string>("");
@@ -29,7 +31,7 @@ const PolicySidebar = () => {
             argumentsList.forEach((arg) => {
                 const el = document.getElementById(arg.slug);
                 if (el) {
-                    const elTop = el.offsetTop;
+                    const elTop = getElementDocumentY(el);
                     const scrollPosition = window.scrollY + 200;
                     if (scrollPosition >= elTop) current = arg.slug;
                 }

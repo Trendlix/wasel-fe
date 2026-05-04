@@ -1,5 +1,12 @@
 import localFont from "next/font/local";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Alexandria, Plus_Jakarta_Sans } from "next/font/google";
+
+/** Arabic UI: [Alexandria](https://fonts.google.com/specimen/Alexandria) — scoped via `locale-ar` in `[locale]/layout`. */
+export const alexandria = Alexandria({
+  subsets: ["arabic", "latin"],
+  variable: "--font-alexandria",
+  display: "swap",
+});
 
 export const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],

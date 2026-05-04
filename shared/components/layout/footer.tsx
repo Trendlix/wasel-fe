@@ -11,8 +11,10 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 
 import { footerLinks } from "@/shared/constants/footer-links";
 import { AppStoreButton, GooglePlayButton } from "../common";
-import { FacebookIcon, Globe, Linkedin } from "lucide-react";
 import { useTheme } from "next-themes";
+import useFooterCmsStore, { getFooterSocialDisplayList } from "@/shared/hooks/store/useFooterCmsStore";
+import { resolveFooterLucideIcon } from "@/shared/lib/footer-lucide-icons";
+import type { FooterSocialLink } from "@/shared/lib/footer-public-api";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,6 +25,11 @@ const Footer = ({ heroLayoutReady = false, className }: FooterProps) => {
     const dir = locale === "ar" ? "rtl" : "ltr";
     const scopeRef = useRef<HTMLDivElement>(null);
     const elementsRefs = useRef<Array<HTMLDivElement | null>>([]);
+    const hydrateFooter = useFooterCmsStore((s) => s.hydrateFooter);
+
+    useEffect(() => {
+        void hydrateFooter();
+    }, [hydrateFooter]);
 
     useGSAP(() => {
         if (!heroLayoutReady || !scopeRef.current || !elementsRefs.current[0] || !elementsRefs.current[1] || !elementsRefs.current[2]) return;
@@ -102,6 +109,8 @@ const Logo = () => {
 
 const Links = ({ dir }: { dir: string }) => {
     const t = useTranslations("footer");
+    const iosHref = useFooterCmsStore((s) => s.data.app_links.ios_app_cta);
+    const androidHref = useFooterCmsStore((s) => s.data.app_links.android_app_cta);
     return (
         <div className="flex items-start justify-between flex-wrap gap-x-12 gap-y-8 capitalize" dir={dir}>
             {footerLinks.map((section) => (
@@ -125,22 +134,46 @@ const Links = ({ dir }: { dir: string }) => {
             <div className="space-y-3.5">
                 <p className={clsx("font-medium text-xs leading-5 dark:text-main-secondary text-main-ukraineBlue")}>{t("shipYourCargo")}</p>
                 <div className="flex items-center justify-between gap-x-3">
-                    <AppStoreButton />
-                    <GooglePlayButton />
+                    <AppStoreButton href={iosHref.trim() || "#"} />
+                    <GooglePlayButton href={androidHref.trim() || "#"} />
                 </div>
             </div>
         </div>
     );
 };
 
-const socialLinks = [
-    { href: "#", icon: FacebookIcon, label: "Facebook" },
-    { href: "#", icon: Globe, label: "Website" },
-    { href: "#", icon: Linkedin, label: "LinkedIn" },
-] as const;
+function SocialFooterIcon({ item }: { item: FooterSocialLink }) {
+    const Icon = resolveFooterLucideIcon(item.icon);
+    const href = item.link?.trim() || "#";
+    const isExternal = /^https?:\/\//i.test(href) || href.startsWith("mailto:");
+    const openInNewTab = isExternal && href !== "#";
+    const label = item.icon;
+    const className = "rounded p-1.5 transition-opacity hover:opacity-80";
+
+    if (isExternal) {
+        return (
+            <a
+                href={href}
+                aria-label={label}
+                className={className}
+                {...(openInNewTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            >
+                <Icon className="size-4" />
+            </a>
+        );
+    }
+
+    return (
+        <Link href={href} aria-label={label} className={className}>
+            <Icon className="size-4" />
+        </Link>
+    );
+}
 
 const Copyright = ({ dir }: { dir: string }) => {
     const t = useTranslations("footer");
+    const footerData = useFooterCmsStore((s) => s.data);
+    const socialRows = getFooterSocialDisplayList(footerData);
     return (
         <div className="border-t border-main-darkGrey pt-4 text-[11px] text-main-darkGrey" dir={dir}>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -158,15 +191,8 @@ const Copyright = ({ dir }: { dir: string }) => {
                         </Link>
                     </div>
                     <div className="flex items-center gap-2">
-                        {socialLinks.map(({ href, icon: Icon, label }) => (
-                            <Link
-                                key={label}
-                                href={href}
-                                aria-label={label}
-                                className="rounded p-1.5 transition-opacity hover:opacity-80"
-                            >
-                                <Icon className="size-4" />
-                            </Link>
+                        {socialRows.map((item, index) => (
+                            <SocialFooterIcon key={`${item.icon}-${index}`} item={item} />
                         ))}
                     </div>
                 </div>

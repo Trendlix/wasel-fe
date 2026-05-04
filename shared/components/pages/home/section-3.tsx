@@ -199,8 +199,8 @@ const Card1 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
                 </div>
                 <Image src="/brand/pages/home/section3/manage.png" alt="truck" width={3072} height={1260} className="w-full h-auto mt-auto" />
             </div>
-            <div className="absolute -top-[22%] -left-[12%] h-fit max-md:hidden">
-                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] rotate-90" />
+            <div className={clsx("absolute flex items-end justify-start max-md:hidden", dir === "rtl" ? "right-[-12%] -bottom-[20%] " : "-left-[15%] -bottom-[25%] ")} id="link">
+                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className={clsx("max-w-[15%] max-h-[15%]", dir === "rtl" ? "scale-x-[-1]" : "scale-x-[1]")} />
             </div>
         </div>
     );
@@ -222,8 +222,8 @@ const Card2 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
                 </div>
                 <Image src="/brand/pages/home/section3/instant.png" alt="truck" width={3072} height={1260} className="w-full h-auto mt-auto" />
             </div>
-            <div className="absolute -top-[15%] -right-[13%] h-fit max-md:hidden flex justify-end">
-                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[15%] max-h-[15%] rotate-180" />
+            <div className={clsx("absolute flex items-end justify-end max-md:hidden", dir === "rtl" ? "-left-[13%] -top-[15%] " : "-right-[13%] -top-[15%] ")} id="link">
+                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className={clsx("max-w-[15%] max-h-[15%]", dir === "rtl" ? "scale-x-[1] rotate-90" : "scale-x-[1] rotate-180")} />
             </div>
         </div>
     );
@@ -247,8 +247,8 @@ const Card3 = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & 
                     <Image src="/brand/pages/home/section3/easy.png" alt="truck" width={3072} height={1260} className="w-[80%] max-w-[380px] max-h-[306px] mt-auto" />
                 </div>
             </div>
-            <div className="absolute -bottom-[18%] -left-[15%] h-fit max-md:hidden">
-                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className="max-w-[18%] max-h-[18%] " />
+            <div className={clsx("absolute flex items-end justify-start max-md:hidden", dir === "rtl" ? "right-[-15%] -bottom-[18%] " : "-left-[15%] -bottom-[20%] ")} id="link">
+                <Image src="/brand/pages/home/section2/link.png" alt="truck" width={1000} height={1000} className={clsx("max-w-[18%] max-h-[18%]", dir === "rtl" ? "scale-x-[-1]" : "scale-x-[1]")} />
             </div>
         </div>
     );

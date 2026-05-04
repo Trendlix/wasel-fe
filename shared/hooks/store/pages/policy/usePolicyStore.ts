@@ -3,6 +3,8 @@ import {
     termsItemsAr,
     termsItems as termsItemsEn,
 } from "@/shared/constants/terms";
+import { legalSectionAnchorId } from "@/shared/lib/legal-section-anchor";
+import { faqUiLang } from "@/shared/lib/ui-locale";
 import type { MarketingFaqApiLocale } from "@/shared/lib/marketing-faq-api";
 import {
     fetchMarketingPrivacyPublic,
@@ -38,7 +40,7 @@ interface IArgument {
 function generateArguments(items: ITermItem[]): IArgument[] {
     return items.map((item) => ({
         title: item.title,
-        slug: item.title.toLocaleLowerCase().replace(/\s+/g, "-"),
+        slug: legalSectionAnchorId(item),
     }));
 }
 
@@ -46,14 +48,19 @@ function mapLocaleToTermItems(loc: MarketingFaqApiLocale | undefined): ITermItem
     const groups = loc?.items ?? [];
     if (!groups.length) return [];
     return groups.map((group, idx) => {
+        const key =
+            typeof group.categoryKey === "string" && group.categoryKey.trim()
+                ? group.categoryKey.trim()
+                : `cat-${idx + 1}`;
         const title =
             (typeof group.category === "string" && group.category.trim()
                 ? group.category
                 : "") ||
             (typeof group.label === "string" && group.label.trim() ? group.label : "") ||
-            (typeof group.categoryKey === "string" ? group.categoryKey : "");
+            key;
         return {
             id: idx + 1,
+            slug: key,
             title,
             higlights: (group.items ?? group.points ?? []).map((p) => ({
                 title: p.question ?? "",
@@ -121,12 +128,12 @@ const usePolicyStore = create<IPolicyStore>((set, get) => ({
         set({ termsItems: items, arguments: generateArguments(items) }),
 
     getLocalizedTermsItems: (locale) => {
-        if (locale === "ar") return termsItemsAr;
+        if (faqUiLang(locale) === "ar") return termsItemsAr;
         return termsItemsEn;
     },
 
     setLocalizedTermsItems: (locale) => {
-        const lang: "en" | "ar" = locale === "ar" ? "ar" : "en";
+        const lang: "en" | "ar" = faqUiLang(locale) === "ar" ? "ar" : "en";
         const { cmsHydrated, cmsPayload } = get();
         if (cmsHydrated && cmsPayload) {
             set(applyLegalLocale(cmsPayload, lang));

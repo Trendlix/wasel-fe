@@ -156,7 +156,10 @@ const FaqsSidebar = () => {
                                 <Item
                                     item={category}
                                     color={argumentsColors[index % argumentsColors.length]}
-                                    isActive={category.categoryKey === activeCategoryKey}
+                                    isActive={
+                                        category.categoryKey.trim() ===
+                                        activeCategoryKey.trim()
+                                    }
                                     isRtl={isRtl}
                                     onClick={() => setActiveCategory(category.categoryKey, lang)}
                                 />

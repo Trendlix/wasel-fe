@@ -60,8 +60,8 @@ const FaqItem = ({
             className={clsx(
                 "rounded-2xl overflow-hidden border transition-colors duration-200",
                 isOpen
-                    ? "border-gray-300 bg-gray-100 dark:border-[#50505061] dark:bg-main-blackOut/70"
-                    : "border-gray-200 bg-white dark:border-[#2a2a2a] dark:bg-main-blackOut"
+                    ? "border-main-whiteMarble bg-main-beautifulWhite dark:border-main-darkGrey dark:bg-main-blackOut/80"
+                    : "border-main-whiteMarble bg-white dark:border-main-darkGrey dark:bg-main-blackOut"
             )}
         >
             <button
@@ -76,7 +76,7 @@ const FaqItem = ({
                     <span
                         dir="ltr"
                         translate="no"
-                        className="shrink-0 tabular-nums text-xs font-semibold text-foreground/50 sm:text-sm"
+                        className="shrink-0 tabular-nums text-xs font-semibold text-main-carbonBlue/70 dark:text-main-secondary/90 sm:text-sm"
                     >
                         {clauseRef}
                     </span>
@@ -85,7 +85,9 @@ const FaqItem = ({
                         html={item.q}
                         className={clsx(
                             "min-w-0 flex-1 text-start font-sans text-sm font-semibold leading-5 tracking-tight transition-colors duration-200 sm:text-base sm:leading-snug",
-                            isOpen ? "text-foreground" : "text-foreground/70",
+                            isOpen
+                                ? "text-main-flatBlack dark:text-white"
+                                : "text-main-carbonBlue dark:text-main-secondary",
                         )}
                     />
                 </span>
@@ -95,7 +97,7 @@ const FaqItem = ({
                         "size-8 shrink-0 flex items-center justify-center text-xl font-light leading-none transition-colors duration-200 rounded-full",
                         isOpen
                             ? "bg-main-secondary text-black"
-                            : "bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-main-lightBlack dark:text-[#aaaaaa] dark:hover:bg-[#3a3a3a]"
+                            : "bg-main-beautifulWhite text-main-carbonBlue hover:bg-main-whiteMarble dark:bg-main-lightBlack dark:text-main-secondary dark:hover:bg-main-darkGrey/80"
                     )}
                     aria-hidden
                 >
@@ -108,7 +110,7 @@ const FaqItem = ({
                     ref={dividerRef}
                     className="mx-6 mb-3 w-8 h-[3px] rounded-full bg-main-secondary"
                 />
-                <div className="px-6 pb-6 font-sans text-sm leading-5 text-foreground/60 dark:text-[#9a9a9a]">
+                <div className="px-6 pb-6 font-sans text-sm leading-5 text-main-carbonBlue/85 dark:text-white/75">
                     <RichTextHtml html={item.aHtml?.trim() ? item.aHtml : item.a} />
                 </div>
             </div>
@@ -174,7 +176,7 @@ const FaqContent = () => {
                 ref={titleRef}
                 className={clsx(
                     "relative mb-6 w-fit font-sans font-bold text-xl leading-7 tracking-[0px]",
-                    "text-foreground",
+                    "text-main-flatBlack dark:text-white",
                     "before:absolute before:top-0 before:h-full before:w-1 before:rounded-full before:bg-main-secondary before:content-['']",
                     isAr ? "before:right-[-15px]" : "before:left-[-15px]"
                 )}
@@ -182,7 +184,7 @@ const FaqContent = () => {
                 <RichTextHtml
                     as="span"
                     html={category.category}
-                    className="font-sans font-bold text-xl leading-7 text-foreground [&_p]:mb-0 [&_p]:inline"
+                    className="font-sans font-bold text-xl leading-7 text-main-flatBlack dark:text-white [&_p]:mb-0 [&_p]:inline"
                 />
             </h1>
 

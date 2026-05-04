@@ -4,6 +4,7 @@ import { RichTextHtml } from "@/shared/components/common/rich-text-html";
 import usePolicyStore from "@/shared/hooks/store/pages/policy/usePolicyStore";
 import clsx from "clsx";
 import { AlertTriangleIcon } from "lucide-react";
+import { legalSectionAnchorId } from "@/shared/lib/legal-section-anchor";
 import { faqUiLang, formatLegalClauseRef } from "@/shared/lib/ui-locale";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
@@ -44,14 +45,14 @@ const PolicyContent = () => {
                 </div>
                 <div className={clsx("text-sm leading-5", isAr ? "text-right" : "text-left")}>
                     {alertCms ? (
-                        <RichTextHtml html={alertCms} className="text-foreground/90" />
+                        <RichTextHtml html={alertCms} className="text-main-carbonBlue dark:text-main-secondary [&_a]:text-main-secondary" />
                     ) : (
                         <>
-                            <span className="capitalize text-foreground font-bold">
+                            <span className="capitalize font-bold text-main-flatBlack dark:text-white">
                                 {t("title")}
                             </span>
                             {": "}
-                            <span className="text-foreground/70">
+                            <span className="text-main-carbonBlue dark:text-main-secondary/90">
                                 {t("descript")}
                             </span>
                         </>
@@ -62,7 +63,7 @@ const PolicyContent = () => {
             <div className="space-y-12">
                 {termsItems.map((item, index) => {
                     const { iconBg, iconText, bar } = ArgumentsColors[index % ArgumentsColors.length];
-                    const slug = item.title.toLocaleLowerCase().replace(/\s+/g, "-");
+                    const slug = legalSectionAnchorId(item);
 
                     return (
                         <section key={item.id} id={slug} className="space-y-4">
@@ -74,11 +75,11 @@ const PolicyContent = () => {
                                     <item.icon size={18} className={iconText} />
                                 </div>
                                 <div className={isAr ? "text-right" : "text-left"}>
-                                    <h3 className="text-xl font-bold text-foreground">
+                                    <h3 className="text-xl font-bold text-main-flatBlack dark:text-white">
                                         <RichTextHtml
                                             as="span"
                                             html={item.title}
-                                            className="text-xl font-bold text-foreground [&_p]:inline [&_p]:mb-0"
+                                            className="text-xl font-bold text-main-flatBlack dark:text-white [&_p]:inline [&_p]:mb-0"
                                         />
                                     </h3>
                                     <div className={clsx(
@@ -92,23 +93,23 @@ const PolicyContent = () => {
                             <ul className="space-y-4 ps-12">
                                 {item.higlights.map((hl, idx) => (
                                     <li key={idx} className="text-sm text-start">
-                                        <div className="flex flex-row items-baseline gap-2 font-semibold text-foreground/80">
+                                        <div className="flex flex-row items-baseline gap-2 font-semibold text-main-carbonBlue dark:text-main-secondary">
                                             <span
                                                 dir="ltr"
                                                 translate="no"
-                                                className="shrink-0 tabular-nums text-foreground/55"
+                                                className="shrink-0 tabular-nums text-main-carbonBlue/75 dark:text-main-secondary/85"
                                             >
                                                 {formatLegalClauseRef(item.id, idx + 1, locale)}
                                             </span>
                                             <RichTextHtml
                                                 as="span"
                                                 html={hl.title}
-                                                className="min-w-0 flex-1 font-semibold text-foreground/80 [&_p]:mb-0 [&_p]:inline"
+                                                className="min-w-0 flex-1 font-semibold text-main-carbonBlue dark:text-main-secondary [&_p]:mb-0 [&_p]:inline"
                                             />
                                         </div>
                                         <RichTextHtml
                                             html={hl.descript}
-                                            className="mt-0.5 leading-relaxed text-foreground/50"
+                                            className="mt-0.5 leading-relaxed text-main-carbonBlue/80 dark:text-white/70"
                                         />
                                     </li>
                                 ))}

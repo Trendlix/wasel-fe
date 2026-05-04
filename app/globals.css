@@ -205,6 +205,20 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
+/* Arabic (`/ar/*`): Alexandria — `alexandria.variable` on `.locale-ar` defines --font-alexandria */
+.locale-ar {
+  --font-sans: var(--font-alexandria), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-alexandria), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Tailwind maps `font-sans` to `var(--font-roc-main)` (see @theme --font-sans), not var(--font-sans),
+ * so overriding --font-sans alone does not change `className="font-sans"` text.
+ */
+.locale-ar .font-sans {
+  font-family: var(--font-alexandria), ui-sans-serif, system-ui, sans-serif;
+}
+
 @layer base {
 
   *,

@@ -8,6 +8,7 @@ import {
     type TermsAudience,
     type TermsPagePayload,
 } from "@/shared/lib/marketing-terms-api";
+import { legalSectionAnchorId, stripHtmlForAnchor } from "@/shared/lib/legal-section-anchor";
 import { create } from "zustand";
 import {
     AlertTriangle,
@@ -35,24 +36,10 @@ interface IArgument {
     slug: string;
 }
 
-function stripHtmlToPlain(value: string): string {
-    return value.replace(/<[^>]*>/g, "").trim();
-}
-
-function slugifyNav(value: string): string {
-    return stripHtmlToPlain(value)
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "");
-}
-
 function generateArguments(items: ITermItem[]): IArgument[] {
     return items.map((item) => ({
         title: item.title,
-        slug:
-            (item.slug && item.slug.trim()) ||
-            slugifyNav(item.title) ||
-            `section-${item.id}`,
+        slug: legalSectionAnchorId(item),
     }));
 }
 
@@ -78,9 +65,7 @@ function mapTermsPageToState(data: TermsPagePayload | null, staticLocale: "en" |
               const key =
                   typeof group.categoryKey === "string" && group.categoryKey.trim()
                       ? group.categoryKey.trim()
-                      : slugifyNav(
-                            typeof group.category === "string" ? group.category : "",
-                        ) || `cat-${idx + 1}`;
+                      : `cat-${idx + 1}`;
               const title =
                   typeof group.category === "string" && group.category.trim()
                       ? group.category
@@ -99,10 +84,15 @@ function mapTermsPageToState(data: TermsPagePayload | null, staticLocale: "en" |
         : staticItems;
 
     const titles = data.content.hero?.titles;
+    const rawSlots = Array.isArray(titles)
+        ? titles.map((t) => (typeof t === "string" ? t : ""))
+        : [];
+    const slot0 = rawSlots[0] ?? "";
+    const slot1 = rawSlots[1] ?? "";
+    const hasPlain0 = stripHtmlForAnchor(slot0).length > 0;
+    const hasPlain1 = stripHtmlForAnchor(slot1).length > 0;
     const heroTitles =
-        Array.isArray(titles) && titles.filter((t) => t && String(t).trim()).length >= 2
-            ? titles.map((t) => (typeof t === "string" ? t : ""))
-            : null;
+        hasPlain0 || hasPlain1 ? [slot0, slot1] : null;
 
     const heroDescription =
         typeof data.content.hero?.description === "string" &&
