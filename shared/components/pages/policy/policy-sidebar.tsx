@@ -4,6 +4,7 @@ import useContactEmailsStore from "@/shared/hooks/store/useContactEmailsStore";
 import usePolicyStore from "@/shared/hooks/store/pages/policy/usePolicyStore";
 import clsx from "clsx";
 import { getElementDocumentY } from "@/shared/lib/dom-scroll";
+import { stripHtmlForAnchor } from "@/shared/lib/legal-section-anchor";
 import { faqUiLang } from "@/shared/lib/ui-locale";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
@@ -66,7 +67,7 @@ const PolicySidebar = () => {
 
 const Header = ({ title }: { title: string }) => {
     return (
-        <h2 className="text-sm font-medium leading-4 tracking-tight text-foreground/30 uppercase">
+        <h2 className="text-sm font-medium leading-4 tracking-tight text-main-carbonBlue/50 dark:text-white/40 uppercase">
             {title}
         </h2>
     );
@@ -117,12 +118,14 @@ const ArgumentItem = ({
                 clsx(
                     "text-sm font-medium leading-4 tracking-tight flex items-start gap-1.5 transition-colors",
                     isAr ? "flex-row-reverse text-right" : "flex-row text-left",
-                    isActive ? "text-foreground" : "text-foreground/30"
+                    isActive
+                        ? "text-main-flatBlack dark:text-white"
+                        : "text-main-carbonBlue/55 dark:text-white/35 hover:text-main-flatBlack/80 dark:hover:text-white/60",
                 )
             }
         >
             <span className={clsx("mt-[3px] w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors", color)} />
-            <span>{title}</span>
+            <span className="min-w-0 break-words">{stripHtmlForAnchor(title)}</span>
         </a >
     );
 };
