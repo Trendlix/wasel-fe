@@ -332,7 +332,8 @@ html.scroll-locked body::-webkit-scrollbar {
 ─────────────────────────────────────────────────────────────────────────── */
 .blog-content {
   color: #171717;
-  font-size: 1.0625rem;   /* ~17px */
+  font-size: 1.0625rem;
+  /* ~17px */
   line-height: 1.8;
   word-break: break-word;
 }
@@ -364,12 +365,29 @@ html.scroll-locked body::-webkit-scrollbar {
   color: #f5f5f5;
 }
 
-.blog-content h1 { font-size: 2rem; }
-.blog-content h2 { font-size: 1.6rem; }
-.blog-content h3 { font-size: 1.35rem; }
-.blog-content h4 { font-size: 1.15rem; }
-.blog-content h5 { font-size: 1rem; }
-.blog-content h6 { font-size: 0.9rem; }
+.blog-content h1 {
+  font-size: 2rem;
+}
+
+.blog-content h2 {
+  font-size: 1.6rem;
+}
+
+.blog-content h3 {
+  font-size: 1.35rem;
+}
+
+.blog-content h4 {
+  font-size: 1.15rem;
+}
+
+.blog-content h5 {
+  font-size: 1rem;
+}
+
+.blog-content h6 {
+  font-size: 0.9rem;
+}
 
 /* Paragraphs */
 .blog-content p {
@@ -426,8 +444,8 @@ html.scroll-locked body::-webkit-scrollbar {
   line-height: 1.7;
 }
 
-.blog-content li > ul,
-.blog-content li > ol {
+.blog-content li>ul,
+.blog-content li>ol {
   margin-top: 0.25em;
   margin-bottom: 0;
 }
@@ -532,6 +550,41 @@ html.scroll-locked body::-webkit-scrollbar {
 }
 
 /* First child no top margin */
-.blog-content > *:first-child {
+.blog-content>*:first-child {
   margin-top: 0;
 }
+
+html.font-size-en {
+  font-size: 16px;
+}
+
+html.font-size-ar {
+  font-size: 14px;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-14px) translateX(10px); }
+}
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(10px) translateX(-12px); }
+}
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-8px) translateX(8px); }
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+.animate-float-medium { animation: float-medium 6s ease-in-out infinite; }
+.animate-float-fast { animation: float-fast 5s ease-in-out infinite; }
+.animate-gradient-shift { animation: gradient-shift 6s ease-in-out infinite; }
+.animate-fade-up { animation: fade-up 600ms ease-out both; }

@@ -667,5 +667,11 @@
             "privacyConcerns": "Privacy Concerns",
             "businessPartnerships": "Business Partnerships"
         }
+    },
+    "notFound": {
+        "title": "Page Not Found",
+        "description": "Sorry, the page you're looking for doesn't exist. It may have been moved, deleted, or you may have mistyped the address.",
+        "homeButton": "Return to Home",
+        "contactButton": "Contact Support"
     }
 }

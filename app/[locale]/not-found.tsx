@@ -46,8 +46,6 @@ const NotFound = async () => {
                     </Link>
                 </div>
             </section>
-
-
         </main>
     );
 };
