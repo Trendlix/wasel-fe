@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import DynamicIsland from "./components/hero/dynamic-island";
 import SentencesCards from "./components/hero/SentencesCards";
 import clsx from "clsx";
@@ -54,6 +54,8 @@ const Hero = ({ onLayoutReady, onMountStart, heroContent, altImg }: HeroProps) =
     const currentImageRef = useRef<string>("/brand/pages/home/iphone.png");
     const [firstImageLoaded, setFirstImageLoaded] = useState(false);
     const [islandTop, setIslandTop] = useState<string | undefined>(undefined);
+    const locale = useLocale();
+    const isAr = locale === "ar";
 
     useEffect(() => {
         const firstSrc = getBaseIphoneSrc();
@@ -73,7 +75,7 @@ const Hero = ({ onLayoutReady, onMountStart, heroContent, altImg }: HeroProps) =
 
         const updateTop = () => {
             const w = window.innerWidth;
-            if(w>=1050){
+            if (w >= 1050) {
                 setIslandTop('3%');
             }
             else if (w >= 1024 && w < 1050) {
@@ -612,6 +614,7 @@ const Hero = ({ onLayoutReady, onMountStart, heroContent, altImg }: HeroProps) =
                                             subtitleBlockRef={subtitleBlockRef}
                                             headingRef={headingRef}
                                             heroContent={heroContent}
+                                            isAr={isAr}
                                         />
                                     </div>
                                 </div>
@@ -651,9 +654,10 @@ type IPhoneContentProps = {
     subtitleBlockRef: React.RefObject<HTMLDivElement | null>;
     headingRef: React.RefObject<HTMLDivElement | null>;
     heroContent: NonNullable<IHomePageResponse["content"]>["hero"] | null;
+    isAr?: boolean;
 };
 
-const IPhoneContent = ({ subtitleBlockRef, headingRef, heroContent }: IPhoneContentProps) => {
+const IPhoneContent = ({ subtitleBlockRef, headingRef, heroContent, isAr }: IPhoneContentProps) => {
     const t = useTranslations("home.hero.phoneContent");
     const screen1 = heroContent?.screen_1 ?? [];
     const requestToDelivery = screen1[1] || t("requestToDelivery");
@@ -665,17 +669,17 @@ const IPhoneContent = ({ subtitleBlockRef, headingRef, heroContent }: IPhoneCont
         {/* upper part */}
         <div ref={subtitleBlockRef} className="flex flex-col items-center justify-center gap-y-[0.1vw]">
             <p className="lg:text-[0.3vw] md:text-[0.6vw] text-[5px] font-light leading-2.5">{t("subtitle")}</p>
-            <p className="flex flex-col items-center font-medium lg:text-[0.7vw] md:text-[1.2vw] text-[10px] lg:leading-[0.8vw] md:leading-[1.4vw] leading-[2.8vw]">
+            <p className={clsx("flex flex-col items-center font-medium lg:text-[0.7vw] md:text-[1.2vw] text-[10px] lg:leading-[0.8vw] md:leading-[1.4vw] leading-[2.8vw]", isAr && "gap-1")}>
                 <span>{requestToDelivery}</span>
                 <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{allInOneApp}</span>
             </p>
         </div>
 
         {/* lower part */}
-        <div ref={headingRef} className="flex flex-col items-center justify-center font-medium lg:text-[1.5vw] md:text-[3vw] text-[16px] lg:leading-[1.5vw] md:leading-[3vw] leading-[4vw]">
-            <p className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{smartWayTo}</p>
-            <p className="max-md:flex max-md:flex-col max-md:items-center max-md:justify-center">
-                <span className="bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent">{moveYourCargo}</span>
+        <div ref={headingRef} className={clsx("flex flex-col items-center justify-center font-medium lg:text-[1.5vw] md:text-[3vw] text-[16px] lg:leading-[1.5vw] md:leading-[3vw] leading-[4vw]", isAr && "gap-1")}>
+            <p className={clsx("bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent", isAr && "pb-1")}>{smartWayTo}</p>
+            <p className={clsx("max-md:flex max-md:flex-col max-md:items-center max-md:justify-center")}>
+                <span className={clsx("bg-gradient-to-b from-[#FFFFFF] to-[#CCCCCC] bg-clip-text text-transparent", isAr && "pb-1")}>{moveYourCargo}</span>
             </p>
         </div>
     </div>)
